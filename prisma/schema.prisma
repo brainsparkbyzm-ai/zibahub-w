@@ -1,0 +1,659 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  EMPLOYER
+  ADMIN
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum ContentStatus {
+  DRAFT
+  PENDING
+  PUBLISHED
+  ARCHIVED
+  REJECTED
+}
+
+enum JobStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  PAUSED
+  CLOSED
+  EXPIRED
+  REJECTED
+}
+
+enum JobTier {
+  FREE
+  FEATURED
+  PREMIUM
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  APPRENTICESHIP
+  TEMPORARY
+  SEASONAL
+}
+
+enum LocationType {
+  ON_SITE
+  REMOTE
+  HYBRID
+}
+
+enum SalaryType {
+  HOURLY
+  ANNUAL
+  DAILY
+  UNSPECIFIED
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  REVIEWING
+  SHORTLISTED
+  REJECTED
+  HIRED
+  WITHDRAWN
+}
+
+enum AlertFrequency {
+  INSTANT
+  DAILY
+  WEEKLY
+}
+
+enum GuestPostStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  PUBLISHED
+}
+
+enum PaymentStatus {
+  PENDING
+  REQUIRES_ACTION
+  SUCCEEDED
+  FAILED
+  REFUNDED
+  CANCELED
+}
+
+enum ReportStatus {
+  OPEN
+  REVIEWING
+  RESOLVED
+  DISMISSED
+}
+
+enum NotificationType {
+  APPLICATION
+  APPLICATION_STATUS
+  JOB_ALERT
+  EMPLOYER
+  ADMIN
+  SYSTEM
+}
+
+model User {
+  id              String        @id @default(cuid())
+  email           String        @unique
+  passwordHash    String
+  name            String
+  role            Role          @default(USER)
+  status          AccountStatus @default(ACTIVE)
+  emailVerifiedAt DateTime?
+  phone           String?
+  headline        String?
+  bio             String?
+  country         String?
+  region          String?
+  city            String?
+  experienceYears Int?
+  skills          String[]      @default([])
+  resumeUrl       String?
+  tradeId         String?
+  trade           Trade?        @relation(fields: [tradeId], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  company         Company?
+  applications    Application[]
+  savedJobs       SavedJob[]
+  alerts          JobAlert[]
+  notifications   Notification[]
+  reports         Report[]
+  auditLogs       AuditLog[]
+  guestPosts      GuestPost[]
+  payments        Payment[]
+  subscriptions   Subscription[]
+  affiliateClicks AffiliateClick[]
+  guides          Guide[]
+  articles        Article[]
+  savedCandidates SavedCandidate[] @relation("Saver")
+  candidateSaves  SavedCandidate[] @relation("Candidate")
+  sessions        Session[]
+  resetTokens     PasswordResetToken[]
+  verifyTokens    EmailVerificationToken[]
+
+  @@index([role, status])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  userAgent String?
+  ip        String?
+
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Company {
+  id          String        @id @default(cuid())
+  ownerId     String        @unique
+  owner       User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name        String
+  slug        String        @unique
+  logoUrl     String?
+  website     String?
+  description String?
+  country     String?
+  region      String?
+  city        String?
+  size        String?
+  status      ContentStatus @default(PENDING)
+  isSeed      Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  jobs        Job[]
+  apprenticeships Apprenticeship[]
+  courses     Course[]
+
+  @@index([status])
+}
+
+model Trade {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  summary     String
+  description String
+  status      ContentStatus @default(PUBLISHED)
+  isSeed      Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  jobs        Job[]
+  users       User[]
+  apprenticeships Apprenticeship[]
+  courses     Course[]
+  guides      Guide[]
+  articles    Article[]
+  salaryBands SalaryBand[]
+  products    AffiliateProduct[]
+}
+
+model Category {
+  id        String        @id @default(cuid())
+  type      String
+  name      String
+  slug      String
+  status    ContentStatus @default(PUBLISHED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@unique([type, slug])
+}
+
+model Job {
+  id                String         @id @default(cuid())
+  slug              String         @unique
+  title             String
+  description       String
+  companyId         String
+  company           Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  tradeId           String?
+  trade             Trade?         @relation(fields: [tradeId], references: [id])
+  country           String
+  region            String?
+  city              String?
+  salaryMin         Int?
+  salaryMax         Int?
+  salaryCurrency    String         @default("USD")
+  salaryType        SalaryType     @default(ANNUAL)
+  employmentType    EmploymentType
+  experience        String?
+  skills            String[]       @default([])
+  requirements      String?
+  benefits          String?
+  locationType      LocationType
+  applicationMethod String
+  applicationTarget String?
+  postedAt          DateTime       @default(now())
+  expiresAt         DateTime?
+  tier              JobTier        @default(FREE)
+  status            JobStatus      @default(PENDING)
+  isApprenticeship  Boolean        @default(false)
+  isSeed            Boolean        @default(false)
+  viewCount         Int            @default(0)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  applications      Application[]
+  saves             SavedJob[]
+  reports           Report[]
+
+  @@index([status, country])
+  @@index([tradeId])
+  @@index([postedAt])
+  @@index([tier, status])
+}
+
+model Application {
+  id          String            @id @default(cuid())
+  jobId       String
+  job         Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coverLetter String?
+  resumeUrl   String?
+  status      ApplicationStatus @default(SUBMITTED)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@unique([jobId, userId])
+  @@index([userId])
+  @@index([status])
+}
+
+model SavedJob {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, jobId])
+}
+
+model JobAlert {
+  id         String         @id @default(cuid())
+  userId     String
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name       String
+  filters    Json
+  frequency  AlertFrequency @default(DAILY)
+  active     Boolean        @default(true)
+  lastSentAt DateTime?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([userId, active])
+}
+
+model Apprenticeship {
+  id             String        @id @default(cuid())
+  slug           String        @unique
+  title          String
+  description    String
+  providerName   String
+  companyId      String?
+  company        Company?      @relation(fields: [companyId], references: [id])
+  tradeId        String?
+  trade          Trade?        @relation(fields: [tradeId], references: [id])
+  country        String
+  region         String?
+  city           String?
+  duration       String?
+  paid           Boolean       @default(true)
+  wageNote       String?
+  requirements   String?
+  applicationUrl String?
+  status         ContentStatus @default(PENDING)
+  isSeed         Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([country, status])
+  @@index([tradeId])
+}
+
+model TrainingProvider {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  website     String?
+  description String?
+  country     String?
+  status      ContentStatus @default(PENDING)
+  isSeed      Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  courses     Course[]
+}
+
+model Course {
+  id            String            @id @default(cuid())
+  slug          String            @unique
+  title         String
+  description   String
+  providerId    String?
+  provider      TrainingProvider? @relation(fields: [providerId], references: [id])
+  companyId     String?
+  company       Company?          @relation(fields: [companyId], references: [id])
+  tradeId       String?
+  trade         Trade?            @relation(fields: [tradeId], references: [id])
+  country       String?
+  city          String?
+  delivery      String
+  duration      String?
+  priceCents    Int?
+  currency      String            @default("USD")
+  certification String?
+  url           String?
+  affiliateUrl  String?
+  status        ContentStatus     @default(PENDING)
+  isSeed        Boolean           @default(false)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([status, tradeId])
+}
+
+model Certification {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  tradeSlug   String?
+  country     String?
+  body        String?
+  description String
+  status      ContentStatus @default(PUBLISHED)
+  isSeed      Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Guide {
+  id             String        @id @default(cuid())
+  slug           String        @unique
+  title          String
+  excerpt        String
+  content        String
+  category       String
+  seoTitle       String?
+  seoDescription String?
+  authorId       String?
+  author         User?         @relation(fields: [authorId], references: [id])
+  tradeId        String?
+  trade          Trade?        @relation(fields: [tradeId], references: [id])
+  status         ContentStatus @default(DRAFT)
+  isSeed         Boolean       @default(false)
+  publishedAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([status, category])
+}
+
+model Article {
+  id             String        @id @default(cuid())
+  slug           String        @unique
+  title          String
+  excerpt        String
+  content        String
+  category       String
+  seoTitle       String?
+  seoDescription String?
+  authorId       String?
+  author         User?         @relation(fields: [authorId], references: [id])
+  tradeId        String?
+  trade          Trade?        @relation(fields: [tradeId], references: [id])
+  sponsored      Boolean       @default(false)
+  status         ContentStatus @default(DRAFT)
+  isSeed         Boolean       @default(false)
+  publishedAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([status, category])
+}
+
+model GuestPost {
+  id            String          @id @default(cuid())
+  companyName   String
+  contactName   String
+  contactEmail  String
+  title         String
+  content       String
+  category      String
+  website       String?
+  requestedDate DateTime?
+  sponsored     Boolean         @default(true)
+  status        GuestPostStatus @default(SUBMITTED)
+  submitterId   String?
+  submitter     User?           @relation(fields: [submitterId], references: [id])
+  reviewNote    String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([status])
+}
+
+model AffiliateProduct {
+  id           String        @id @default(cuid())
+  slug         String        @unique
+  name         String
+  description  String
+  category     String
+  brand        String?
+  priceDisplay String?
+  affiliateUrl String?
+  imageUrl     String?
+  rating       Float?
+  featured     Boolean       @default(false)
+  status       ContentStatus @default(DRAFT)
+  tradeId      String?
+  trade        Trade?        @relation(fields: [tradeId], references: [id])
+  isSeed       Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  clicks       AffiliateClick[]
+
+  @@index([status, category])
+}
+
+model AffiliateClick {
+  id        String           @id @default(cuid())
+  productId String
+  product   AffiliateProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?            @relation(fields: [userId], references: [id])
+  createdAt DateTime         @default(now())
+
+  @@index([productId, createdAt])
+}
+
+model Advertisement {
+  id        String        @id @default(cuid())
+  name      String
+  placement String
+  targetUrl String?
+  imageUrl  String?
+  label     String        @default("Sponsored")
+  startsAt  DateTime?
+  endsAt    DateTime?
+  status    ContentStatus @default(DRAFT)
+  isSeed    Boolean       @default(false)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  amountCents     Int
+  currency        String
+  purpose         String
+  referenceId     String?
+  status          PaymentStatus @default(PENDING)
+  stripeSessionId String?
+  stripePaymentId String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId, status])
+  @@index([purpose, referenceId])
+}
+
+model Subscription {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id])
+  plan             String
+  status           String
+  currentPeriodEnd DateTime?
+  stripeSubId      String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  body      String
+  href      String?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  @@index([userId, readAt])
+}
+
+model Report {
+  id         String       @id @default(cuid())
+  reporterId String?
+  reporter   User?        @relation(fields: [reporterId], references: [id])
+  targetType String
+  targetId   String
+  reason     String
+  details    String?
+  status     ReportStatus @default(OPEN)
+  jobId      String?
+  job        Job?         @relation(fields: [jobId], references: [id])
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([status])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id])
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+model SiteSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model SalaryBand {
+  id             String         @id @default(cuid())
+  tradeId        String?
+  trade          Trade?         @relation(fields: [tradeId], references: [id])
+  country        String
+  region         String?
+  city           String?
+  experience     String
+  employmentType EmploymentType @default(FULL_TIME)
+  currency       String
+  lowCents       Int
+  midCents       Int
+  highCents      Int
+  sourceNote     String
+  isSeed         Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([country, experience])
+  @@index([tradeId])
+}
+
+model SavedCandidate {
+  id          String   @id @default(cuid())
+  employerId  String
+  employer    User     @relation("Saver", fields: [employerId], references: [id], onDelete: Cascade)
+  candidateId String
+  candidate   User     @relation("Candidate", fields: [candidateId], references: [id], onDelete: Cascade)
+  note        String?
+  createdAt   DateTime @default(now())
+
+  @@unique([employerId, candidateId])
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model RateBucket {
+  key         String   @id
+  count       Int
+  windowStart DateTime
+}

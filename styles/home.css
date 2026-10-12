@@ -1,0 +1,220 @@
+body.zh-app {
+  background:
+    radial-gradient(900px 420px at 8% 0%, rgba(214, 168, 79, 0.16), transparent 55%),
+    radial-gradient(800px 480px at 92% 8%, rgba(214, 168, 79, 0.12), transparent 50%),
+    #f7f8fa;
+  color: #0b1220;
+  font-family: var(--font-sans), "Segoe UI", sans-serif;
+}
+body.zh-app::before,
+body.zh-app::after { display: none; }
+body.zh-app h1,
+body.zh-app h2,
+body.zh-app h3 { font-family: var(--font-display), Georgia, serif; }
+
+.zh-header { position: sticky; top: 0; z-index: 40; padding: 14px 20px 0; }
+.zh-nav, .zh-page, .zh-footer {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+}
+.zh-nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 68px;
+  padding: 8px 14px 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px rgba(7, 26, 61, 0.06), inset 0 1px 0 #fff;
+  backdrop-filter: blur(16px);
+}
+.zh-brand { display: flex; align-items: center; gap: 8px; min-width: 168px; }
+.zh-wordmark { display: grid; line-height: 1; }
+.zh-wordmark strong { color: #071a3d; font-size: 20px; letter-spacing: -0.04em; font-weight: 750; }
+.zh-wordmark small { margin-top: 3px; color: #8a7340; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 650; }
+.zh-nav-links { display: flex; gap: 4px; flex: 1; justify-content: center; }
+.zh-nav-links a { color: #243044; font-size: 13.5px; font-weight: 560; padding: 8px 8px; border-radius: 999px; }
+.zh-nav-links a:hover { background: rgba(7, 26, 61, 0.04); }
+.zh-nav-actions { display: flex; align-items: center; gap: 8px; }
+.zh-tool { display: inline-flex; align-items: center; gap: 6px; color: #243044; font-size: 13.5px; font-weight: 560; padding: 8px; }
+.zh-signin {
+  display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px;
+  border-radius: 999px; border: 1px solid #d7dde6; background: #fff; color: #071a3d; font-size: 13.5px; font-weight: 650;
+}
+.zh-post, .zh-search button, .zh-job-actions a, .zh-gold, .zh-news button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 36px; padding: 0 16px; border: 0; border-radius: 999px; cursor: pointer;
+  background: linear-gradient(180deg, #e0bc6d, #c9963e); color: #fff; font-weight: 700; font-size: 13.5px;
+  box-shadow: 0 8px 16px rgba(168, 122, 42, 0.22);
+}
+.zh-menu { display: none; min-height: 36px; border-radius: 999px; border: 1px solid #d7dde6; background: #fff; padding: 0 12px; }
+.zh-drawer {
+  position: fixed; inset: 84px 16px auto; z-index: 50; display: grid; gap: 4px;
+  padding: 12px; border-radius: 18px; background: #fff; box-shadow: 0 20px 50px rgba(7, 26, 61, 0.12);
+}
+.zh-drawer a { padding: 10px 8px; border-radius: 10px; color: #071a3d; }
+
+.zh-page { padding: 28px 0 10px; }
+.zh-hero { display: grid; grid-template-columns: 1.02fr 0.98fr; gap: 18px; align-items: center; }
+.zh-region { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 12px; color: #6b7280; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; }
+.zh-hero h1 { margin: 0; max-width: 11ch; color: #071a3d; font-size: clamp(42px, 4.6vw, 62px); line-height: 0.98; font-weight: 650; letter-spacing: -0.035em; }
+.zh-lede { max-width: 46ch; margin: 14px 0 18px; color: #6b7280; font-size: 15px; line-height: 1.55; }
+.zh-search {
+  display: grid; grid-template-columns: 1.15fr 1fr auto; gap: 8px; align-items: center;
+  padding: 8px; border-radius: 16px; background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(7, 26, 61, 0.06); box-shadow: 0 16px 40px rgba(7, 26, 61, 0.06);
+}
+.zh-search label { display: grid; grid-template-columns: 16px 1fr; gap: 2px 8px; align-items: center; min-height: 52px; padding: 6px 10px; color: #6b7280; }
+.zh-search label span { grid-column: 2; font-size: 11px; font-weight: 700; }
+.zh-search input { grid-column: 2; border: 0; background: transparent; min-height: 24px; padding: 0; font-size: 14px; color: #0b1220; outline: none; }
+.zh-search svg { grid-row: 1 / span 2; color: #8a7340; }
+.zh-search button { min-height: 46px; padding: 0 18px; }
+.zh-popular { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; color: #6b7280; font-size: 12px; }
+.zh-popular a { border: 1px solid #e6ebf2; background: #fff; border-radius: 999px; padding: 5px 10px; color: #243044; font-size: 12px; }
+
+.zh-visual { position: relative; min-height: 430px; }
+.zh-visual > img { position: absolute; right: -20px; top: 10px; width: 78%; height: 92%; object-fit: cover; object-position: 70% center; mask-image: linear-gradient(90deg, transparent, #000 22%); border-radius: 28px; }
+.zh-dash {
+  position: absolute; left: 0; top: 28px; width: min(430px, 78%);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; border-radius: 22px;
+  background: rgba(255,255,255,0.62); border: 1px solid rgba(255,255,255,0.8);
+  box-shadow: 0 20px 50px rgba(7, 26, 61, 0.08); backdrop-filter: blur(14px);
+}
+.zh-metric { position: relative; min-height: 118px; padding: 12px; border-radius: 16px; background: rgba(255,255,255,0.82); border: 1px solid rgba(255,255,255,0.9); }
+.zh-metric i { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #f4e7c8; color: #8a7340; }
+.zh-metric span, .zh-metric small { display: block; color: #6b7280; font-size: 12px; }
+.zh-metric strong { display: block; margin-top: 6px; color: #071a3d; font-size: 22px; letter-spacing: -0.03em; }
+.zh-metric strong small { display: inline; font-size: 12px; }
+.zh-metric em { position: absolute; right: 12px; top: 40px; color: #2f9e68; font-style: normal; font-size: 12px; font-weight: 700; }
+.zh-spark { width: 100%; height: 34px; margin-top: 6px; }
+.zh-colchart { display: flex; align-items: end; gap: 4px; height: 36px; margin-top: 8px; }
+.zh-colchart span { flex: 1; border-radius: 3px 3px 0 0; background: linear-gradient(#8eb7e8, #2f6fbe); }
+.zh-colchart span:nth-child(1) { height: 40%; } .zh-colchart span:nth-child(2) { height: 62%; }
+.zh-colchart span:nth-child(3) { height: 48%; } .zh-colchart span:nth-child(4) { height: 78%; }
+.zh-colchart span:nth-child(5) { height: 55%; } .zh-colchart span:nth-child(6) { height: 88%; }
+.zh-colchart span:nth-child(7) { height: 70%; }
+.zh-rail {
+  position: absolute; right: 0; top: 54px; width: 168px; margin: 0; padding: 10px; list-style: none;
+  border-radius: 18px; background: rgba(255,255,255,0.72); border: 1px solid rgba(255,255,255,0.85);
+  box-shadow: 0 16px 40px rgba(7, 26, 61, 0.08); backdrop-filter: blur(12px);
+}
+.zh-rail li { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 8px; margin: 4px 0; border-radius: 12px; background: rgba(255,255,255,0.8); color: #071a3d; font-size: 13px; font-weight: 650; }
+.zh-rail svg { color: #8a7340; }
+
+.zh-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 8px 0 22px; }
+.zh-stat, .zh-panel, .zh-job, .zh-trade, .zh-news {
+  background: rgba(255,255,255,0.9); border: 1px solid rgba(7, 26, 61, 0.06);
+  box-shadow: 0 10px 28px rgba(7, 26, 61, 0.045); border-radius: 16px;
+}
+.zh-stat { display: flex; align-items: center; gap: 12px; min-height: 74px; padding: 14px 16px; }
+.zh-stat svg { color: #8a7340; }
+.zh-stat strong { display: block; color: #071a3d; font-size: 22px; letter-spacing: -0.03em; }
+.zh-stat span { color: #6b7280; font-size: 13px; }
+
+.zh-block { display: grid; grid-template-columns: 1.65fr 0.95fr; gap: 16px; margin-bottom: 16px; }
+.zh-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin-bottom: 10px; }
+.zh-head h2 { margin: 0; color: #071a3d; font-size: 22px; font-weight: 650; }
+.zh-head a, .zh-insight a, .zh-guide em { color: #8a7340; font-size: 13px; font-weight: 700; font-style: normal; }
+.zh-job-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.zh-job { padding: 12px; }
+.zh-job-top { display: grid; grid-template-columns: 36px 1fr 16px; gap: 8px; }
+.zh-job h3 { margin: 0; font-family: var(--font-sans), sans-serif; font-size: 14px; letter-spacing: 0; }
+.zh-job h3 a, .zh-job p { color: #243044; }
+.zh-job p { margin: 2px 0; font-size: 12px; color: #6b7280; }
+.zh-place { display: flex; gap: 4px; align-items: center; }
+.zh-job > strong { display: block; margin: 10px 0; color: #071a3d; font-size: 13px; }
+.zh-job > strong small { font-weight: 500; color: #6b7280; }
+.zh-tags { display: flex; gap: 6px; }
+.zh-tags span { border-radius: 999px; background: #f4f6f8; color: #526072; font-size: 11px; padding: 3px 7px; }
+.zh-job-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+.zh-job-actions button, .zh-save-link {
+  min-height: 32px; border-radius: 999px; border: 1px solid #e4e8ee; background: #fff; color: #243044; font-size: 12px; font-weight: 700;
+}
+.zh-job-actions a:last-child { min-height: 32px; font-size: 12px; }
+.zh-glyph { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #071a3d; color: #f4e7c8; }
+.zh-heart { color: #98a2b3; }
+.zh-trade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.zh-trade { display: grid; gap: 4px; min-height: 118px; padding: 12px; color: #243044; }
+.zh-trade strong { font-size: 13px; }
+.zh-trade span { color: #6b7280; font-size: 12px; line-height: 1.35; }
+.zh-trade:hover, .zh-job:hover, .zh-stat:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(7, 26, 61, 0.08); }
+
+.zh-intel { display: grid; grid-template-columns: 1.25fr 0.78fr 1fr; gap: 12px; margin-bottom: 16px; }
+.zh-panel { padding: 14px; }
+.zh-salary { display: grid; grid-template-columns: 0.9fr 0.8fr 0.7fr 0.8fr; gap: 8px; }
+.zh-salary b { display: block; color: #071a3d; font-family: var(--font-display), Georgia, serif; font-size: 34px; letter-spacing: -0.04em; }
+.zh-salary span, .zh-compare, .zh-insight { color: #6b7280; font-size: 12px; }
+.zh-salary form { display: grid; gap: 6px; margin-top: 10px; }
+.zh-salary select, .zh-news input { min-height: 34px; border-radius: 10px; border: 1px solid #e6ebf2; background: #fff; padding: 0 8px; }
+.zh-bars { display: flex; align-items: end; gap: 8px; min-height: 120px; }
+.zh-bars div { display: grid; align-items: end; justify-items: center; gap: 4px; flex: 1; height: 120px; }
+.zh-bars span { width: 18px; border-radius: 6px 6px 2px 2px; background: linear-gradient(#8eb7e8, #245f9e); }
+.zh-bars small, .zh-bars b { font-size: 10px; color: #6b7280; font-weight: 600; }
+.zh-compare p, .zh-insight p { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+.zh-train, .zh-guides { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.zh-train a, .zh-guide { display: grid; gap: 4px; padding: 10px; border-radius: 14px; background: #f8fafc; color: #243044; min-height: 132px; }
+.zh-train strong, .zh-guide strong { font-size: 13px; }
+.zh-train span, .zh-guide small { color: #6b7280; font-size: 11px; }
+.zh-guide { padding: 0 0 8px; overflow: hidden; background: #fff; border: 1px solid #eef2f6; }
+.zh-guide img { width: 100%; height: 72px; object-fit: cover; }
+.zh-guide small, .zh-guide strong, .zh-guide em { padding: 0 8px; }
+.zh-bottom { display: grid; grid-template-columns: 1.45fr 0.8fr; gap: 12px; margin-bottom: 28px; }
+.zh-hire {
+  display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 12px; align-items: center;
+  padding: 22px; border-radius: 18px; color: #f7f8fa;
+  background: radial-gradient(400px 160px at 80% 20%, rgba(214,168,79,0.28), transparent 50%), linear-gradient(100deg, #071a3d, #12315f);
+}
+.zh-hire h2 { margin: 0 0 8px; font-size: 30px; line-height: 1; }
+.zh-hire p { margin: 0 0 14px; color: #d5deea; }
+.zh-hire-actions { display: flex; gap: 8px; }
+.zh-ghost { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.35); color: #fff; }
+.zh-hire-art { display: grid; grid-template-columns: 1fr 0.8fr 0.7fr; gap: 8px; align-items: center; }
+.zh-team, .zh-mini-metrics { display: grid; gap: 6px; padding: 10px; border-radius: 14px; background: rgba(255,255,255,0.12); font-size: 12px; }
+.zh-hire-art img { width: 100%; height: 92px; object-fit: cover; border-radius: 14px; }
+.zh-news { padding: 16px; }
+.zh-news-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #f4e7c8; }
+.zh-news h2 { margin: 8px 0 4px; color: #071a3d; font-size: 22px; }
+.zh-news p { margin: 0 0 10px; color: #6b7280; font-size: 13px; }
+.zh-news-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.zh-news ul { display: flex; gap: 10px; margin: 10px 0 0; padding: 0; list-style: none; color: #6b7280; font-size: 11px; }
+.zh-form-error { color: #9f1239; }
+.zh-form-ok { color: #166534; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+.zh-footer {
+  display: grid; grid-template-columns: 1.1fr 1.1fr 0.9fr 0.8fr 0.7fr 0.7fr 0.8fr;
+  gap: 16px; padding: 10px 0 36px; color: #6b7280; font-size: 13px;
+}
+.zh-foot-col { display: grid; align-content: start; gap: 6px; }
+.zh-foot-col strong { color: #071a3d; margin-bottom: 4px; }
+.zh-foot-col.split { grid-template-columns: 1fr 1fr; }
+.zh-foot-col.split strong { grid-column: 1 / -1; }
+.zh-footer a { color: #526072; }
+.zh-flags { display: flex; gap: 10px; justify-content: flex-end; color: #071a3d; font-weight: 700; }
+.zh-flags span { display: inline-flex; align-items: center; gap: 4px; }
+.zh-footer-meta { text-align: right; }
+.zh-footer-meta small { display: block; margin-top: 18px; }
+
+@media (max-width: 1100px) {
+  .zh-nav-links, .zh-tool span { display: none; }
+  .zh-menu { display: inline-flex; }
+  .zh-hero, .zh-block, .zh-intel, .zh-bottom, .zh-hire, .zh-footer { grid-template-columns: 1fr; }
+  .zh-job-grid, .zh-stats { grid-template-columns: 1fr 1fr; }
+  .zh-visual { min-height: 520px; }
+  .zh-rail { position: static; width: auto; margin-top: 12px; }
+  .zh-salary, .zh-train, .zh-guides, .zh-hire-art { grid-template-columns: 1fr 1fr; }
+  .zh-footer-meta, .zh-flags { text-align: left; justify-content: flex-start; }
+}
+@media (max-width: 720px) {
+  .zh-nav, .zh-page, .zh-footer { width: min(100% - 20px, 1180px); }
+  .zh-signin { display: none; }
+  .zh-search, .zh-job-grid, .zh-trade-grid, .zh-stats, .zh-salary, .zh-train, .zh-guides, .zh-news-row, .zh-hire-art { grid-template-columns: 1fr; }
+  .zh-hero h1 { max-width: none; font-size: 40px; }
+  .zh-dash { position: relative; width: auto; top: auto; }
+  .zh-visual > img { position: relative; width: 100%; height: 220px; right: auto; mask-image: none; }
+  .zh-visual { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zh-trade, .zh-job, .zh-stat { transition: none; }
+}
