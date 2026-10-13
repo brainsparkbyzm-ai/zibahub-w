@@ -218,3 +218,53 @@ body.zh-app h3 { font-family: var(--font-display), Georgia, serif; }
 @media (prefers-reduced-motion: reduce) {
   .zh-trade, .zh-job, .zh-stat { transition: none; }
 }
+
+/* Mobile navigation refinement */
+@media (max-width: 720px) {
+  .zh-header {
+    padding: 8px 8px 0;
+  }
+  .zh-nav {
+    width: 100%;
+    min-height: 54px;
+    padding: 6px 9px;
+    gap: 6px;
+    border-radius: 18px;
+  }
+  .zh-brand {
+    min-width: 0;
+    flex: 1;
+    gap: 6px;
+  }
+  .zh-wordmark strong {
+    font-size: 17px;
+  }
+  .zh-wordmark small {
+    font-size: 7px;
+  }
+  .zh-nav-actions {
+    flex-shrink: 0;
+    gap: 5px;
+  }
+  .zh-tool {
+    padding: 6px;
+  }
+  .zh-post {
+    display: none;
+  }
+  .zh-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+  .zh-drawer {
+    inset: 70px 10px auto;
+    max-height: calc(100dvh - 85px);
+    overflow-y: auto;
+  }
+}

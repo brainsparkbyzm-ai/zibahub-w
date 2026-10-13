@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { LogoMark, Wordmark } from "@/components/brand/Logo";
 
 export function SiteFooter() {
@@ -21,7 +21,7 @@ export function SiteFooter() {
           <span><FlagUK /> UK</span>
           <span><FlagCA /> Canada</span>
         </div>
-        <small>© 2025 ZibaHub. All rights reserved.</small>
+        <small>© {new Date().getFullYear()} ZibaHub. All rights reserved.</small>
       </div>
     </footer>
   );
@@ -45,3 +45,4 @@ function FlagUK() {
 function FlagCA() {
   return <svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><rect width="16" height="12" rx="1" fill="#fff" /><rect width="4" height="12" fill="#d52b1e" /><rect x="12" width="4" height="12" fill="#d52b1e" /><path d="M8 2.2l.7 2.1h2.1L9.2 5.6l.7 2.1L8 6.4 6.1 7.7l.7-2.1-1.6-1.3h2.1z" fill="#d52b1e" /></svg>;
 }
+
