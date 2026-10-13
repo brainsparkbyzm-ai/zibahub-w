@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+﻿import { db } from "@/lib/db";
 import { AppError } from "@/lib/errors";
 import { uniqueSlug } from "@/lib/format";
 import type { Prisma } from "@prisma/client";
@@ -79,7 +79,7 @@ export async function globalSearch(q: string) {
   if (term.length < 2) return { jobs: [], trades: [], apprenticeships: [], courses: [], guides: [], employers: [] };
   const contains = { contains: term, mode: "insensitive" as const };
   const [jobs, trades, apprenticeships, courses, guides, employers] = await Promise.all([
-    db.job.findMany({ where: { status: "ACTIVE", OR: [{ title: contains }, { city: contains }] }, include: { company: true }, take: 6 }),
+    db.job.findMany({ where: { status: "ACTIVE", isSeed: false, OR: [{ title: contains }, { city: contains }] }, include: { company: true }, take: 6 }),
     db.trade.findMany({ where: { status: "PUBLISHED", name: contains }, take: 6 }),
     db.apprenticeship.findMany({ where: { status: "PUBLISHED", title: contains }, take: 6 }),
     db.course.findMany({ where: { status: "PUBLISHED", title: contains }, take: 6 }),
@@ -91,7 +91,7 @@ export async function globalSearch(q: string) {
 
 export async function homeData() {
   const [jobs, trades, apprenticeships, courses, guides, employers, products, articles] = await Promise.all([
-    db.job.findMany({ where: { status: "ACTIVE" }, include: { company: true, trade: true }, orderBy: [{ tier: "desc" }, { postedAt: "desc" }], take: 6 }),
+    db.job.findMany({ where: { status: "ACTIVE", isSeed: false }, include: { company: true, trade: true }, orderBy: [{ tier: "desc" }, { postedAt: "desc" }], take: 6 }),
     db.trade.findMany({ where: { status: "PUBLISHED" }, take: 10, orderBy: { name: "asc" } }),
     db.apprenticeship.findMany({ where: { status: "PUBLISHED" }, include: { trade: true }, take: 3 }),
     db.course.findMany({ where: { status: "PUBLISHED" }, include: { provider: true }, take: 3 }),
@@ -135,3 +135,4 @@ export async function subscribeNewsletter(email: string) {
 }
 
 export { uniqueSlug };
+

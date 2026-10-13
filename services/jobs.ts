@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client";
+﻿import type { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { AppError } from "@/lib/errors";
 import { audit } from "@/lib/audit";
@@ -12,7 +12,7 @@ import { jobSchema } from "@/validation/content";
 const jobInclude = { company: true, trade: true, _count: { select: { applications: true } } } satisfies Prisma.JobInclude;
 
 function activeWhere(): Prisma.JobWhereInput {
-  return { status: "ACTIVE", OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] };
+  return { status: "ACTIVE", isSeed: false, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] };
 }
 
 export async function listJobs(query: Record<string, string | undefined>) {
@@ -205,3 +205,4 @@ export async function reportJob(userId: string | null, slug: string, reason: str
 }
 
 export { jobInclude };
+

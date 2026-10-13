@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+﻿import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const db = new PrismaClient();
@@ -90,18 +90,27 @@ async function main() {
     },
   });
 
-  await db.salaryBand.deleteMany({ where: { isSeed: true, sourceNote: { contains: "Illustrative development seed" } } });
-  for (const trade of tradeRows) {
+  const officialBands = [
+    { tradeSlug: "electrician", country: "United States", experience: "All experience levels", currency: "USD", lowCents: 4264000, midCents: 6319000, highCents: 10851000, sourceNote: "BLS May 2025 annual pay: below $42,640 at the 10th-percentile threshold; median $63,190; above $108,510 at the 90th-percentile threshold. https://www.bls.gov/ooh/construction-and-extraction/electricians.htm" },
+    { tradeSlug: "hvac", country: "United States", experience: "All experience levels", currency: "USD", lowCents: 4005000, midCents: 6101000, highCents: 9521000, sourceNote: "BLS May 2025 annual pay: below $40,050 at the 10th-percentile threshold; median $61,010; above $95,210 at the 90th-percentile threshold. https://www.bls.gov/ooh/installation-maintenance-and-repair/heating-air-conditioning-and-refrigeration-mechanics-and-installers.htm" },
+    { tradeSlug: "electrician", country: "Canada", experience: "All experience levels", currency: "CAD", lowCents: 2000, midCents: 3500, highCents: 4800, sourceNote: "Hourly wages in CAD; low $20, median $35, high $48. Job Bank / Statistics Canada, reference period 2023–2024; updated November 19, 2025. https://www.jobbank.gc.ca/marketreport/wages-occupation/20684/ca" },
+    { tradeSlug: "electrician", country: "United Kingdom", experience: "Starter–Experienced", currency: "GBP", lowCents: 2600000, midCents: 3550000, highCents: 4500000, sourceNote: "Annual salary range £26,000 starter to £45,000 experienced. Midpoint is calculated and is not an official median. UK National Careers Service. https://nationalcareers.service.gov.uk/job-profiles/electrician" },
+  ];
+
+  await db.salaryBand.deleteMany({ where: { isSeed: true } });
+  for (const band of officialBands) {
+    const trade = tradeRows.find((item) => item.slug === band.tradeSlug);
+    if (!trade) continue;
     await db.salaryBand.create({
       data: {
         tradeId: trade.id,
-        country: "United States",
-        experience: "Journeyman",
-        currency: "USD",
-        lowCents: 4800000,
-        midCents: 6800000,
-        highCents: 9200000,
-        sourceNote: "Illustrative development seed. Not a verified wage survey.",
+        country: band.country,
+        experience: band.experience,
+        currency: band.currency,
+        lowCents: band.lowCents,
+        midCents: band.midCents,
+        highCents: band.highCents,
+        sourceNote: band.sourceNote,
         isSeed: true,
       },
     });
@@ -133,3 +142,4 @@ async function main() {
 }
 
 main().finally(() => db.$disconnect());
+
