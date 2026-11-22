@@ -1,0 +1,80 @@
+/* ZibaHub site-wide typography, contrast and interaction polish */
+:root {
+  --zh-text: #10264b;
+  --zh-text-soft: #405675;
+  --zh-text-muted: #60738f;
+  --zh-primary: #075cff;
+  --zh-border: #dce7f6;
+}
+html { text-rendering: optimizeLegibility; -webkit-text-size-adjust: 100%; }
+body.zh-app { color: var(--zh-text); line-height: 1.5; }
+body.zh-app, body.zh-app button, body.zh-app input, body.zh-app select,
+body.zh-app textarea { font-family: var(--font-sans), "Segoe UI", sans-serif; }
+body.zh-app :where(h1,h2,h3,h4,h5,h6) {
+  color: var(--zh-text);
+  line-height: 1.16;
+  text-wrap: pretty;
+  font-family: var(--font-sans), "Segoe UI", sans-serif;
+}
+body.zh-app :where(p,li,dd,dt,figcaption) { line-height: 1.58; }
+body.zh-app :where(small,.muted,.text-muted,.subtle,.description,.subtitle,.helper-text,.form-hint,.lede) {
+  color: var(--zh-text-muted);
+}
+body.zh-app :where(label,legend) { color: #304968; font-weight: 650; line-height: 1.35; }
+body.zh-app :where(input,select,textarea) {
+  color: #10264b; line-height: 1.4; font-size: 14px;
+}
+body.zh-app :where(input,select,textarea)::placeholder { color: #71839e; opacity: 1; }
+body.zh-app :where(button,a,[role="button"]) { -webkit-tap-highlight-color: transparent; }
+body.zh-app :where(button,a,[role="button"]):focus-visible {
+  outline: 3px solid rgba(7,92,255,.48); outline-offset: 3px;
+}
+body.zh-app :where(button,[role="button"],.btn,.btn-amber,.btn-arc,.zh-post,.zh-gold) {
+  line-height: 1.2; font-weight: 700;
+}
+body.zh-app :where(.card,.panel,.surface,.glass,.glass-subtle) {
+  color: var(--zh-text);
+}
+body.zh-app :where(.card,.panel,.surface,.glass,.glass-subtle) :where(h1,h2,h3,h4,strong,b) {
+  color: #10264b;
+}
+body.zh-app :where(.card,.panel,.surface,.glass,.glass-subtle) :where(p,small,li,label,span) {
+  color: #405675;
+}
+body.zh-app :where(.btn,.btn-amber,.btn-arc,.badge.ink,.zh-post,.zh-gold,.zh-hire) {
+  color: #fff;
+}
+body.zh-app :where(.btn,.btn-amber,.btn-arc,.zh-post,.zh-gold) :where(span,strong,svg) { color: inherit; }
+body.zh-app :where(table) { border-collapse: separate; border-spacing: 0; }
+body.zh-app :where(th) { color: #19365f; font-weight: 750; }
+body.zh-app :where(td) { color: #405675; }
+body.zh-app :where(hr) { border: 0; border-top: 1px solid #e2eaf5; }
+body.zh-app :where(a:not(.btn):not(.btn-amber):not(.btn-arc):not(.zh-post):not(.zh-gold)) {
+  text-underline-offset: 3px;
+}
+.zh-route-enter { min-height: 1px; animation: zhRouteEnter .42s cubic-bezier(.2,.75,.25,1) both; }
+@keyframes zhRouteEnter {
+  from { opacity: 0; transform: translate3d(0,10px,0); filter: blur(2px); }
+  to { opacity: 1; transform: translate3d(0,0,0); filter: blur(0); }
+}
+body.zh-app :where(.card,.panel,.surface,.zh-job,.zh-trade,.zh-stat,.zh-panel,.zh-news) {
+  transition: transform .28s cubic-bezier(.2,.75,.25,1), box-shadow .28s ease, border-color .28s ease, background-color .28s ease;
+}
+body.zh-app :where(button,.btn,.btn-amber,.btn-arc,.zh-post,.zh-gold) {
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, filter .2s ease;
+}
+body.zh-app :where(button,.btn,.btn-amber,.btn-arc,.zh-post,.zh-gold):active {
+  transform: translateY(1px) scale(.99);
+}
+@media (max-width: 720px) {
+  body.zh-app { font-size: 14px; }
+  body.zh-app :where(h1) { line-height: 1.08; }
+  body.zh-app :where(input,select,textarea,button) { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zh-route-enter { animation: none !important; }
+  body.zh-app *, body.zh-app *::before, body.zh-app *::after {
+    scroll-behavior: auto !important; animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important; transition-duration: .01ms !important;
+  }
+}
