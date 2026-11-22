@@ -162,3 +162,118 @@ body.zh-app ::selection { background: #1769ff; color: #fff; }
 @media (max-width: 760px) {
   body.zh-app { background: linear-gradient(180deg,#fff 0%,#f3f7ff 100%); }
 }
+
+
+/* Public, account, employer and admin page layout consistency */
+body.zh-app main { position: relative; isolation: isolate; }
+body.zh-app main > .shell.page,
+body.zh-app main > .shell {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+  padding-top: clamp(28px, 4vw, 48px);
+  padding-bottom: clamp(48px, 6vw, 76px);
+}
+body.zh-app main :where(.page-title) {
+  max-width: 22ch;
+  margin: 0 0 18px;
+  color: #10264b;
+  font-family: var(--font-sans), "Segoe UI", sans-serif;
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 760;
+  letter-spacing: -.035em;
+  line-height: 1.08;
+}
+body.zh-app main :where(h1,h2,h3,h4) {
+  letter-spacing: -.025em;
+}
+body.zh-app main :where(.grid-2,.grid-3,.grid-4,.list,.filters,.split) {
+  gap: clamp(12px, 1.6vw, 20px);
+}
+body.zh-app main :where(.card,.job-row,.filters,.side,.table-wrap,.notice,.empty,.error-box) {
+  border-color: rgba(36,105,210,.13);
+  border-radius: 18px;
+}
+body.zh-app main :where(.card) {
+  background: linear-gradient(145deg,rgba(255,255,255,.97),rgba(247,250,255,.92));
+  box-shadow: 0 12px 30px rgba(16,54,112,.055), inset 0 1px 0 #fff;
+}
+body.zh-app main :where(.card h2,.card h3,.card h4) {
+  color: #10264b;
+  line-height: 1.25;
+}
+body.zh-app main :where(.card p,.job-row p,.page > p) {
+  color: #526782;
+}
+body.zh-app main :where(.chip,.badge) {
+  border-color: rgba(23,105,255,.16);
+}
+body.zh-app main :where(.filters,.side,.table-wrap) {
+  background: rgba(255,255,255,.88);
+  box-shadow: 0 12px 30px rgba(16,54,112,.045);
+}
+body.zh-app main :where(th) {
+  color: #24466f;
+  background: #f0f5ff;
+}
+body.zh-app main :where(td) {
+  color: #405675;
+}
+body.zh-app main :where(tr:hover td) {
+  background: #f6f9ff;
+}
+body.zh-app main :where(input,select,textarea) {
+  min-height: 42px;
+  border: 1px solid #d7e3f4;
+  border-radius: 10px;
+  background: #fff;
+  padding: 9px 12px;
+}
+body.zh-app main :where(textarea) { min-height: 110px; }
+body.zh-app main :where(input,select,textarea):focus {
+  border-color: #3985ff;
+  box-shadow: 0 0 0 3px rgba(23,105,255,.11);
+  outline: none;
+}
+body.zh-app main :where(label) {
+  display: grid;
+  gap: 7px;
+  color: #304968;
+}
+body.zh-app main :where(.notice) {
+  color: #174b83;
+  background: #edf6ff;
+  border-color: #cfe5ff;
+}
+body.zh-app main :where(.empty) {
+  color: #405675;
+  background: #f8fbff;
+  border: 1px dashed #c8d9ef;
+}
+body.zh-app main :where(a:not(.btn):not(.btn-amber):not(.btn-arc):not(.zh-post):not(.zh-gold)) {
+  transition: color .18s ease, background-color .18s ease, transform .18s ease;
+}
+@media (max-width: 900px) {
+  body.zh-app main :where(.grid-3,.grid-4) { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  body.zh-app main :where(.grid-2,.split) { grid-template-columns: 1fr; }
+  body.zh-app main :where(.filters) { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 600px) {
+  body.zh-app main > .shell.page,
+  body.zh-app main > .shell {
+    width: min(100% - 28px, 1180px);
+    padding-top: 24px;
+    padding-bottom: 44px;
+  }
+  body.zh-app main :where(.grid-2,.grid-3,.grid-4,.filters) {
+    grid-template-columns: minmax(0,1fr);
+  }
+  body.zh-app main :where(.card,.job-row) { padding: 16px; }
+  body.zh-app main :where(.page-title) { font-size: clamp(28px,8vw,36px); }
+  body.zh-app main :where(table) { min-width: 620px; }
+  body.zh-app main :where(.table-wrap) { overflow-x: auto; }
+}
+@media (max-width: 380px) {
+  body.zh-app main > .shell.page,
+  body.zh-app main > .shell { width: calc(100% - 22px); }
+  body.zh-app main :where(.card,.job-row) { padding: 13px; }
+}
