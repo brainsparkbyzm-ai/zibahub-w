@@ -35,6 +35,7 @@ export default async function HomePage() {
   const jobs = result.ok ? result.data.jobs.slice(0, 4) : [];
   const trades = result.ok && result.data.trades.length ? result.data.trades.slice(0, 6) : null;
   const guides = result.ok && result.data.guides.length ? result.data.guides.slice(0, 3) : null;
+  const highlights = result.ok ? result.data.highlights : null;
 
   return (
     <div className="zh-page">
@@ -65,10 +66,10 @@ export default async function HomePage() {
       </section>
 
       <section className="zh-stats" aria-label="Directory highlights">
-        <Stat icon={<Briefcase />} value="50K+" label="Jobs Available" />
-        <Stat icon={<People />} value="8K+" label="Employers Hiring" />
-        <Stat icon={<Wrench />} value="40+" label="Trades" />
-        <Stat icon={<Cap />} value="12K+" label="Training Paths" />
+        <Stat icon={<Briefcase />} value={highlights ? highlights.jobs.toLocaleString() : "—"} label="Active Job Listings" />
+        <Stat icon={<People />} value={highlights ? highlights.employers.toLocaleString() : "—"} label="Published Employers" />
+        <Stat icon={<Wrench />} value={highlights ? highlights.trades.toLocaleString() : "—"} label="Published Trades" />
+        <Stat icon={<Cap />} value={highlights ? highlights.training.toLocaleString() : "—"} label="Training Opportunities" />
       </section>
 
       {!result.ok ? <DatabaseNotice /> : null}
@@ -128,29 +129,24 @@ export default async function HomePage() {
           <div className="zh-head"><h2>Salary Intelligence</h2><Link href="/salaries">View All Salaries →</Link></div>
           <div className="zh-salary">
             <div>
-              <b>$68,500</b>
-              <span>Average Salary (US)</span>
+              <b>Salary data by trade</b>
+              <span>Explore available salary ranges and source notes.</span>
               <form action="/salaries">
                 <select name="trade" aria-label="Trade" defaultValue="electrician"><option value="electrician">Electrician</option>{popular.map((item) => <option key={item} value={item.toLowerCase()}>{item}</option>)}</select>
                 <select name="country" aria-label="Country" defaultValue="United States"><option>United States</option><option>United Kingdom</option><option>Canada</option></select>
+                <button type="submit">Explore Salaries</button>
               </form>
             </div>
             <div className="zh-bars" aria-hidden="true">
-              <Bar label="Entry" height="46%" value="$45K" />
-              <Bar label="Mid" height="62%" value="$60K" />
-              <Bar label="Senior" height="78%" value="$78K" />
-              <Bar label="Expert" height="96%" value="$95K" />
-            </div>
-            <div className="zh-compare">
-              <p><b>Salary Comparison</b></p>
-              <p><FlagUS /> US <strong>$68,500</strong></p>
-              <p><FlagUK /> UK <strong>£52,000</strong></p>
-              <p><FlagCA /> Canada <strong>C$75,000</strong></p>
+              <div><b>Trade</b><span style={{ height: "76%" }} /><small>Compare</small></div>
+              <div><b>Region</b><span style={{ height: "58%" }} /><small>Filter</small></div>
+              <div><b>Level</b><span style={{ height: "88%" }} /><small>Experience</small></div>
+              <div><b>Source</b><span style={{ height: "68%" }} /><small>Review</small></div>
             </div>
             <div className="zh-insight">
-              <p><b>Market Insight</b></p>
-              <p>Electricians in the US earn 12% higher salaries than the national average.</p>
-              <Link href="/salaries">View Full Report →</Link>
+              <p><b>Compare with confidence</b></p>
+              <p>Browse salary bands by trade, country and experience. Check each listing's source note before making career decisions.</p>
+              <Link href="/salaries">View Salary Data →</Link>
             </div>
           </div>
         </article>
@@ -189,16 +185,16 @@ export default async function HomePage() {
           </div>
           <div className="zh-hire-art" aria-hidden="true">
             <div className="zh-team">
-              <b>Manage Your Team</b>
-              <span>James Miller · Electrician</span>
-              <span>Sarah Johnson · HVAC Specialist</span>
-              <span>Mike Rodriguez · Plumber</span>
+              <b>Employer workspace</b>
+              <span>Publish skilled-trade opportunities</span>
+              <span>Review candidate applications</span>
+              <span>Manage your hiring pipeline</span>
             </div>
             <Image src="/brand/hero-worker.jpg" alt="" width={900} height={700} />
             <div className="zh-mini-metrics">
-              <span>Active Jobs <b>24</b></span>
-              <span>Applications <b>186</b></span>
-              <span>Hired <b>12</b></span>
+              <span>Job <b>Posting</b></span>
+              <span>Candidate <b>Review</b></span>
+              <span>Hiring <b>Tools</b></span>
             </div>
           </div>
         </div>
@@ -228,29 +224,27 @@ function HeroVisual() {
       <div className="zh-dash">
         <div className="zh-metric">
           <i><Briefcase /></i>
-          <span>Average Salary</span>
-          <strong>$68,500 <small>/year</small></strong>
-          <em>+12%</em>
-          <Spark />
+          <span>Find opportunities</span>
+          <strong>Trade jobs</strong>
+          <small>Search roles by skill and location</small>
         </div>
         <div className="zh-metric">
           <i><Clock /></i>
-          <span>Job Availability</span>
-          <strong>8,420</strong>
-          <em>+18%</em>
-          <div className="zh-colchart"><span /><span /><span /><span /><span /><span /><span /></div>
+          <span>Stay informed</span>
+          <strong>New listings</strong>
+          <small>Explore current opportunities</small>
         </div>
         <div className="zh-metric">
           <i><Trend /></i>
-          <span>Career Growth</span>
-          <strong>+24%</strong>
-          <small>Over the next 5 years</small>
+          <span>Plan your next step</span>
+          <strong>Career growth</strong>
+          <small>Discover training and apprenticeships</small>
         </div>
         <div className="zh-metric">
           <i><Pin /></i>
-          <span>Top Location</span>
-          <strong>Austin, TX</strong>
-          <small>(Most Jobs)</small>
+          <span>Explore markets</span>
+          <strong>Global reach</strong>
+          <small>US · UK · Canada</small>
           <FlagUS />
         </div>
       </div>
@@ -266,9 +260,6 @@ function HeroVisual() {
 
 function Stat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return <article className="zh-stat">{icon}<div><strong>{value}</strong><span>{label}</span></div></article>;
-}
-function Bar({ label, height, value }: { label: string; height: string; value: string }) {
-  return <div><b>{value}</b><span style={{ height }} /><small>{label}</small></div>;
 }
 function Spark() {
   return <svg className="zh-spark" viewBox="0 0 120 36" aria-hidden="true"><path d="M2 28 C18 26 22 22 34 20 C48 17 52 24 66 16 C80 8 92 12 118 4" fill="none" stroke="#2f9e68" strokeWidth="2.4" /><path d="M2 28 C18 26 22 22 34 20 C48 17 52 24 66 16 C80 8 92 12 118 4 V36 H2 Z" fill="rgba(47,158,104,0.12)" /></svg>;
