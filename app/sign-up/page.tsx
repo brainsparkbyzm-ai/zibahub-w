@@ -1,6 +1,6 @@
 import { ApiForm } from "@/components/forms/ApiForm";
 import { pageMeta } from "@/lib/seo";
-export const metadata = pageMeta({ title: "Create account", description: "Create a ZibaHub candidate or employer account.", path: "/sign-up" });
+export const metadata = { ...pageMeta({ title: "Create account", description: "Create a ZibaHub candidate or employer account.", path: "/sign-up" }), robots: { index: false, follow: true } };
 export default function SignUpPage() {
   return (
     <div className="shell page" style={{ maxWidth: 680 }}>

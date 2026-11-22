@@ -4,13 +4,26 @@ import { renderMarkdown } from "@/lib/markdown";
 import { formatDate } from "@/lib/format";
 import { SampleBadge } from "@/components/ui/States";
 import { brand } from "@/config/brand";
+import { pageMeta } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const guide = await db.guide.findFirst({ where: { slug, status: "PUBLISHED" } });
-  return { title: guide?.seoTitle || guide?.title || "Guide", description: guide?.seoDescription || guide?.excerpt || brand.description };
-}
+  const guide = await db.guide.findFirst({
+    where: { slug, status: "PUBLISHED" },
+  });
 
+  const title = guide?.seoTitle || guide?.title || "Guide | ZibaHub";
+  const description = (guide?.seoDescription || guide?.excerpt || brand.description)
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 160);
+
+  return pageMeta({
+    title,
+    description,
+    path: `/guides/${slug}`,
+  });
+}
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const guide = await db.guide.findFirst({ where: { slug, status: "PUBLISHED" }, include: { author: true, trade: true } });
@@ -28,3 +41,4 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
     </div>
   );
 }
+

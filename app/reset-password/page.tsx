@@ -1,3 +1,4 @@
+export const metadata = { robots: { index: false, follow: true } };
 import { ApiForm } from "@/components/forms/ApiForm";
 export default async function ResetPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const raw = await searchParams;

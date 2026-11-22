@@ -39,6 +39,7 @@ export async function listJobs(query: Record<string, string | undefined>) {
       OR: [
         { title: { contains: query.q, mode: "insensitive" } },
         { city: { contains: query.q, mode: "insensitive" } },
+      { externalCompanyName: { contains: query.q, mode: "insensitive" } },
         { company: { name: { contains: query.q, mode: "insensitive" } } },
       ],
     });
@@ -173,6 +174,7 @@ export async function applyToJob(userId: string, slug: string, coverLetter?: str
   const job = await db.job.findFirst({ where: { slug, status: "ACTIVE" }, include: { company: true } });
   if (!job) throw new AppError(404, "not_found", "This job is not open.");
   if (job.applicationMethod !== "ONSITE") throw new AppError(400, "external_apply", "This employer accepts applications outside ZibaHub.");
+  if (!job.company) throw new AppError(400, "external_apply", "This job does not accept applications through ZibaHub.");
   if (job.company.ownerId === userId) throw new AppError(400, "own_job", "You cannot apply to your own listing.");
   const application = await db.application.upsert({
     where: { jobId_userId: { jobId: job.id, userId } },
@@ -205,4 +207,5 @@ export async function reportJob(userId: string | null, slug: string, reason: str
 }
 
 export { jobInclude };
+
 

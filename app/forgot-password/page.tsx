@@ -1,3 +1,4 @@
+export const metadata = { robots: { index: false, follow: true } };
 import { ApiForm } from "@/components/forms/ApiForm";
 export default function ForgotPage() {
   return (

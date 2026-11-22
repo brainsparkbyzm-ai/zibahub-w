@@ -250,8 +250,12 @@ model Job {
   slug              String         @unique
   title             String
   description       String
-  companyId         String
-  company           Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId           String?
+  company             Company?      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  externalCompanyName String?
+  source              String?
+  externalId          String?
+  sourceUrl           String?
   tradeId           String?
   trade             Trade?         @relation(fields: [tradeId], references: [id])
   country           String
@@ -286,6 +290,8 @@ model Job {
   @@index([tradeId])
   @@index([postedAt])
   @@index([tier, status])
+  @@index([source])
+  @@unique([source, externalId])
 }
 
 model Application {
@@ -657,3 +663,4 @@ model RateBucket {
   count       Int
   windowStart DateTime
 }
+

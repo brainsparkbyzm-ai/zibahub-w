@@ -7,18 +7,42 @@ import { renderMarkdown } from "@/lib/markdown";
 import { salaryRange, titleCaseEnum, formatDate } from "@/lib/format";
 import { brand } from "@/config/brand";
 import { ShareBar } from "@/features/jobs/ShareBar";
+import { pageMeta } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  return { title: slug.replace(/-/g, " "), description: "Skilled-trade job on ZibaHub." };
-}
+  const result = await load(() => getPublicJob(slug));
 
+  if (!result.ok || !result.data) {
+    return pageMeta({
+      title: "Skilled Trade Job | ZibaHub",
+      description: "Explore skilled-trade job opportunities across the United States, United Kingdom and Canada.",
+      path: `/jobs/${slug}`,
+    });
+  }
+
+  const job = result.data;
+  const employerName = job.externalCompanyName || job.company?.name || "Employer";
+  const location = [job.city, job.region, job.country].filter(Boolean).join(", ");
+  const description = (job.description || `Explore the ${job.title} opportunity at ${employerName}.`)
+    .replace(/[#*_`>\[\]()]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 160);
+
+  return pageMeta({
+    title: `${job.title} at ${employerName} | ZibaHub`,
+    description: `${location ? `${location}. ` : ""}${description}`.slice(0, 160),
+    path: `/jobs/${slug}`,
+  });
+}
 export default async function JobDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const result = await load(() => getPublicJob(slug));
   if (!result.ok) return <div className="shell page"><DatabaseNotice /></div>;
   if (!result.data) notFound();
   const job = result.data;
+  const employerName = job.externalCompanyName || job.company?.name || "Employer";
   await recordJobView(job.id).catch(() => undefined);
   const schema = job.isSeed ? null : {
     "@context": "https://schema.org",
@@ -27,7 +51,7 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
     description: job.description,
     datePosted: job.postedAt.toISOString(),
     employmentType: job.employmentType,
-    hiringOrganization: { "@type": "Organization", name: job.company.name },
+    hiringOrganization: { "@type": "Organization", name: employerName },
     jobLocation: { "@type": "Place", address: { "@type": "PostalAddress", addressLocality: job.city || undefined, addressRegion: job.region || undefined, addressCountry: job.country } },
   };
   return (
@@ -37,7 +61,7 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
       <h1 className="page-title">{job.title}</h1>
       <p className="meta">
         {job.isSeed ? <SampleBadge /> : null}
-        <Link href={`/employers/${job.company.slug}`}>{job.company.name}</Link>
+        {job.company ? <Link href={`/employers/${job.company.slug}`}>{employerName}</Link> : <span>{employerName}</span>}
         <span>{[job.city, job.region, job.country].filter(Boolean).join(", ")}</span>
         <span>{titleCaseEnum(job.locationType)}</span>
         <span>{titleCaseEnum(job.employmentType)}</span>
@@ -66,3 +90,4 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
     </div>
   );
 }
+

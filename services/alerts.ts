@@ -26,13 +26,13 @@ export async function dispatchInstantAlerts(jobId: string) {
       userId: alert.userId,
       type: "JOB_ALERT",
       title: alert.name,
-      body: `${job.title} at ${job.company.name} matches this alert.`,
+      body: `${job.title} at ${(job.externalCompanyName || job.company?.name || "Employer")} matches this alert.`,
       href: `/jobs/${job.slug}`,
     });
     await sendTransactionalEmail({
       to: alert.user.email,
       subject: `ZibaHub alert: ${job.title}`,
-      text: `${job.title} at ${job.company.name} matches “${alert.name}”.\n${brand.url}/jobs/${job.slug}`,
+      text: `${job.title} at ${(job.externalCompanyName || job.company?.name || "Employer")} matches â€œ${alert.name}â€.\n${brand.url}/jobs/${job.slug}`,
     });
     await db.jobAlert.update({ where: { id: alert.id }, data: { lastSentAt: new Date() } });
     notified += 1;
@@ -63,7 +63,7 @@ export async function runDigest(frequency: "DAILY" | "WEEKLY") {
     await sendTransactionalEmail({
       to: alert.user.email,
       subject: `ZibaHub ${frequency.toLowerCase()} job alert`,
-      text: hits.map((job) => `${job.title} — ${brand.url}/jobs/${job.slug}`).join("\n"),
+      text: hits.map((job) => `${job.title} â€” ${brand.url}/jobs/${job.slug}`).join("\n"),
     });
     await db.jobAlert.update({ where: { id: alert.id }, data: { lastSentAt: new Date() } });
     notified += 1;

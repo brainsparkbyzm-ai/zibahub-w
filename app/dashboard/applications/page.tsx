@@ -14,7 +14,7 @@ export default async function ApplicationsPage() {
       <h1 className="page-title">Applications</h1>
       {rows.length === 0 ? <EmptyState title="No applications" body="Apply from an open job that accepts applications on ZibaHub." href="/jobs" action="Find a job" /> : (
         <div className="table-wrap"><table><thead><tr><th>Role</th><th>Employer</th><th>Status</th><th>Sent</th></tr></thead><tbody>
-          {rows.map((row) => <tr key={row.id}><td><Link href={`/jobs/${row.job.slug}`}>{row.job.title}</Link></td><td>{row.job.company.name}</td><td>{titleCaseEnum(row.status)}</td><td>{formatDate(row.createdAt)}</td></tr>)}
+          {rows.map((row) => <tr key={row.id}><td><Link href={`/jobs/${row.job.slug}`}>{row.job.title}</Link></td><td>{row.job.externalCompanyName || row.job.company?.name || "Employer"}</td><td>{titleCaseEnum(row.status)}</td><td>{formatDate(row.createdAt)}</td></tr>)}
         </tbody></table></div>
       )}
     </div>

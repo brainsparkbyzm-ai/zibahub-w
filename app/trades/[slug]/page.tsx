@@ -5,7 +5,34 @@ import { load } from "@/lib/safe";
 import { DatabaseNotice } from "@/components/ui/States";
 import { JobList } from "@/components/jobs/JobList";
 import { renderMarkdown } from "@/lib/markdown";
+import { pageMeta } from "@/lib/seo";
 
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const result = await load(() => tradeBySlug(slug));
+
+  if (!result.ok || !result.data) {
+    return pageMeta({
+      title: "Trade Guide | ZibaHub",
+      description: "Explore skilled trades, career opportunities, salaries and apprenticeships on ZibaHub.",
+      path: `/trades/${slug}`,
+    });
+  }
+
+  const trade = result.data;
+  const description = trade.description
+    .replace(/[#*_`>\[\]()]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 160);
+
+  return pageMeta({
+    title: `${trade.name} Careers, Jobs & Salary Guide | ZibaHub`,
+    description: description || `Explore ${trade.name} jobs, salaries and apprenticeships on ZibaHub.`,
+    path: `/trades/${slug}`,
+  });
+}
 export default async function TradePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const result = await load(() => tradeBySlug(slug));
@@ -26,3 +53,4 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
     </div>
   );
 }
+

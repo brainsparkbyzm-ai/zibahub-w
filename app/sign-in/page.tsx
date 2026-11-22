@@ -1,7 +1,7 @@
 import { ApiForm } from "@/components/forms/ApiForm";
 import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
-export const metadata = pageMeta({ title: "Sign in", description: "Sign in to ZibaHub.", path: "/sign-in" });
+export const metadata = { ...pageMeta({ title: "Sign in", description: "Sign in to ZibaHub.", path: "/sign-in" }), robots: { index: false, follow: true } };
 export default function SignInPage() {
   return (
     <div className="shell page" style={{ maxWidth: 640 }}>

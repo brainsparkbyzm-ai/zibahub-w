@@ -4,7 +4,7 @@ import { load } from "@/lib/safe";
 import { DatabaseNotice, EmptyState } from "@/components/ui/States";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Search", description: "Search jobs, trades, training, guides, and employers.", path: "/search" });
+export const metadata = { ...pageMeta({ title: "Search", description: "Search jobs, trades, training, guides, and employers.", path: "/search" }), robots: { index: false, follow: true } };
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const raw = await searchParams;

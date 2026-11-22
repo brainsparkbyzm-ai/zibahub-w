@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { DatabaseNotice } from "@/components/ui/States";
 import { NewsletterForm } from "@/features/home/NewsletterForm";
@@ -24,10 +25,10 @@ const tradeCards = [
 ] as const;
 
 const fallbackJobs = [
-  { title: "Electrician", company: "Summit Electric Co.", place: "New York, NY, USA", pay: "$62,000 – $85,000", trade: "Electrician", q: "Electrician" },
-  { title: "HVAC Technician", company: "CoolAir Solutions", place: "Chicago, IL, USA", pay: "$48,000 – $72,000", trade: "HVAC", q: "HVAC" },
-  { title: "Plumber", company: "Harbor Pipe Co.", place: "Toronto, ON, Canada", pay: "$55,000 – $78,000", trade: "Plumbing", q: "Plumber" },
-  { title: "Welder", company: "SteelWorks Ltd.", place: "Detroit, MI, USA", pay: "$52,000 – $76,000", trade: "Welding", q: "Welder" },
+  { title: "Electrician", company: "Summit Electric Co.", place: "New York, NY, USA", pay: "$62,000 â€“ $85,000", trade: "Electrician", q: "Electrician" },
+  { title: "HVAC Technician", company: "CoolAir Solutions", place: "Chicago, IL, USA", pay: "$48,000 â€“ $72,000", trade: "HVAC", q: "HVAC" },
+  { title: "Plumber", company: "Harbor Pipe Co.", place: "Toronto, ON, Canada", pay: "$55,000 â€“ $78,000", trade: "Plumbing", q: "Plumber" },
+  { title: "Welder", company: "SteelWorks Ltd.", place: "Detroit, MI, USA", pay: "$52,000 â€“ $76,000", trade: "Welding", q: "Welder" },
 ];
 
 const guideCards = [
@@ -46,7 +47,7 @@ export default async function HomePage() {
     <div className="zh-page">
       <section className="zh-hero">
         <div className="zh-hero-copy">
-          <p className="zh-region"><Pin /> US · UK · Canada</p>
+          <p className="zh-region"><Pin /> US Â· UK Â· Canada</p>
           <h1>Build Your Career in the Skilled Trades.</h1>
           <p className="zh-lede">Find better trade jobs, compare salaries, discover apprenticeships and make smarter career moves.</p>
           <form className="zh-search" action="/jobs">
@@ -83,7 +84,7 @@ export default async function HomePage() {
         <div className="zh-jobs-col">
           <div className="zh-head">
             <h2>Featured Jobs</h2>
-            <Link href="/jobs">View All Jobs →</Link>
+            <Link href="/jobs">View All Jobs â†’</Link>
           </div>
           <div className="zh-job-grid">
             {jobs.length ? jobs.map((job) => (
@@ -92,7 +93,7 @@ export default async function HomePage() {
                   <TradeGlyph name={job.trade?.name || job.title} />
                   <div>
                     <h3><Link href={`/jobs/${job.slug}`}>{job.title}</Link></h3>
-                    <p>{job.company.name}</p>
+                    <p>{job.externalCompanyName || job.company?.name || "Employer"}</p>
                     <p className="zh-place"><Pin /> {[job.city, job.region, job.country].filter(Boolean).join(", ")}</p>
                   </div>
                   <Heart />
@@ -104,7 +105,7 @@ export default async function HomePage() {
                 </div>
                 <div className="zh-job-actions">
                   <form action={`/api/jobs/${job.slug}/save`} method="post">
-                    <button type="submit">♡ Save</button>
+                    <button type="submit">â™¡ Save</button>
                   </form>
                   <Link href={`/jobs/${job.slug}`}>View Job</Link>
                 </div>
@@ -123,7 +124,7 @@ export default async function HomePage() {
                 <strong>{job.pay} <small>/ year</small></strong>
                 <div className="zh-tags"><span>Full-time</span><span>{job.trade}</span></div>
                 <div className="zh-job-actions">
-                  <Link className="zh-save-link" href="/jobs/saved">♡ Save</Link>
+                  <Link className="zh-save-link" href="/jobs/saved">â™¡ Save</Link>
                   <Link href={`/jobs?q=${encodeURIComponent(job.q)}`}>View Job</Link>
                 </div>
               </article>
@@ -133,7 +134,7 @@ export default async function HomePage() {
         <div>
           <div className="zh-head">
             <h2>Popular Trades</h2>
-            <Link href="/trades">View All Trades →</Link>
+            <Link href="/trades">View All Trades â†’</Link>
           </div>
           <div className="zh-trade-grid">
             {(trades ? trades.map((trade) => [trade.name, trade.summary, trade.slug] as const) : tradeCards.map(([name, summary]) => [name, summary, ""] as const)).map(([name, summary, slug]) => (
@@ -149,7 +150,7 @@ export default async function HomePage() {
 
       <section className="zh-intel">
         <article className="zh-panel">
-          <div className="zh-head"><h2>Salary Intelligence</h2><Link href="/salaries">View All Salaries →</Link></div>
+          <div className="zh-head"><h2>Salary Intelligence</h2><Link href="/salaries">View All Salaries â†’</Link></div>
           <div className="zh-salary">
             <div>
               <b>$68,500</b>
@@ -168,18 +169,18 @@ export default async function HomePage() {
             <div className="zh-compare">
               <p><b>Salary Comparison</b></p>
               <p><FlagUS /> US <strong>$68,500</strong></p>
-              <p><FlagUK /> UK <strong>£52,000</strong></p>
+              <p><FlagUK /> UK <strong>Â£52,000</strong></p>
               <p><FlagCA /> Canada <strong>C$75,000</strong></p>
             </div>
             <div className="zh-insight">
               <p><b>Market Insight</b></p>
               <p>Electricians in the US earn 12% higher salaries than the national average.</p>
-              <Link href="/salaries">View Full Report →</Link>
+              <Link href="/salaries">View Full Report â†’</Link>
             </div>
           </div>
         </article>
         <article className="zh-panel">
-          <div className="zh-head"><h2>Career & Training</h2><Link href="/training">View All →</Link></div>
+          <div className="zh-head"><h2>Career & Training</h2><Link href="/training">View All â†’</Link></div>
           <div className="zh-train">
             <Link href="/apprenticeships"><Cap /><strong>Apprenticeships</strong><span>Earn while you learn and gain real experience.</span></Link>
             <Link href="/training"><Badge /><strong>Certifications</strong><span>Get certified and boost your career.</span></Link>
@@ -187,14 +188,14 @@ export default async function HomePage() {
           </div>
         </article>
         <article className="zh-panel">
-          <div className="zh-head"><h2>Career Guides</h2><Link href="/guides">View All Guides →</Link></div>
+          <div className="zh-head"><h2>Career Guides</h2><Link href="/guides">View All Guides â†’</Link></div>
           <div className="zh-guides">
             {(guides ? guides.map((guide) => ({ kicker: guide.category, title: guide.title, image: guideCards[0].image, href: `/guides/${guide.slug}` })) : guideCards).map((guide) => (
               <Link key={guide.title} href={guide.href} className="zh-guide">
-                <img src={guide.image} alt="" />
+                <Image src={guide.image} alt="" width={320} height={72} />
                 <small>{guide.kicker}</small>
                 <strong>{guide.title}</strong>
-                <em>Read Guide →</em>
+                <em>Read Guide â†’</em>
               </Link>
             ))}
           </div>
@@ -214,11 +215,11 @@ export default async function HomePage() {
           <div className="zh-hire-art" aria-hidden="true">
             <div className="zh-team">
               <b>Manage Your Team</b>
-              <span>James Miller · Electrician</span>
-              <span>Sarah Johnson · HVAC Specialist</span>
-              <span>Mike Rodriguez · Plumber</span>
+              <span>James Miller Â· Electrician</span>
+              <span>Sarah Johnson Â· HVAC Specialist</span>
+              <span>Mike Rodriguez Â· Plumber</span>
             </div>
-            <img src="/brand/hero-worker.jpg" alt="" />
+            <Image src="/brand/hero-worker.jpg" alt="" width={900} height={700} />
             <div className="zh-mini-metrics">
               <span>Active Jobs <b>24</b></span>
               <span>Applications <b>186</b></span>
@@ -235,7 +236,7 @@ export default async function HomePage() {
 function payLine(min: number | null, max: number | null, currency: string, type: string) {
   if (min == null && max == null) return "Pay not listed";
   const suffix = type === "HOURLY" ? "/ hour" : type === "DAILY" ? "/ day" : "/ year";
-  if (min != null && max != null) return `${money(min, currency)} – ${money(max, currency)} ${suffix}`;
+  if (min != null && max != null) return `${money(min, currency)} â€“ ${money(max, currency)} ${suffix}`;
   return `${money(min ?? max, currency)} ${suffix}`;
 }
 
@@ -248,7 +249,7 @@ function jobType(value: string) {
 function HeroVisual() {
   return (
     <div className="zh-visual" aria-hidden="true">
-      <img src="/brand/hero-worker.jpg" alt="" />
+      <Image src="/brand/hero-worker.jpg" alt="" width={900} height={700} />
       <div className="zh-dash">
         <div className="zh-metric">
           <i><Briefcase /></i>
@@ -325,3 +326,4 @@ function Crane() { return <svg width="16" height="16" viewBox="0 0 24 24" fill="
 function FlagUS() { return <svg width="16" height="11" viewBox="0 0 16 11" aria-hidden="true"><rect width="16" height="11" fill="#fff" /><rect width="16" height="1.2" fill="#b22234" /><rect y="2.4" width="16" height="1.2" fill="#b22234" /><rect y="4.8" width="16" height="1.2" fill="#b22234" /><rect y="7.2" width="16" height="1.2" fill="#b22234" /><rect y="9.6" width="16" height="1.2" fill="#b22234" /><rect width="7" height="5.8" fill="#3c3b6e" /></svg>; }
 function FlagUK() { return <svg width="16" height="11" viewBox="0 0 16 11" aria-hidden="true"><rect width="16" height="11" fill="#012169" /><path d="M0 0l16 11M16 0L0 11" stroke="#fff" strokeWidth="2" /><path d="M8 0v11M0 5.5h16" stroke="#fff" strokeWidth="3" /><path d="M8 0v11M0 5.5h16" stroke="#c8102e" strokeWidth="1.4" /></svg>; }
 function FlagCA() { return <svg width="16" height="11" viewBox="0 0 16 11" aria-hidden="true"><rect width="16" height="11" fill="#fff" /><rect width="4" height="11" fill="#d52b1e" /><rect x="12" width="4" height="11" fill="#d52b1e" /><path d="M8 2l.6 1.8h1.8L9.1 5l.6 1.8L8 5.7 6.3 6.8 6.9 5 5.6 3.8h1.8z" fill="#d52b1e" /></svg>; }
+
