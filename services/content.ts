@@ -90,7 +90,10 @@ export async function globalSearch(q: string) {
 }
 
 export async function homeData() {
-  const [jobs, trades, apprenticeships, courses, guides, employers, products, articles] = await Promise.all([
+  const [
+    jobs, trades, apprenticeships, courses, guides, employers, products, articles,
+    activeJobCount, publishedEmployerCount, publishedTradeCount, apprenticeshipCount, courseCount,
+  ] = await Promise.all([
     db.job.findMany({ where: { status: "ACTIVE", isSeed: false }, include: { company: true, trade: true }, orderBy: [{ tier: "desc" }, { postedAt: "desc" }], take: 6 }),
     db.trade.findMany({ where: { status: "PUBLISHED" }, take: 10, orderBy: { name: "asc" } }),
     db.apprenticeship.findMany({ where: { status: "PUBLISHED" }, include: { trade: true }, take: 3 }),
@@ -99,8 +102,21 @@ export async function homeData() {
     db.company.findMany({ where: { status: "PUBLISHED" }, take: 4 }),
     db.affiliateProduct.findMany({ where: { status: "PUBLISHED" }, take: 4 }),
     db.article.findMany({ where: { status: "PUBLISHED", sponsored: true }, take: 2 }),
+    db.job.count({ where: { status: "ACTIVE", isSeed: false } }),
+    db.company.count({ where: { status: "PUBLISHED" } }),
+    db.trade.count({ where: { status: "PUBLISHED" } }),
+    db.apprenticeship.count({ where: { status: "PUBLISHED" } }),
+    db.course.count({ where: { status: "PUBLISHED" } }),
   ]);
-  return { jobs, trades, apprenticeships, courses, guides, employers, products, articles };
+  return {
+    jobs, trades, apprenticeships, courses, guides, employers, products, articles,
+    highlights: {
+      jobs: activeJobCount,
+      employers: publishedEmployerCount,
+      trades: publishedTradeCount,
+      training: apprenticeshipCount + courseCount,
+    },
+  };
 }
 
 export async function metrics() {
