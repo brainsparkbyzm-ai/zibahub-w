@@ -33,17 +33,7 @@ export function JobList({ jobs }: { jobs: JobCard[] }) {
         return (
           <article
             key={job.slug}
-            className={`card card-interactive job-row ${isPremium ? "job-row-premium" : ""}`}
-            style={{
-              borderColor: isPremium
-                ? "rgba(196, 92, 18, 0.35)"
-                : isFeatured
-                ? "rgba(15, 110, 120, 0.28)"
-                : "rgba(228, 222, 212, 0.78)",
-              background: isPremium
-                ? "linear-gradient(180deg, rgba(255, 252, 248, 0.96) 0%, rgba(255, 248, 240, 0.90) 100%)"
-                : "var(--glass-card)",
-            }}
+            className={`card card-interactive job-row ${isPremium ? "job-row-premium" : isFeatured ? "job-row-featured" : ""}`}
           >
             <div style={{ display: "grid", gap: 8 }}>
               {/* Top metadata row */}
@@ -63,7 +53,7 @@ export function JobList({ jobs }: { jobs: JobCard[] }) {
                   style={{
                     fontWeight: 600,
                     color: "var(--ink-secondary)",
-                    background: "rgba(28,25,22,0.04)",
+                    background: "rgba(23,105,255,0.07)",
                     padding: "2px 8px",
                     borderRadius: 6,
                     fontSize: 12,
