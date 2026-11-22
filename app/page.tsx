@@ -261,9 +261,6 @@ function HeroVisual() {
 function Stat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return <article className="zh-stat">{icon}<div><strong>{value}</strong><span>{label}</span></div></article>;
 }
-function Spark() {
-  return <svg className="zh-spark" viewBox="0 0 120 36" aria-hidden="true"><path d="M2 28 C18 26 22 22 34 20 C48 17 52 24 66 16 C80 8 92 12 118 4" fill="none" stroke="#2f9e68" strokeWidth="2.4" /><path d="M2 28 C18 26 22 22 34 20 C48 17 52 24 66 16 C80 8 92 12 118 4 V36 H2 Z" fill="rgba(47,158,104,0.12)" /></svg>;
-}
 function TradeGlyph({ name }: { name: string }) {
   const key = name.toLowerCase();
   const icon = key.includes("hvac") ? <span className="zh-glyph hvac"><Hvac /></span> : key.includes("plumb") ? <span className="zh-glyph pipe"><Pipe /></span> : key.includes("weld") ? <span className="zh-glyph weld"><Weld /></span> : key.includes("carpent") ? <span className="zh-glyph hammer"><Hammer /></span> : key.includes("construct") ? <span className="zh-glyph crane"><Crane /></span> : <span className="zh-glyph bolt"><Bolt /></span>;
@@ -290,6 +287,4 @@ function Weld() { return <svg width="16" height="16" viewBox="0 0 24 24" fill="n
 function Hammer() { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M14 4l6 6-4 1-7 7-3-3 7-7 1-4z" /></svg>; }
 function Crane() { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 20h10M8 20V6l12 3M8 10h8" /></svg>; }
 function FlagUS() { return <svg width="16" height="11" viewBox="0 0 16 11" aria-hidden="true"><rect width="16" height="11" fill="#fff" /><rect width="16" height="1.2" fill="#b22234" /><rect y="2.4" width="16" height="1.2" fill="#b22234" /><rect y="4.8" width="16" height="1.2" fill="#b22234" /><rect y="7.2" width="16" height="1.2" fill="#b22234" /><rect y="9.6" width="16" height="1.2" fill="#b22234" /><rect width="7" height="5.8" fill="#3c3b6e" /></svg>; }
-function FlagUK() { return <svg width="16" height="11" viewBox="0 0 16 11" aria-hidden="true"><rect width="16" height="11" fill="#012169" /><path d="M0 0l16 11M16 0L0 11" stroke="#fff" strokeWidth="2" /><path d="M8 0v11M0 5.5h16" stroke="#fff" strokeWidth="3" /><path d="M8 0v11M0 5.5h16" stroke="#c8102e" strokeWidth="1.4" /></svg>; }
-function FlagCA() { return <svg width="16" height="11" viewBox="0 0 16 11" aria-hidden="true"><rect width="16" height="11" fill="#fff" /><rect width="4" height="11" fill="#d52b1e" /><rect x="12" width="4" height="11" fill="#d52b1e" /><path d="M8 2l.6 1.8h1.8L9.1 5l.6 1.8L8 5.7 6.3 6.8 6.9 5 5.6 3.8h1.8z" fill="#d52b1e" /></svg>; }
 
