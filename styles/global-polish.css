@@ -78,3 +78,87 @@ body.zh-app :where(button,.btn,.btn-amber,.btn-arc,.zh-post,.zh-gold):active {
     animation-iteration-count: 1 !important; transition-duration: .01ms !important;
   }
 }
+
+
+/* Unified ZibaHub premium blue theme across every route */
+:root {
+  --canvas: #f5f8ff;
+  --canvas-subtle: #edf3ff;
+  --paper: #ffffff;
+  --ink: #10264b;
+  --ink-secondary: #304968;
+  --muted: #647895;
+  --muted-light: #8293ad;
+  --line: rgba(16, 54, 112, .10);
+  --line-strong: rgba(16, 54, 112, .17);
+  --amber: #1769ff;
+  --amber-light: #5b9bff;
+  --amber-deep: #124bb5;
+  --amber-subtle: #eaf2ff;
+  --amber-glow: rgba(23, 105, 255, .15);
+  --cyan: #089acb;
+  --cyan-light: #45c3e8;
+  --cyan-deep: #08739a;
+  --cyan-subtle: #e8f8ff;
+  --cyan-glow: rgba(8, 154, 203, .13);
+}
+body.zh-app {
+  color: #10264b;
+  background:
+    radial-gradient(900px 460px at 4% -8%, rgba(23,105,255,.075), transparent 62%),
+    radial-gradient(780px 420px at 96% 4%, rgba(8,154,203,.065), transparent 62%),
+    linear-gradient(180deg, #ffffff 0%, #f7faff 58%, #f1f6ff 100%);
+}
+body.zh-app::before {
+  opacity: .025;
+  background-image:
+    linear-gradient(rgba(23,105,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23,105,255,.08) 1px, transparent 1px);
+}
+body.zh-app :where(.btn-amber,.btn,.zh-post,.zh-gold,.zh-search button,.zh-news button,.zh-job-actions a) {
+  background: linear-gradient(135deg, #2878ff 0%, #0757e8 100%);
+  color: #fff;
+  border-color: rgba(7,87,232,.18);
+  box-shadow: 0 9px 22px rgba(7,87,232,.18), inset 0 1px 0 rgba(255,255,255,.22);
+}
+body.zh-app :where(.btn-amber,.btn,.zh-post,.zh-gold,.zh-search button,.zh-news button,.zh-job-actions a):hover {
+  background: linear-gradient(135deg, #438cff 0%, #0649c7 100%);
+  box-shadow: 0 13px 28px rgba(7,87,232,.24);
+}
+body.zh-app :where(.badge,.chip,.hero-eyebrow,.zh-metric i,.trade-icon,.career-icon,.newsletter-icon) {
+  background-color: #eaf2ff;
+  border-color: rgba(23,105,255,.14);
+  color: #124bb5;
+}
+body.zh-app :where(.card,.panel,.surface,.glass,.glass-subtle,.zh-stat,.zh-panel,.zh-job,.zh-trade,.zh-news) {
+  border-color: rgba(36,105,210,.12);
+  box-shadow: 0 14px 34px rgba(16,54,112,.055), inset 0 1px 0 rgba(255,255,255,.92);
+}
+body.zh-app :where(.card,.panel,.surface,.glass,.glass-subtle,.zh-stat,.zh-panel,.zh-job,.zh-trade,.zh-news):hover {
+  border-color: rgba(23,105,255,.24);
+  box-shadow: 0 20px 44px rgba(16,75,160,.10), inset 0 1px 0 rgba(255,255,255,.96);
+}
+body.zh-app :where(.zh-nav,.zh-signin,.zh-drawer,.zh-search,.zh-dash,.zh-rail) {
+  border-color: rgba(36,105,210,.13);
+}
+body.zh-app :where(.zh-wordmark strong,.zh-hero h1,.zh-metric strong,.zh-rail li,.zh-head h2,.zh-stat strong) {
+  color: #10264b;
+}
+body.zh-app :where(.zh-wordmark small,.zh-head a,.zh-insight a,.zh-guide em,.zh-search svg,.zh-stat svg,.zh-rail svg) {
+  color: #1769ff;
+}
+body.zh-app :where(.zh-nav-links a:hover,.zh-tool:hover,.zh-popular a:hover,.nav-links a:hover,.nav-tool:hover,.btn-ghost:hover,.btn-line:hover) {
+  color: #0757e8;
+  background: rgba(23,105,255,.08);
+}
+body.zh-app :where(.salary-card,.employer-cta) {
+  color: #fff;
+}
+body.zh-app :where(.salary-card,.employer-cta) :where(h1,h2,h3,h4,p,span,small,strong,a:not(.btn-amber)) {
+  color: #fff;
+}
+body.zh-app :where(.salary-number) { color: #a9ccff; }
+body.zh-app ::selection { background: #1769ff; color: #fff; }
+@media (max-width: 760px) {
+  body.zh-app { background: linear-gradient(180deg,#fff 0%,#f3f7ff 100%); }
+}
