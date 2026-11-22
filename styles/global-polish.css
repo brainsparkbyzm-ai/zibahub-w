@@ -277,3 +277,67 @@ body.zh-app main :where(a:not(.btn):not(.btn-amber):not(.btn-arc):not(.zh-post):
   body.zh-app main > .shell { width: calc(100% - 22px); }
   body.zh-app main :where(.card,.job-row) { padding: 13px; }
 }
+
+
+/* Form alignment and readable control states */
+body.zh-app main :where(label) {
+  display: block;
+  gap: 0;
+}
+body.zh-app main :where(label:has(> input:not([type="checkbox"]):not([type="radio"]), > select, > textarea)) {
+  display: grid;
+  gap: 7px;
+}
+body.zh-app main :where(label:has(> input[type="checkbox"], > input[type="radio"])) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 9px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+body.zh-app main :where(input[type="checkbox"], input[type="radio"]) {
+  appearance: auto;
+  -webkit-appearance: auto;
+  flex: 0 0 auto;
+  width: 17px;
+  min-width: 17px;
+  height: 17px;
+  min-height: 17px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  box-shadow: none;
+  accent-color: #1769ff;
+}
+body.zh-app main :where(input[type="checkbox"]:focus, input[type="radio"]:focus) {
+  box-shadow: 0 0 0 3px rgba(23,105,255,.14);
+}
+body.zh-app main :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  width: 100%;
+  max-width: 100%;
+  color: #10264b;
+  background-color: #fff;
+}
+body.zh-app main :where(input:disabled, select:disabled, textarea:disabled, button:disabled) {
+  cursor: not-allowed;
+  opacity: .62;
+}
+body.zh-app main :where(.error-box,[role="alert"]) {
+  color: #9f1239;
+  background: #fff1f3;
+  border: 1px solid #fecdd3;
+  border-radius: 12px;
+  padding: 11px 14px;
+}
+body.zh-app main :where(.notice,[role="status"]) {
+  line-height: 1.5;
+}
+body.zh-app main :where(.badge,.chip) {
+  color: #124bb5;
+}
+body.zh-app main :where(.badge.ink,.badge.premium,.badge.arc) {
+  color: #fff;
+}
