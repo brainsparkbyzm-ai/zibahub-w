@@ -84,7 +84,7 @@ export default async function HomePage() {
             {jobs.length ? jobs.map((job) => (
               <article key={job.id} className="zh-job">
                 <div className="zh-job-top">
-                  <TradeGlyph name={job.trade?.name || job.title} />
+                  <Image className="zh-job-photo" src={jobPhoto(job.trade?.name || job.title)} alt="" width={112} height={132} />
                   <div>
                     <h3><Link href={`/jobs/${job.slug}`}>{job.title}</Link></h3>
                     <p>{job.externalCompanyName || job.company?.name || "Employer"}</p>
@@ -214,6 +214,13 @@ export default async function HomePage() {
       </section>
     </div>
   );
+}
+
+function jobPhoto(name: string) {
+  const value = name.toLowerCase();
+  if (value.includes("electric") || value.includes("hvac") || value.includes("plumb")) return "/brand/guide-electrician.jpg";
+  if (value.includes("weld") || value.includes("construct") || value.includes("carpent")) return "/brand/guide-tools.jpg";
+  return "/brand/guide-resume.jpg";
 }
 
 function payLine(min: number | null, max: number | null, currency: string, type: string) {
