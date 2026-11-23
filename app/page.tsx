@@ -238,41 +238,8 @@ function jobType(value: string) {
 
 function HeroVisual() {
   return (
-    <div className="zh-visual" aria-hidden="true">
-      <Image src="/brand/hero-worker.jpg" alt="" width={900} height={700} />
-      <div className="zh-dash">
-        <div className="zh-metric">
-          <i><Briefcase /></i>
-          <span>Find opportunities</span>
-          <strong>Trade jobs</strong>
-          <small>Search roles by skill and location</small>
-        </div>
-        <div className="zh-metric">
-          <i><Clock /></i>
-          <span>Stay informed</span>
-          <strong>New listings</strong>
-          <small>Explore current opportunities</small>
-        </div>
-        <div className="zh-metric">
-          <i><Trend /></i>
-          <span>Plan your next step</span>
-          <strong>Career growth</strong>
-          <small>Discover training and apprenticeships</small>
-        </div>
-        <div className="zh-metric">
-          <i><Pin /></i>
-          <span>Explore markets</span>
-          <strong>Global reach</strong>
-          <small>US · UK · Canada</small>
-          <FlagUS />
-        </div>
-      </div>
-      <ul className="zh-rail">
-        <li><Trend /> Better Jobs</li>
-        <li><Wallet /> Higher Salaries</li>
-        <li><Chart /> Career Growth</li>
-        <li><Pin /> Top Locations</li>
-      </ul>
+    <div className="zh-visual zh-visual-clean" aria-label="Skilled trades professional at work">
+      <Image src="/brand/hero-worker.jpg" alt="Skilled trades professional wearing a hard hat at a construction site" width={1200} height={900} priority />
     </div>
   );
 }
