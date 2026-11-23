@@ -43,7 +43,7 @@ export default async function HomePage() {
         <div className="zh-hero-copy">
           <p className="zh-region"><span className="zh-bolt">ϟ</span> Build Your Skilled Career with ZibaHub</p>
           <h1>Skilled Trades Jobs<br/>for a <em>Better Tomorrow</em></h1>
-          <p className="zh-lede">Find better trade jobs, compare salaries, discover apprenticeships and make smarter career moves.</p>
+          <p className="zh-lede">Discover top job opportunities, grow your skills, and build a rewarding career in skilled trades worldwide.</p>
           <form className="zh-search" action="/jobs">
             <label>
               <Briefcase />
@@ -66,10 +66,10 @@ export default async function HomePage() {
       </section>
 
       <section className="zh-stats" aria-label="Directory highlights">
-        <Stat icon={<Briefcase />} value={highlights ? highlights.jobs.toLocaleString() : "—"} label="Job Opportunities" />
-        <Stat icon={<People />} value={highlights ? highlights.employers.toLocaleString() : "—"} label="Skilled Professionals" />
-        <Stat icon={<Wrench />} value={highlights ? highlights.trades.toLocaleString() : "—"} label="Employers Worldwide" />
-        <Stat icon={<Cap />} value="3" label="US · UK · Canada" />
+        <Stat icon={<Briefcase />} value={highlights ? highlights.jobs.toLocaleString() : "—"} label="Active Job Listings" />
+        <Stat icon={<People />} value={highlights ? highlights.employers.toLocaleString() : "—"} label="Published Employers" />
+        <Stat icon={<Wrench />} value={highlights ? highlights.trades.toLocaleString() : "—"} label="Trade Categories" />
+        <Stat icon={<Cap />} value={highlights ? highlights.training.toLocaleString() : "—"} label="Training Opportunities" />
       </section>
 
       {!result.ok ? <DatabaseNotice /> : null}
