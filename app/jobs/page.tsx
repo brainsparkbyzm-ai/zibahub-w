@@ -43,6 +43,14 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
           <label className="jobs-field jobs-field-keyword"><span>Keyword</span>
             <input name="q" placeholder="Job title, employer or city" defaultValue={query.q || ""} />
           </label>
+          <label className="jobs-field"><span>Industry</span>
+            <select name="sector" defaultValue={query.sector || ""}>
+              <option value="">All industries</option>
+              <option value="hotels">Hotels &amp; Hospitality</option>
+              <option value="grocery">Grocery &amp; Supermarkets</option>
+              <option value="trainers">Fitness &amp; Trainers</option>
+            </select>
+          </label>
           <label className="jobs-field"><span>Country</span>
             <select name="country" defaultValue={query.country || ""}>
               <option value="">Any country</option>
