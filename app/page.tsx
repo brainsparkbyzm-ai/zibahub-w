@@ -124,6 +124,18 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className="zh-industry-strip">
+        <div className="zh-directory-heading">
+          <div><span className="zh-eyebrow">EXPANDING THE OPPORTUNITY</span><h2>Explore jobs beyond the trades</h2><p>Discover opportunities in hospitality, grocery retail and fitness — alongside skilled-trade careers.</p></div>
+          <Link href="/industries">Explore all industries <span aria-hidden="true">↗</span></Link>
+        </div>
+        <div className="zh-industry-strip-grid">
+          <Link href="/jobs?sector=hotels"><span>01 / HOSPITALITY</span><b>Hotel &amp; Resort Jobs</b><small>Guest services · Front desk · Housekeeping</small><i aria-hidden="true">↗</i></Link>
+          <Link href="/jobs?sector=grocery"><span>02 / RETAIL</span><b>Grocery &amp; Supermarket Jobs</b><small>Store teams · Cashiers · Stock &amp; produce</small><i aria-hidden="true">↗</i></Link>
+          <Link href="/jobs?sector=trainers"><span>03 / FITNESS</span><b>Fitness &amp; Trainer Jobs</b><small>Personal training · Gym instruction · Coaching</small><i aria-hidden="true">↗</i></Link>
+        </div>
+      </section>
+
       <section className="zh-intel">
         <article className="zh-panel">
           <div className="zh-head"><h2>Salary Intelligence</h2><Link href="/salaries">View All Salaries →</Link></div>
