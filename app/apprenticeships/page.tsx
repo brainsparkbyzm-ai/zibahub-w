@@ -11,7 +11,7 @@ export default async function ApprenticeshipsPage({ searchParams }: { searchPara
   const query = Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, Array.isArray(value) ? value[0] : value || ""]));
   const result = await load(() => listApprenticeships(query));
   return (
-    <div className="shell page">
+    <div className="shell page zh-directory-page zh-page-apprenticeships">
       <h1 className="page-title">Apprenticeships</h1>
       <form className="filters glass" action="/apprenticeships">
         <label>Country<select name="country" defaultValue={query.country || ""}><option value="">Any</option><option>United States</option><option>United Kingdom</option><option>Canada</option></select></label>
