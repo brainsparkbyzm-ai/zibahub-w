@@ -22,7 +22,7 @@ export function LogoMark({ size = 42 }: { size?: number }) {
 
 export function Wordmark({ tagline = true }: { tagline?: boolean }) {
   return (
-    <span className="zh-wordmark">
+    <span className="zh-wordmark" aria-label="ZibaHub">
       <strong><span className="zh-word-ziba">Ziba</span><span className="zh-word-hub">Hub</span></strong>
       {tagline ? <small>Skilled trades. Brighter futures.</small> : null}
     </span>
