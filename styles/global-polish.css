@@ -687,3 +687,38 @@ body.zh-app .zh-footer { margin-top:12px; }
 @media(prefers-reduced-motion:reduce) {
  .zh-industry-card,.zh-industry-strip-grid > a { transition:none!important; }
 }
+
+
+/* Directory page compositions: trades, pay, learning, employers, guides and tools */
+.zh-directory-page > .page-title { position:relative; padding-bottom:17px; margin-bottom:16px!important; }
+.zh-directory-page > .page-title::after { content:""; position:absolute; left:0; bottom:0; width:66px; height:4px; border-radius:9px; background:linear-gradient(90deg,#1769ed,#8db9ff); }
+.zh-directory-page > .page-title + p { max-width:72ch; margin:0 0 25px; color:#637994; font-size:15px; }
+.zh-directory-page > .kicker,.zh-directory-page > .eyebrow { display:inline-flex; align-items:center; margin:0 0 12px; padding:7px 11px; border:1px solid #d8e7fc; border-radius:999px; background:#eff6ff; color:#1761d1; font-size:10px; font-weight:850; letter-spacing:.11em; text-transform:uppercase; }
+.zh-directory-page > .grid-3,.zh-directory-page > .grid-2,.zh-directory-page > .list { margin-top:23px; }
+.zh-directory-page > .grid-3 > .card,.zh-directory-page > .grid-2 > .card { min-height:170px; }
+.zh-directory-page > .grid-3 > .card h3,.zh-directory-page > .grid-2 > .card h3 { margin:0 0 10px; }
+.zh-directory-page > .grid-3 > .card p,.zh-directory-page > .grid-2 > .card p { margin:0; font-size:13px; }
+.zh-directory-page > .filters { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); align-items:end; margin:24px 0 26px; }
+.zh-directory-page > .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:17px; }
+.zh-directory-page > .chips .chip { padding:8px 12px; border:1px solid #dce8f8; border-radius:999px; background:#fff; color:#315b8b; font-size:11px; font-weight:750; }
+.zh-directory-page > .table-wrap { margin-top:22px; }
+.zh-directory-page > .list { display:grid; gap:13px; }
+.zh-directory-page .card .badge,.zh-directory-page .card .chip { vertical-align:middle; }
+.zh-directory-page .prose { max-width:82ch; padding:26px; border:1px solid #e0eaf7; border-radius:20px; background:#fff; box-shadow:0 12px 32px rgba(23,59,112,.05); }
+.zh-directory-page .prose h2 { margin-top:25px; }
+.zh-directory-page .prose h3 { margin-top:20px; }
+.zh-directory-page .prose ul,.zh-directory-page .prose ol { padding-left:22px; }
+.zh-directory-page .prose li { margin:7px 0; color:#536a87; }
+.zh-page-trades > .grid-3 > .card { position:relative; min-height:190px; padding-top:29px; }
+.zh-page-trades > .grid-3 > .card::before { content:"TRADE CAREER"; display:block; margin-bottom:15px; color:#7b91ad; font-size:9px; font-weight:850; letter-spacing:.13em; }
+.zh-page-employers > .grid-3 > .card { min-height:185px; }
+.zh-page-search > .filters { max-width:920px; grid-template-columns:minmax(0,1fr) auto; }
+.zh-page-search > .grid-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.zh-page-calculators > :not(.page-title) { max-width:980px; }
+.zh-page-tools > .chips { margin:18px 0; }
+@media(max-width:760px) {
+ .zh-directory-page > .filters,.zh-page-search > .filters { grid-template-columns:1fr; }
+ .zh-page-search > .grid-2 { grid-template-columns:1fr; }
+ .zh-directory-page .prose { padding:19px; }
+ .zh-directory-page > .grid-3 > .card,.zh-directory-page > .grid-2 > .card { min-height:0; }
+}
