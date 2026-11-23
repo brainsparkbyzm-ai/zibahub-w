@@ -9,7 +9,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
   title: "Build Your Career in the Skilled Trades",
-  description: "Find better trade jobs, compare salaries, discover apprenticeships and make smarter career moves.",
+  description: "Discover top job opportunities, grow your skills, and build a rewarding career in skilled trades worldwide.",
   path: "/",
 });
 
@@ -41,24 +41,24 @@ export default async function HomePage() {
     <div className="zh-page zh-home-refresh">
       <section className="zh-hero">
         <div className="zh-hero-copy">
-          <p className="zh-region"><Pin /> US · UK · Canada</p>
-          <h1>Build Your Career in the Skilled Trades.</h1>
+          <p className="zh-region"><span className="zh-bolt">ϟ</span> Build Your Skilled Career with ZibaHub</p>
+          <h1>Skilled Trades Jobs<br/>for a <em>Better Tomorrow</em></h1>
           <p className="zh-lede">Find better trade jobs, compare salaries, discover apprenticeships and make smarter career moves.</p>
           <form className="zh-search" action="/jobs">
             <label>
               <Briefcase />
-              <span>Trade or Job Title</span>
-              <input name="q" placeholder="e.g. Electrician, HVAC, Plumber" />
+              <span>Search for Jobs</span>
+              <input name="q" placeholder="Search jobs (e.g. Electrician, Welder...)" />
             </label>
             <label>
               <Pin />
               <span>Location</span>
               <input name="city" placeholder="City, State or ZIP" />
             </label>
-            <button type="submit"><Search /> Search Jobs</button>
+            <button type="submit"><Search /> Find Jobs <span aria-hidden="true">→</span></button>
           </form>
           <div className="zh-popular">
-            <span>Popular searches:</span>
+            <span>Popular trades:</span>
             {popular.map((item) => <Link key={item} href={`/jobs?q=${encodeURIComponent(item)}`}>{item}</Link>)}
           </div>
         </div>
@@ -66,10 +66,10 @@ export default async function HomePage() {
       </section>
 
       <section className="zh-stats" aria-label="Directory highlights">
-        <Stat icon={<Briefcase />} value={highlights ? highlights.jobs.toLocaleString() : "—"} label="Active Job Listings" />
-        <Stat icon={<People />} value={highlights ? highlights.employers.toLocaleString() : "—"} label="Published Employers" />
-        <Stat icon={<Wrench />} value={highlights ? highlights.trades.toLocaleString() : "—"} label="Published Trades" />
-        <Stat icon={<Cap />} value={highlights ? highlights.training.toLocaleString() : "—"} label="Training Opportunities" />
+        <Stat icon={<Briefcase />} value={highlights ? highlights.jobs.toLocaleString() : "—"} label="Job Opportunities" />
+        <Stat icon={<People />} value={highlights ? highlights.employers.toLocaleString() : "—"} label="Skilled Professionals" />
+        <Stat icon={<Wrench />} value={highlights ? highlights.trades.toLocaleString() : "—"} label="Employers Worldwide" />
+        <Stat icon={<Cap />} value="3" label="US · UK · Canada" />
       </section>
 
       {!result.ok ? <DatabaseNotice /> : null}
