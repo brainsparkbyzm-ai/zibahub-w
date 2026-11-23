@@ -9,7 +9,7 @@ export const metadata = pageMeta({ title: "Trades", description: "Skilled trades
 export default async function TradesPage() {
   const result = await load(publishedTrades);
   return (
-    <div className="shell page">
+    <div className="shell page zh-directory-page zh-page-trades">
       <h1 className="page-title">Trades</h1>
       {!result.ok ? <DatabaseNotice /> : result.data.length === 0 ? <EmptyState title="No trades yet" body="An admin can add trades. The list is not filled with fake categories." /> : (
         <div className="grid-3">{result.data.map((trade) => <article key={trade.id} className="card"><h3><Link href={`/trades/${trade.slug}`}>{trade.name}</Link></h3><p>{trade.summary}</p></article>)}</div>
