@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 const links = [
   ["/jobs", "Jobs"],
+  ["/industries", "Industries"],
   ["/trades", "Trades"],
   ["/apprenticeships", "Apprenticeships"],
   ["/salaries", "Salaries"],
