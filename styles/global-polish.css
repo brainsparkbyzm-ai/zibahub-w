@@ -1090,3 +1090,45 @@ body.zh-app .zh-foot-col strong { color:var(--zh-teal); }
   body.zh-app main > * > section:not(:first-child) { animation:none!important; }
   body.zh-app * { scroll-behavior:auto!important; transition-duration:.01ms!important; }
 }
+
+
+/* Layout coverage: Next route templates wrap each page in .zh-route-enter */
+body.zh-app main .shell {
+  width:min(1320px,calc(100% - 72px));
+  margin:0 auto;
+  padding-top:42px;
+  padding-bottom:58px;
+}
+body.zh-app main .shell[style*="max-width"] { width:calc(100% - 48px); }
+body.zh-app main > .zh-route-enter > div:not(.zh-page):not(.shell) {
+  width:min(1320px,calc(100% - 72px));
+  margin:0 auto;
+  padding:42px 0 58px;
+}
+body.zh-app main .shell.page > .page-title { margin-bottom:20px; }
+body.zh-app main .jobs-page .jobs-hero {
+  padding:30px; border:1px solid var(--zh-border); border-radius:24px;
+  background:radial-gradient(ellipse at 90% 0%,rgba(242,138,30,.13),transparent 36%),linear-gradient(125deg,#fffdfa,#f6eee5);
+  box-shadow:var(--zh-shadow);
+}
+body.zh-app main .jobs-page .jobs-kicker { color:#a75b12; }
+body.zh-app main .jobs-page .jobs-filter-panel {
+  margin:24px 0; padding:23px; border:1px solid var(--zh-border);
+  border-radius:21px; background:#fffdfa; box-shadow:var(--zh-shadow);
+}
+body.zh-app main .jobs-page .jobs-filter-heading h2,
+body.zh-app main .jobs-page .jobs-results-heading h2 { color:var(--zh-teal); }
+body.zh-app main .jobs-page .jobs-search-button { color:#281b0c; background:linear-gradient(135deg,#ffb440,#f28a1e); }
+body.zh-app main .jobs-page .jobs-clear-button { color:var(--zh-teal); border-color:#cbdad5; background:#fffdfa; }
+body.zh-app main .jobs-page .jobs-page-indicator { color:#52696b; }
+body.zh-app main .grid-3,body.zh-app main .grid-2,body.zh-app main .grid-4 { gap:16px; }
+body.zh-app main .metric.card { display:flex; flex-direction:column; gap:8px; min-height:112px; justify-content:center; }
+body.zh-app main .metric.card b { color:var(--zh-teal); font-size:29px; }
+body.zh-app main .bars .bar { overflow:hidden; border-radius:99px; background:#e8e4dc; }
+body.zh-app main .bars .bar > span { display:block; min-height:8px; border-radius:99px; background:linear-gradient(90deg,var(--zh-teal-2),var(--zh-orange)); }
+@media(max-width:760px) {
+ body.zh-app main .shell { width:calc(100% - 28px); padding-top:25px; padding-bottom:38px; }
+ body.zh-app main > .zh-route-enter > div:not(.zh-page):not(.shell) { width:calc(100% - 28px); padding:25px 0 38px; }
+ body.zh-app main .jobs-page .jobs-hero { padding:21px; border-radius:19px; }
+ body.zh-app main .jobs-page .jobs-filter-panel { padding:16px; }
+}
