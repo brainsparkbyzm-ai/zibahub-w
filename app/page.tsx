@@ -9,7 +9,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
   title: "Build Your Career in the Skilled Trades",
-  description: "Discover top job opportunities, grow your skills, and build a rewarding career in skilled trades worldwide.",
+  description: "Find better trade jobs, compare salaries, discover apprenticeships and make smarter career moves.",
   path: "/",
 });
 
