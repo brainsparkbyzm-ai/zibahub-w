@@ -23,6 +23,20 @@ export async function listJobs(query: Record<string, string | undefined>) {
   if (query.region) filters.push({ region: query.region });
   if (query.city) filters.push({ city: { contains: query.city, mode: "insensitive" } });
   if (query.trade) filters.push({ trade: { slug: query.trade } });
+  if (query.sector) {
+    const sectorTerms: Record<string, string[]> = {
+      hotels: ["hotel", "hospitality", "housekeeping", "front desk", "concierge", "guest services", "room attendant", "hotel manager", "resort"],
+      grocery: ["grocery", "supermarket", "cashier", "stocker", "produce", "deli", "store associate", "retail grocery"],
+      trainers: ["personal trainer", "fitness trainer", "gym instructor", "fitness coach", "strength coach", "sports coach", "trainer"],
+    };
+    const terms = sectorTerms[query.sector];
+    if (terms) filters.push({ OR: terms.flatMap((term) => [
+      { title: { contains: term, mode: "insensitive" as const } },
+      { description: { contains: term, mode: "insensitive" as const } },
+      { externalCompanyName: { contains: term, mode: "insensitive" as const } },
+      { company: { name: { contains: term, mode: "insensitive" as const } } },
+    ]) });
+  }
   if (query.company) filters.push({ company: { slug: query.company } });
   if (query.employment) filters.push({ employmentType: query.employment as Prisma.EnumEmploymentTypeFilter["equals"] });
   if (query.location) filters.push({ locationType: query.location as Prisma.EnumLocationTypeFilter["equals"] });
