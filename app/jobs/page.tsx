@@ -14,14 +14,16 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
   const result = await load(() => Promise.all([listJobs(query), publishedTrades()]));
   const total = result.ok ? result.data[0].total : 0;
   const shown = result.ok ? result.data[0].jobs.length : 0;
+  const sectorLabels: Record<string, string> = { hotels: "Hotel & Hospitality", grocery: "Grocery & Supermarket", trainers: "Fitness & Trainer" };
+  const sectorLabel = sectorLabels[query.sector || ""];
 
   return (
     <div className="shell page jobs-page">
       <header className="jobs-hero">
         <div className="jobs-hero-copy">
           <p className="kicker jobs-kicker">Skilled-trade marketplace</p>
-          <h1 className="page-title">Find your next trade role</h1>
-          <p className="jobs-intro">Discover skilled-trade opportunities and narrow your search by location, trade and the way you want to work.</p>
+          <h1 className="page-title">{sectorLabel ? `${sectorLabel} jobs` : "Find your next trade role"}</h1>
+          <p className="jobs-intro">{sectorLabel ? `Explore live ${sectorLabel.toLowerCase()} opportunities. Refine by location, work type and experience.` : "Discover skilled-trade opportunities and narrow your search by location, trade and the way you want to work."}</p>
         </div>
         <div className="jobs-hero-note">
           <span className="jobs-note-icon" aria-hidden="true">↗</span>
@@ -130,7 +132,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
           <div className="jobs-results-heading">
             <div>
               <span className="jobs-section-eyebrow">OPPORTUNITIES</span>
-              <h2 id="jobs-results-title">Latest trade jobs</h2>
+              <h2 id="jobs-results-title">{sectorLabel ? `Latest ${sectorLabel.toLowerCase()} jobs` : "Latest trade jobs"}</h2>
               <p><strong>{shown}</strong> shown <span aria-hidden="true">·</span> <strong>{total}</strong> open opportunities</p>
             </div>
             <span className="jobs-page-size">12 jobs per page</span>
