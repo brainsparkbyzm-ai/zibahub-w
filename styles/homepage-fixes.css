@@ -397,3 +397,29 @@ body.zh-app .zh-home-refresh .zh-hire { background:linear-gradient(135deg,#123d4
   body.zh-app .zh-home-refresh .zh-feature-section *,
   body.zh-app .zh-home-refresh .zh-visual>img { animation:none!important; transition:none!important; }
 }
+
+
+/* Improve contrast on the cream homepage information sections only. */
+body.zh-app .zh-home-refresh .zh-feature-heading h2,
+body.zh-app .zh-home-refresh .zh-feature-heading p,
+body.zh-app .zh-home-refresh .zh-feature-heading > div > span,
+body.zh-app .zh-home-refresh .zh-feature-heading > a,
+body.zh-app .zh-home-refresh .zh-salary-panel,
+body.zh-app .zh-home-refresh .zh-salary-controls > b,
+body.zh-app .zh-home-refresh .zh-salary-controls > span,
+body.zh-app .zh-home-refresh .zh-bars b,
+body.zh-app .zh-home-refresh .zh-bars small,
+body.zh-app .zh-home-refresh .zh-insight,
+body.zh-app .zh-home-refresh .zh-insight p,
+body.zh-app .zh-home-refresh .zh-insight p:first-child,
+body.zh-app .zh-home-refresh .zh-insight a,
+body.zh-app .zh-home-refresh .zh-training-grid > a,
+body.zh-app .zh-home-refresh .zh-training-grid > a > strong,
+body.zh-app .zh-home-refresh .zh-training-grid > a > span,
+body.zh-app .zh-home-refresh .zh-training-grid > a > em,
+body.zh-app .zh-home-refresh .zh-guides-grid > a,
+body.zh-app .zh-home-refresh .zh-guides-grid > a > small,
+body.zh-app .zh-home-refresh .zh-guides-grid > a > strong,
+body.zh-app .zh-home-refresh .zh-guides-grid > a > em {
+  color:#111111 !important;
+}
