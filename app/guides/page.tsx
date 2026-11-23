@@ -12,7 +12,7 @@ export default async function GuidesPage({ searchParams }: { searchParams: Promi
   const category = Array.isArray(raw.category) ? raw.category[0] : raw.category;
   const result = await load(() => listGuides(category));
   return (
-    <div className="shell page">
+    <div className="shell page zh-directory-page zh-page-guides">
       <h1 className="page-title">Guides</h1>
       <div className="chips">{guideCategories.map((item) => <Link key={item} className="chip" href={`/guides?category=${encodeURIComponent(item)}`}>{item}</Link>)}</div>
       {!result.ok ? <DatabaseNotice /> : result.data.length === 0 ? <EmptyState title="No published guides" body="Drafts stay in the admin panel until they are published." /> : (
