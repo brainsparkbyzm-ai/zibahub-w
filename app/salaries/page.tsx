@@ -12,7 +12,7 @@ export default async function SalariesPage({ searchParams }: { searchParams: Pro
   const query = Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, Array.isArray(value) ? value[0] : value || ""]));
   const result = await load(() => Promise.all([salaryBands(query), publishedTrades()]));
   return (
-    <div className="shell page">
+    <div className="shell page zh-directory-page zh-page-salaries">
       <h1 className="page-title">Salary context</h1>
       <p>Bands stored in the database are estimates. They are not official government wage claims. Use the calculators for arithmetic you control.</p>
       <form className="filters glass" action="/salaries">
