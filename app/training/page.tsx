@@ -13,7 +13,7 @@ export default async function TrainingPage({ searchParams }: { searchParams: Pro
   const query = Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, Array.isArray(value) ? value[0] : value || ""]));
   const result = await load(() => Promise.all([listCourses(query), db.certification.findMany({ where: { status: "PUBLISHED" }, take: 20 })]));
   return (
-    <div className="shell page">
+    <div className="shell page zh-directory-page zh-page-training">
       <h1 className="page-title">Training and certifications</h1>
       <form className="filters glass" action="/training">
         <label>Trade slug<input name="trade" defaultValue={query.trade || ""} /></label>
