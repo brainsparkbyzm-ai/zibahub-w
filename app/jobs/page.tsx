@@ -71,7 +71,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
               <option value="REMOTE">Remote</option>
             </select>
           </label>
-          <label>Minimum salary (annual / hourly as listed)
+          <label>Minimum listed pay (same unit as the job listing)
             <input name="salary" type="number" min="0" step="1000" placeholder="e.g. 40000" defaultValue={query.salary || ""} />
           </label>
           <label>Posted within
