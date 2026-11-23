@@ -2310,3 +2310,27 @@ body.zh-app main>.shell:not(.page) { width:min(1320px,calc(100% - 64px)); margin
   body.zh-app .zh-directory-page>.filters { grid-template-columns:minmax(0,1fr); }
   body.zh-app .shell.page:has(.metric.card) .grid-3 { grid-template-columns:minmax(0,1fr); }
 }
+
+
+/* Bare authenticated route roots (employer workspace and compact admin views). */
+body.zh-app main>.zh-route-enter>div:has(> .page-title) {
+  width:min(1320px,calc(100% - 64px)); min-height:55vh;
+  margin-inline:auto; padding:clamp(34px,4vw,58px) 0 clamp(48px,6vw,78px);
+}
+body.zh-app main>.zh-route-enter>div:has(> .page-title)>.page-title {
+  max-width:22ch; margin:0 0 20px; color:#123b43;
+  font-size:clamp(34px,4.3vw,54px); line-height:1.04;
+  font-weight:900; letter-spacing:-.065em;
+}
+body.zh-app main>.zh-route-enter>div:has(> .page-title)>.notice,
+body.zh-app main>.zh-route-enter>div:has(> .page-title)>.card,
+body.zh-app main>.zh-route-enter>div:has(> .page-title)>.panel {
+  padding:20px 22px; border:1px solid rgba(255,255,255,.94);
+  border-radius:21px; background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(241,248,245,.84));
+  box-shadow:0 14px 36px rgba(24,65,70,.075),inset 0 1px 0 #fff;
+}
+body.zh-app main>.zh-route-enter>div:has(> .page-title)>p { color:#687c82; }
+body.zh-app main>.zh-route-enter>div:has(> .page-title) a:not(.btn):not(.btn-amber) { color:#1764d9; font-weight:750; }
+@media(max-width:600px) {
+  body.zh-app main>.zh-route-enter>div:has(> .page-title) { width:calc(100% - 28px); padding-block:26px 44px; }
+}
