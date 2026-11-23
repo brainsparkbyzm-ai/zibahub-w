@@ -12,7 +12,7 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
   const category = Array.isArray(raw.category) ? raw.category[0] : raw.category;
   const result = await load(() => listProducts(category));
   return (
-    <div className="shell page">
+    <div className="shell page zh-directory-page zh-page-tools">
       <h1 className="page-title">Tools and workwear</h1>
       <p>Clicks are tracked only when an admin has saved an affiliate URL. No merchant link is invented.</p>
       <div className="chips">{productCategories.map((item) => <Link className="chip" key={item} href={`/tools?category=${encodeURIComponent(item)}`}>{item}</Link>)}</div>
