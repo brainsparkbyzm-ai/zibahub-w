@@ -13,6 +13,12 @@ const TRADES = [
   { slug: "roofer", keyword: "roofer" },
 ];
 
+const INDUSTRIES = [
+  { slug: "hotels", keyword: "hotel hospitality front desk housekeeping guest services" },
+  { slug: "grocery", keyword: "grocery supermarket cashier stocker produce deli" },
+  { slug: "trainers", keyword: "personal trainer fitness trainer gym instructor fitness coach" },
+];
+
 type JoobleJob = {
   title?: string;
   location?: string;
@@ -118,10 +124,15 @@ export async function importJoobleJobs(options: { dryRun?: boolean } = {}) {
 
   const tradeMap = new Map(trades.map((trade) => [trade.slug, trade.id]));
 
-  for (const tradeConfig of TRADES) {
-    const tradeId = tradeMap.get(tradeConfig.slug);
+  const importSearches = [
+    ...TRADES.map((item) => ({ ...item, tradeId: tradeMap.get(item.slug) })),
+    ...INDUSTRIES.map((item) => ({ ...item, tradeId: null as string | null })),
+  ];
 
-    if (!tradeId) {
+  for (const tradeConfig of importSearches) {
+    const tradeId = tradeConfig.tradeId;
+
+    if (tradeId === undefined) {
       errors.push(`Trade not found: ${tradeConfig.slug}`);
       continue;
     }
