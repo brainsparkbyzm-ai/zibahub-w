@@ -11,7 +11,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const q = (Array.isArray(raw.q) ? raw.q[0] : raw.q) || "";
   const result = q.length >= 2 ? await load(() => globalSearch(q)) : null;
   return (
-    <div className="shell page">
+    <div className="shell page zh-directory-page zh-page-search">
       <h1 className="page-title">Search</h1>
       <form className="filters glass" action="/search"><label>Query<input name="q" defaultValue={q} minLength={2} required /></label><button className="btn" type="submit">Search</button></form>
       {q.length < 2 ? <EmptyState title="Type at least two characters" body="Search covers jobs, trades, apprenticeships, training, guides, and employers." /> : !result || !result.ok ? <DatabaseNotice /> : (
