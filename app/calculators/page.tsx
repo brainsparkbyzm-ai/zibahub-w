@@ -5,7 +5,7 @@ export const metadata = pageMeta({ title: "Calculators", description: "Working p
 
 export default function CalculatorsPage() {
   return (
-    <div className="shell page">
+    <div className="shell page zh-directory-page zh-page-calculators">
       <h1 className="page-title">Trade calculators</h1>
       <p>Every figure below is calculated from the inputs on this page. Assumptions are written next to the result.</p>
       <Calculators />
