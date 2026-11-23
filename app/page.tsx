@@ -136,20 +136,23 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="zh-intel">
-        <article className="zh-panel">
-          <div className="zh-head"><h2>Salary Intelligence</h2><Link href="/salaries">View All Salaries →</Link></div>
+      <section className="zh-feature-section zh-salary-section" id="salary-intelligence">
+        <div className="zh-feature-heading">
+          <div><span>PAY & MARKET DATA</span><h2>Salary Intelligence</h2><p>Explore salary ranges by trade, country and experience before choosing your next career move.</p></div>
+          <Link href="/salaries">Explore all salary data <span aria-hidden="true">→</span></Link>
+        </div>
+        <article className="zh-panel zh-salary-panel">
           <div className="zh-salary">
-            <div>
+            <div className="zh-salary-controls">
               <b>Salary data by trade</b>
-              <span>Explore available salary ranges and source notes.</span>
+              <span>Compare available salary ranges and review the source notes.</span>
               <form action="/salaries">
                 <select name="trade" aria-label="Trade" defaultValue="electrician"><option value="electrician">Electrician</option>{popular.map((item) => <option key={item} value={item.toLowerCase()}>{item}</option>)}</select>
                 <select name="country" aria-label="Country" defaultValue="United States"><option>United States</option><option>United Kingdom</option><option>Canada</option></select>
                 <button type="submit">Explore Salaries</button>
               </form>
             </div>
-            <div className="zh-bars" aria-hidden="true">
+            <div className="zh-bars" aria-label="Illustrative salary comparison categories">
               <div><b>Trade</b><span style={{ height: "76%" }} /><small>Compare</small></div>
               <div><b>Region</b><span style={{ height: "58%" }} /><small>Filter</small></div>
               <div><b>Level</b><span style={{ height: "88%" }} /><small>Experience</small></div>
@@ -162,27 +165,35 @@ export default async function HomePage() {
             </div>
           </div>
         </article>
-        <article className="zh-panel">
-          <div className="zh-head"><h2>Career & Training</h2><Link href="/training">View All →</Link></div>
-          <div className="zh-train">
-            <Link href="/apprenticeships"><Cap /><strong>Apprenticeships</strong><span>Earn while you learn and gain real experience.</span></Link>
-            <Link href="/training"><Badge /><strong>Certifications</strong><span>Get certified and boost your career.</span></Link>
-            <Link href="/training"><Book /><strong>Trade Courses</strong><span>Build skills with flexible online & in-person courses.</span></Link>
-          </div>
-        </article>
-        <article className="zh-panel">
-          <div className="zh-head"><h2>Career Guides</h2><Link href="/guides">View All Guides →</Link></div>
-          <div className="zh-guides">
-            {(guides ? guides.map((guide) => ({ kicker: guide.category, title: guide.title, image: guideCards[0].image, href: `/guides/${guide.slug}` })) : guideCards).map((guide) => (
-              <Link key={guide.title} href={guide.href} className="zh-guide">
-                <Image src={guide.image} alt="" width={320} height={72} />
-                <small>{guide.kicker}</small>
-                <strong>{guide.title}</strong>
-                <em>Read Guide →</em>
-              </Link>
-            ))}
-          </div>
-        </article>
+      </section>
+
+      <section className="zh-feature-section zh-training-section" id="career-training">
+        <div className="zh-feature-heading">
+          <div><span>BUILD YOUR NEXT SKILL</span><h2>Career & Training</h2><p>Find practical routes into skilled work, from paid apprenticeships to recognized certifications and trade courses.</p></div>
+          <Link href="/training">Explore training <span aria-hidden="true">→</span></Link>
+        </div>
+        <div className="zh-train zh-training-grid">
+          <Link href="/apprenticeships"><Cap /><strong>Apprenticeships</strong><span>Earn while you learn and gain real experience.</span><em>Explore apprenticeships →</em></Link>
+          <Link href="/training"><Badge /><strong>Certifications</strong><span>Get certified and build confidence in your trade.</span><em>Browse certifications →</em></Link>
+          <Link href="/training"><Book /><strong>Trade Courses</strong><span>Build practical skills with flexible online and in-person courses.</span><em>Explore courses →</em></Link>
+        </div>
+      </section>
+
+      <section className="zh-feature-section zh-guides-section" id="career-guides">
+        <div className="zh-feature-heading">
+          <div><span>ADVICE FOR YOUR CAREER</span><h2>Career Guides</h2><p>Helpful, practical guidance for training, applications and long-term career growth.</p></div>
+          <Link href="/guides">Read all guides <span aria-hidden="true">→</span></Link>
+        </div>
+        <div className="zh-guides zh-guides-grid">
+          {(guides ? guides.map((guide) => ({ kicker: guide.category, title: guide.title, image: guideCards[0].image, href: `/guides/${guide.slug}` })) : guideCards).map((guide) => (
+            <Link key={guide.title} href={guide.href} className="zh-guide">
+              <Image src={guide.image} alt="" width={480} height={240} />
+              <small>{guide.kicker}</small>
+              <strong>{guide.title}</strong>
+              <em>Read Guide →</em>
+            </Link>
+          ))}
+        </div>
       </section>
 
       <section className="zh-bottom">
