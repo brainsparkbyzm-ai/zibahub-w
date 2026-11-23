@@ -423,3 +423,60 @@ body.zh-app .zh-home-refresh .zh-guides-grid > a > strong,
 body.zh-app .zh-home-refresh .zh-guides-grid > a > em {
   color:#111111 !important;
 }
+
+
+/* Final visibility fixes: popular-trade shortcuts and admin-only header controls. */
+body.zh-app .zh-home-refresh .zh-popular {
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  gap:8px 10px !important;
+  width:100% !important;
+  min-height:34px !important;
+  margin:18px 0 0 !important;
+  overflow:visible !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  color:#111 !important;
+}
+body.zh-app .zh-home-refresh .zh-popular > span {
+  display:inline-block !important;
+  color:#111 !important;
+  font-weight:800 !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+body.zh-app .zh-home-refresh .zh-popular > a {
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:32px !important;
+  padding:6px 12px !important;
+  border:1px solid #d9d1c8 !important;
+  border-radius:999px !important;
+  background:#fff !important;
+  color:#111 !important;
+  font-size:13px !important;
+  font-weight:750 !important;
+  line-height:1.2 !important;
+  text-decoration:none !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+body.zh-app .zh-home-refresh .zh-popular > a:hover {
+  border-color:#111 !important;
+  background:#f5f5f5 !important;
+  color:#000 !important;
+}
+body.zh-app .zh-header a[href="/admin"],
+body.zh-app .zh-header a[href^="/admin/"],
+body.zh-app .zh-header .zh-admin-shortcut,
+body.zh-app .zh-header .zh-admin-bar,
+body.zh-app .zh-header [data-admin-shortcut],
+body.zh-app .zh-header [data-admin-toolbar] {
+  display:none !important;
+}
+@media(max-width:760px) {
+  body.zh-app .zh-home-refresh .zh-popular { gap:7px !important; margin-top:13px !important; }
+  body.zh-app .zh-home-refresh .zh-popular > a { min-height:30px !important; padding:6px 10px !important; font-size:12px !important; }
+}
