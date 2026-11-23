@@ -480,3 +480,36 @@ body.zh-app .zh-header [data-admin-toolbar] {
   body.zh-app .zh-home-refresh .zh-popular { gap:7px !important; margin-top:13px !important; }
   body.zh-app .zh-home-refresh .zh-popular > a { min-height:30px !important; padding:6px 10px !important; font-size:12px !important; }
 }
+
+
+/* Dark readable type on the light cream sections; backgrounds stay unchanged. */
+body.zh-app .zh-home-refresh .zh-industry-strip,
+body.zh-app .zh-home-refresh .zh-feature-section,
+body.zh-app .zh-home-refresh .zh-stats,
+body.zh-app .zh-home-refresh .zh-block {
+  color:#111 !important;
+}
+body.zh-app .zh-home-refresh .zh-industry-strip h2,
+body.zh-app .zh-home-refresh .zh-industry-strip p,
+body.zh-app .zh-home-refresh .zh-industry-strip a,
+body.zh-app .zh-home-refresh .zh-industry-strip span,
+body.zh-app .zh-home-refresh .zh-industry-strip b,
+body.zh-app .zh-home-refresh .zh-industry-strip small,
+body.zh-app .zh-home-refresh .zh-feature-section h2,
+body.zh-app .zh-home-refresh .zh-feature-section h3,
+body.zh-app .zh-home-refresh .zh-feature-section p,
+body.zh-app .zh-home-refresh .zh-feature-section a,
+body.zh-app .zh-home-refresh .zh-feature-section span,
+body.zh-app .zh-home-refresh .zh-feature-section strong,
+body.zh-app .zh-home-refresh .zh-feature-section small,
+body.zh-app .zh-home-refresh .zh-feature-section em,
+body.zh-app .zh-home-refresh .zh-stats strong,
+body.zh-app .zh-home-refresh .zh-stats span,
+body.zh-app .zh-home-refresh .zh-block h2,
+body.zh-app .zh-home-refresh .zh-block h3,
+body.zh-app .zh-home-refresh .zh-block p,
+body.zh-app .zh-home-refresh .zh-block a,
+body.zh-app .zh-home-refresh .zh-block strong,
+body.zh-app .zh-home-refresh .zh-block span {
+  color:#111 !important;
+}
