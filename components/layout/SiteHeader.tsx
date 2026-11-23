@@ -28,12 +28,12 @@ export async function SiteHeader() {
           <LogoMark />
           <Wordmark />
         </Link>
-        <nav className="zh-nav-links" aria-label="Primary">
+        <nav className="zh-nav-links zh-primary-nav" aria-label="Primary">
           {links.map((item) => (
             <Link key={item.href} href={item.href}>{item.label}</Link>
           ))}
         </nav>
-        <div className="zh-nav-actions">
+        <div className="zh-nav-actions zh-header-actions">
           <Link className="zh-tool" href="/search" aria-label="Search">
             <SearchIcon />
             <span>Search</span>
