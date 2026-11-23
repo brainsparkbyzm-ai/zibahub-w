@@ -43,7 +43,9 @@ export async function SiteHeader() {
             <span>Saved</span>
           </Link>
           {user ? (
-            <Link className="zh-signin" href={accountHref}>{user.name.split(" ")[0]}</Link>
+            user.role !== "ADMIN" ? (
+              <Link className="zh-signin" href={accountHref}>{user.name.split(" ")[0]}</Link>
+            ) : null
           ) : (
             <Link className="zh-signin" href="/sign-in">Sign In</Link>
           )}
