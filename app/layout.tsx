@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     description: brand.description,
   };
   return (
-    <html lang="en" >
+    <html lang="en">
       <body className="zh-app">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
         <SiteHeader />
