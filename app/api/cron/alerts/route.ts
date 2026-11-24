@@ -1,3 +1,5 @@
+export const maxDuration = 300;
+
 import { runDigest } from "@/services/alerts";
 import { AppError } from "@/lib/errors";
 import { fail } from "@/lib/http";
