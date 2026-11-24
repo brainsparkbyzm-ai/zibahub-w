@@ -6,5 +6,15 @@ export async function GET(request: Request, context: { params: Promise<{ slug: s
   const course = await db.course.findFirst({ where: { slug, status: "PUBLISHED" } });
   const target = course?.affiliateUrl || course?.url;
   if (!target) return Response.json({ ok: false, error: { message: "No provider link is configured." } }, { status: 409 });
-  return NextResponse.redirect(target.startsWith("http") ? target : new URL(target, request.url));
+
+  let destination: URL;
+  try {
+    destination = new URL(target);
+  } catch {
+    return Response.json({ ok: false, error: { message: "The provider link is invalid." } }, { status: 409 });
+  }
+  if (destination.protocol !== "https:") {
+    return Response.json({ ok: false, error: { message: "The provider link must use HTTPS." } }, { status: 409 });
+  }
+  return NextResponse.redirect(destination);
 }

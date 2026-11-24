@@ -60,8 +60,17 @@ export async function recordAffiliateClick(slug: string, userId?: string | null)
   const product = await db.affiliateProduct.findFirst({ where: { slug, status: "PUBLISHED" } });
   if (!product) throw new AppError(404, "not_found", "Product not found.");
   if (!product.affiliateUrl) throw new AppError(409, "link_not_configured", "An affiliate link has not been configured for this product.");
+  let destination: URL;
+  try {
+    destination = new URL(product.affiliateUrl);
+  } catch {
+    throw new AppError(409, "invalid_affiliate_link", "The affiliate link is invalid.");
+  }
+  if (destination.protocol !== "https:") {
+    throw new AppError(409, "invalid_affiliate_link", "The affiliate link must use HTTPS.");
+  }
   await db.affiliateClick.create({ data: { productId: product.id, userId: userId || null } });
-  return product.affiliateUrl;
+  return destination.toString();
 }
 
 export async function salaryBands(query: Record<string, string | undefined>) {

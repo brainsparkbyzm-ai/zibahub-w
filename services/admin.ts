@@ -109,13 +109,25 @@ export async function upsertGuide(actorId: string, input: { id?: string; title: 
 }
 
 export async function upsertProduct(actorId: string, input: { id?: string; name: string; description: string; category: string; brand?: string; priceDisplay?: string; affiliateUrl?: string }) {
+  const affiliateUrl = input.affiliateUrl?.trim() || "";
+  if (affiliateUrl) {
+    let destination: URL;
+    try {
+      destination = new URL(affiliateUrl);
+    } catch {
+      throw new AppError(400, "invalid_affiliate_link", "Affiliate URL must be a valid HTTPS URL.");
+    }
+    if (destination.protocol !== "https:") {
+      throw new AppError(400, "invalid_affiliate_link", "Affiliate URL must use HTTPS.");
+    }
+  }
   const data = {
     name: input.name,
     description: input.description,
     category: input.category,
     brand: input.brand || null,
     priceDisplay: input.priceDisplay || null,
-    affiliateUrl: input.affiliateUrl || null,
+    affiliateUrl: affiliateUrl || null,
   };
   const product = input.id
     ? await db.affiliateProduct.update({ where: { id: input.id }, data })
