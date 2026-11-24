@@ -10,6 +10,25 @@ import { brand } from "@/config/brand";
 import type { z } from "zod";
 import { loginSchema, registerSchema, resetSchema } from "@/validation/auth";
 
+async function alertAdminsOfRepeatedLoginFailures() {
+  try {
+    const admins = await db.user.findMany({
+      where: { role: "ADMIN", status: "ACTIVE" },
+      select: { email: true },
+      take: 5,
+    });
+    await Promise.all(admins.map((admin) =>
+      sendTransactionalEmail({
+        to: admin.email,
+        subject: "ZibaHub security alert: repeated failed sign-ins",
+        text: "Five failed sign-in attempts against one account were recorded within a 15-minute window. The account email and source IP are not included in this alert. Review the Admin audit log. This alert alone does not establish account compromise.",
+      }).catch(() => ({ sent: false as const, reason: "send_failed" as const }))
+    ));
+  } catch {
+    // Sign-in protection must continue even if security-alert email delivery is unavailable.
+  }
+}
+
 export async function registerUser(input: z.infer<typeof registerSchema>, meta: { ip: string; userAgent: string | null }) {
   await rateLimit(`register:${meta.ip}`, 8, 60 * 60 * 1000);
   const email = input.email.toLowerCase();
@@ -36,12 +55,18 @@ export async function registerUser(input: z.infer<typeof registerSchema>, meta: 
 }
 
 export async function loginUser(input: z.infer<typeof loginSchema>, meta: { ip: string; userAgent: string | null }) {
+  const email = input.email.toLowerCase();
+  const accountRateKey = `login-account:${hashToken(email)}`;
   await rateLimit(`login:${meta.ip}`, 12, 15 * 60 * 1000);
-  const user = await db.user.findUnique({ where: { email: input.email.toLowerCase() } });
+  const accountAttempts = await rateLimit(accountRateKey, 8, 15 * 60 * 1000);
+  const user = await db.user.findUnique({ where: { email } });
   if (!user || !(await verifyPassword(input.password, user.passwordHash))) {
+    await audit(null, "auth.login_failed", "Auth", null, { attempt: accountAttempts });
+    if (accountAttempts === 5) await alertAdminsOfRepeatedLoginFailures();
     throw new AppError(401, "invalid_credentials", "Email or password is incorrect.");
   }
   if (user.status !== "ACTIVE") throw new AppError(403, "suspended", "This account is suspended.");
+  await db.rateBucket.deleteMany({ where: { key: accountRateKey } });
   await createSession(user, meta);
   await audit(user.id, "user.login", "User", user.id);
   return { id: user.id, role: user.role };

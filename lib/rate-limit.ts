@@ -1,19 +1,30 @@
 import { db } from "@/lib/db";
 import { AppError } from "@/lib/errors";
 
-export async function rateLimit(key: string, limit: number, windowMs: number) {
+export async function rateLimit(key: string, limit: number, windowMs: number): Promise<number> {
   const now = new Date();
-  const existing = await db.rateBucket.findUnique({ where: { key } });
-  if (!existing || now.getTime() - existing.windowStart.getTime() > windowMs) {
-    await db.rateBucket.upsert({
-      where: { key },
-      create: { key, count: 1, windowStart: now },
-      update: { count: 1, windowStart: now },
-    });
-    return;
-  }
-  if (existing.count >= limit) {
+  const cutoff = new Date(now.getTime() - windowMs);
+
+  // Atomic PostgreSQL upsert prevents parallel requests from bypassing the counter.
+  const rows = await db.$queryRaw<Array<{ count: number }>>`
+    INSERT INTO "RateBucket" ("key", "count", "windowStart")
+    VALUES (${key}, 1, ${now})
+    ON CONFLICT ("key") DO UPDATE
+    SET
+      "count" = CASE
+        WHEN "RateBucket"."windowStart" <= ${cutoff} THEN 1
+        ELSE "RateBucket"."count" + 1
+      END,
+      "windowStart" = CASE
+        WHEN "RateBucket"."windowStart" <= ${cutoff} THEN ${now}
+        ELSE "RateBucket"."windowStart"
+      END
+    RETURNING "count"
+  `;
+
+  const count = Number(rows[0]?.count ?? 1);
+  if (count > limit) {
     throw new AppError(429, "rate_limited", "Too many attempts. Wait a few minutes and try again.");
   }
-  await db.rateBucket.update({ where: { key }, data: { count: { increment: 1 } } });
+  return count;
 }
