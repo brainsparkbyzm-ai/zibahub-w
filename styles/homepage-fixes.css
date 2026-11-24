@@ -513,3 +513,36 @@ body.zh-app .zh-home-refresh .zh-block strong,
 body.zh-app .zh-home-refresh .zh-block span {
   color:#111 !important;
 }
+
+
+/* MOBILE PORTRAIT NAV FINAL OVERRIDE — preserve brand colors */
+@media screen and (max-width: 1180px) and (orientation: portrait) {
+  body.zh-app .zh-header .zh-primary-nav,
+  body.zh-app .zh-header .zh-primary-nav *,
+  body.zh-app .zh-header .zh-nav-actions .zh-tool,
+  body.zh-app .zh-header .zh-nav-actions .zh-tool *,
+  body.zh-app .zh-header .zh-nav-actions .zh-signin,
+  body.zh-app .zh-header .zh-nav-actions .zh-post,
+  body.zh-app .zh-header .zh-menu,
+  body.zh-app .zh-header .zh-menu *,
+  body.zh-app .zh-header .zh-drawer,
+  body.zh-app .zh-header .zh-drawer * {
+    color: #111827 !important;
+  }
+
+  body.zh-app .zh-header .zh-nav-actions .zh-tool svg,
+  body.zh-app .zh-header .zh-nav-actions .zh-tool svg * {
+    color: #111827 !important;
+    stroke: #111827 !important;
+  }
+
+  body.zh-app .zh-header .zh-menu {
+    background: #fff !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+
+  body.zh-app .zh-header .zh-drawer {
+    background: #fff !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+}
