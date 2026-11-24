@@ -1,3 +1,5 @@
+export const maxDuration = 300;
+
 import { AppError } from "@/lib/errors";
 import { fail } from "@/lib/http";
 import { importJoobleJobs } from "@/services/jooble";
