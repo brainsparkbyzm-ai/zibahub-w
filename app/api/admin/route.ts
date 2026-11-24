@@ -8,6 +8,11 @@ import { notify } from "@/lib/notifications";
 import { uniqueSlug } from "@/lib/format";
 import type { ContentStatus, GuestPostStatus, JobStatus, ReportStatus, Role } from "@prisma/client";
 
+const contentStatuses: readonly ContentStatus[] = ["DRAFT", "PENDING", "PUBLISHED", "ARCHIVED", "REJECTED"];
+const jobStatuses: readonly JobStatus[] = ["DRAFT", "PENDING", "ACTIVE", "PAUSED", "CLOSED", "EXPIRED", "REJECTED"];
+const guestStatuses: readonly GuestPostStatus[] = ["SUBMITTED", "UNDER_REVIEW", "APPROVED", "REJECTED", "PUBLISHED"];
+const reportStatuses: readonly ReportStatus[] = ["OPEN", "REVIEWING", "RESOLVED", "DISMISSED"];
+
 export async function POST(request: Request) {
   try {
     const actor = await requireRole(["ADMIN"]);
@@ -31,21 +36,34 @@ export async function POST(request: Request) {
     }
     if (action === "category") {
       const name = String(body.name || "");
+      if (!name.trim()) throw new AppError(400, "invalid_name", "A category name is required.");
       await db.category.create({ data: { type: String(body.type || "general"), name, slug: uniqueSlug(name) } });
       return ok(request, { message: "Category added." }, "/admin/categories");
     }
     if (action === "apprenticeship") {
       const title = String(body.title || "");
+      if (!title.trim()) throw new AppError(400, "invalid_title", "An apprenticeship title is required.");
       await db.apprenticeship.create({ data: { title, slug: uniqueSlug(title), providerName: String(body.providerName || ""), country: String(body.country || "United States"), description: String(body.description || ""), status: "PENDING" } });
       return ok(request, { message: "Apprenticeship added as pending." }, "/admin/apprenticeships");
     }
     if (action === "course") {
       const title = String(body.title || "");
+      if (!title.trim()) throw new AppError(400, "invalid_title", "A course title is required.");
       await db.course.create({ data: { title, slug: uniqueSlug(title), description: String(body.description || ""), delivery: String(body.delivery || "Online"), status: "DRAFT" } });
       return ok(request, { message: "Course saved as draft." }, "/admin/courses");
     }
     if (action === "ad") {
-      await db.advertisement.create({ data: { name: String(body.name || "Ad"), placement: String(body.placement || "homepage"), targetUrl: String(body.targetUrl || "") || null, status: "DRAFT" } });
+      const name = String(body.name || "Ad").trim();
+      const targetUrl = String(body.targetUrl || "").trim();
+      if (targetUrl) {
+        try {
+          const parsed = new URL(targetUrl);
+          if (parsed.protocol !== "https:") throw new Error("protocol");
+        } catch {
+          throw new AppError(400, "invalid_target", "Ad target must be a valid HTTPS URL.");
+        }
+      }
+      await db.advertisement.create({ data: { name, placement: String(body.placement || "homepage"), targetUrl: targetUrl || null, status: "DRAFT" } });
       return ok(request, { message: "Ad saved as draft." }, "/admin/ads");
     }
     if (action === "notify") {
@@ -55,11 +73,19 @@ export async function POST(request: Request) {
       return ok(request, { message: "Notification sent." }, "/admin/notifications");
     }
     if (action === "pricing") {
-      await saveSetting(actor.id, "job_pricing", { currency: String(body.currency || "USD"), FREE: 0, FEATURED: Number(body.FEATURED || 0), PREMIUM: Number(body.PREMIUM || 0) });
+      const currency = String(body.currency || "USD").trim().toUpperCase();
+      const featured = Number(body.FEATURED);
+      const premium = Number(body.PREMIUM);
+      if (!/^[A-Z]{3}$/.test(currency) || !Number.isSafeInteger(featured) || featured <= 0 || !Number.isSafeInteger(premium) || premium <= featured) {
+        throw new AppError(400, "invalid_pricing", "Use a valid three-letter currency and positive integer prices; Premium must be higher than Featured.");
+      }
+      await saveSetting(actor.id, "job_pricing", { currency, FREE: 0, FEATURED: featured, PREMIUM: premium });
       return ok(request, { message: "Pricing saved." }, "/admin/settings");
     }
     if (action === "setting") {
-      await saveSetting(actor.id, String(body.key || "seo"), { description: String(body.description || "") });
+      const key = String(body.key || "seo").trim();
+      if (!key || key.length > 80) throw new AppError(400, "invalid_setting", "Invalid setting key.");
+      await saveSetting(actor.id, key, { description: String(body.description || "") });
       return ok(request, { message: "Setting saved." }, "/admin/seo");
     }
     if (action === "delete") {
@@ -77,14 +103,17 @@ export async function POST(request: Request) {
       return ok(request, { message: "User updated." });
     }
     if (entity === "job") {
+      if (!jobStatuses.includes(status as JobStatus)) throw new AppError(400, "bad_status", "Unsupported job status.");
       await setJobModeration(actor.id, id, status as JobStatus);
       return ok(request, { message: "Job updated." });
     }
     if (entity === "guest") {
+      if (!guestStatuses.includes(status as GuestPostStatus)) throw new AppError(400, "bad_status", "Unsupported guest-post status.");
       await setGuestStatus(actor.id, id, status as GuestPostStatus);
       return ok(request, { message: status === "PUBLISHED" ? "Published as a labeled article." : "Submission updated." });
     }
     if (entity === "report") {
+      if (!reportStatuses.includes(status as ReportStatus)) throw new AppError(400, "bad_status", "Unsupported report status.");
       await setReportStatus(actor.id, id, status as ReportStatus);
       return ok(request, { message: "Report updated." });
     }
@@ -93,12 +122,14 @@ export async function POST(request: Request) {
       await markPayment(actor.id, id, status);
       return ok(request, { message: "Payment updated and recorded in the audit log." });
     }
-    const contentMap = { company: "company", trade: "trade", course: "course", guide: "guide", article: "article", product: "product", ad: "ad", apprenticeship: "apprenticeship", provider: "provider", certification: "certification", category: "category" } as const;
-    if (entity in contentMap && entity !== "category") {
+    const contentMap = { company: "company", trade: "trade", course: "course", guide: "guide", article: "article", product: "product", ad: "ad", apprenticeship: "apprenticeship", provider: "provider", certification: "certification" } as const;
+    if (Object.prototype.hasOwnProperty.call(contentMap, entity)) {
+      if (!contentStatuses.includes(status as ContentStatus)) throw new AppError(400, "bad_status", "Unsupported content status.");
       await setContentStatus(actor.id, contentMap[entity as keyof typeof contentMap] as "company", id, status as ContentStatus);
       return ok(request, { message: "Status updated." });
     }
     if (entity === "category") {
+      if (!contentStatuses.includes(status as ContentStatus)) throw new AppError(400, "bad_status", "Unsupported category status.");
       await db.category.update({ where: { id }, data: { status: status as ContentStatus } });
       return ok(request, { message: "Category updated." });
     }

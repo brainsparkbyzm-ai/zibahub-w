@@ -53,7 +53,7 @@ export async function deleteEntity(actorId: string, entity: string, id: string) 
     certification: () => db.certification.delete({ where: { id } }),
     notification: () => db.notification.delete({ where: { id } }),
   } as const;
-  if (!(entity in map)) throw new AppError(400, "unsupported", "This record cannot be deleted here.");
+  if (!Object.prototype.hasOwnProperty.call(map, entity)) throw new AppError(400, "unsupported", "This record cannot be deleted here.");
   await map[entity as keyof typeof map]();
   await audit(actorId, "admin.delete", entity, id);
 }
