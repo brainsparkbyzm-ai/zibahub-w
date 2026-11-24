@@ -1,23 +1,8 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { brand } from "@/config/brand";
-
-const display = Outfit({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-  weight: ["400", "500", "600", "700", "800", "900"],
-});
-
-const sans = Outfit({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-  weight: ["400", "500", "600", "700", "800", "900"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(brand.url),
@@ -41,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     description: brand.description,
   };
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`}>
+    <html lang="en" >
       <body className="zh-app">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
         <SiteHeader />
