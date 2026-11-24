@@ -197,12 +197,19 @@ export async function toggleSave(userId: string, slug: string) {
 export async function applyToJob(userId: string, slug: string, coverLetter?: string) {
   const user = await db.user.findUnique({ where: { id: userId } });
   if (!user) throw new AppError(401, "unauthenticated", "Sign in to apply.");
+  if (user.role !== "USER") throw new AppError(403, "candidate_only", "Only candidate accounts can apply for jobs.");
   if (!user.emailVerifiedAt) throw new AppError(403, "email_unverified", "Verify your email before applying.");
   const job = await db.job.findFirst({ where: { slug, status: "ACTIVE" }, include: { company: true } });
   if (!job) throw new AppError(404, "not_found", "This job is not open.");
   if (job.applicationMethod !== "ONSITE") throw new AppError(400, "external_apply", "This employer accepts applications outside ZibaHub.");
   if (!job.company) throw new AppError(400, "external_apply", "This job does not accept applications through ZibaHub.");
   if (job.company.ownerId === userId) throw new AppError(400, "own_job", "You cannot apply to your own listing.");
+  const existing = await db.application.findUnique({
+    where: { jobId_userId: { jobId: job.id, userId } },
+  });
+  if (existing && existing.status !== "SUBMITTED") {
+    throw new AppError(409, "application_processed", "This application has already been processed and cannot be resubmitted.");
+  }
   const application = await db.application.upsert({
     where: { jobId_userId: { jobId: job.id, userId } },
     update: { coverLetter: coverLetter || null, status: "SUBMITTED" },
