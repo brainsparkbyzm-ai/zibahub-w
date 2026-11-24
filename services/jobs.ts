@@ -114,7 +114,7 @@ export async function createEmployerJob(ownerId: string, input: z.infer<typeof j
       applicationMethod: input.applicationMethod,
       applicationTarget: input.applicationTarget || null,
       expiresAt: input.expiresAt ? new Date(input.expiresAt) : null,
-      tier: input.tier,
+      tier: "FREE",
       isApprenticeship: Boolean(input.isApprenticeship) || input.employmentType === "APPRENTICESHIP",
       status: "PENDING",
     },
@@ -149,7 +149,6 @@ export async function updateEmployerJob(ownerId: string, jobId: string, input: z
       applicationMethod: input.applicationMethod,
       applicationTarget: input.applicationTarget || null,
       expiresAt: input.expiresAt ? new Date(input.expiresAt) : null,
-      tier: input.tier,
       isApprenticeship: Boolean(input.isApprenticeship) || input.employmentType === "APPRENTICESHIP",
       status: job.status === "REJECTED" ? "PENDING" : job.status,
     },
@@ -163,7 +162,21 @@ export async function setEmployerJobStatus(ownerId: string, jobId: string, statu
 }
 
 export async function publishJob(actorId: string, jobId: string) {
-  const job = await db.job.update({ where: { id: jobId }, data: { status: "ACTIVE", postedAt: new Date() } });
+  const job = await db.$transaction(async (tx) => {
+    const updated = await tx.job.updateMany({
+      where: {
+        id: jobId,
+        OR: [{ companyId: null }, { company: { status: "PUBLISHED" } }],
+      },
+      data: { status: "ACTIVE", postedAt: new Date() },
+    });
+    if (updated.count !== 1) {
+      const exists = await tx.job.findUnique({ where: { id: jobId }, select: { id: true } });
+      if (!exists) throw new AppError(404, "not_found", "Job not found.");
+      throw new AppError(403, "company_not_approved", "The company must be approved before its job can be published.");
+    }
+    return tx.job.findUniqueOrThrow({ where: { id: jobId } });
+  });
   await audit(actorId, "job.publish", "Job", job.id);
   await dispatchInstantAlerts(job.id);
   return job;
