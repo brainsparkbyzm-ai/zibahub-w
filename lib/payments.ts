@@ -24,10 +24,11 @@ export async function getJobPricing(): Promise<JobPricing> {
 
 export function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
-  if (!key) return null;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!key || !webhookSecret) return null;
   return new Stripe(key);
 }
 
 export function paymentsConfigured() {
-  return Boolean(process.env.STRIPE_SECRET_KEY);
+  return Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_WEBHOOK_SECRET);
 }
