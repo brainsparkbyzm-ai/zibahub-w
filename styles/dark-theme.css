@@ -126,3 +126,53 @@ body.zh-app ::selection { color: #fff; background: #4f46e5; }
 @media (prefers-reduced-motion: reduce) {
   body.zh-app *, body.zh-app *::before, body.zh-app *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* Higher-specificity homepage overrides: neutralize older light-theme declarations. */
+body.zh-app .zh-home-refresh .zh-nav { background: rgba(20,20,29,.94) !important; border-color: rgba(206,199,245,.15) !important; }
+body.zh-app .zh-home-refresh .zh-primary-nav a,
+body.zh-app .zh-home-refresh .zh-header-actions .zh-tool { color: #e4e1ee !important; }
+body.zh-app .zh-home-refresh .zh-wordmark strong,
+body.zh-app .zh-home-refresh .zh-word-ziba { color: #faf9ff !important; }
+body.zh-app .zh-home-refresh .zh-word-hub,
+body.zh-app .zh-home-refresh .zh-wordmark small { color: #a79fff !important; }
+body.zh-app .zh-home-refresh .zh-hero h1,
+body.zh-app .zh-home-refresh .zh-feature-heading h2,
+body.zh-app .zh-home-refresh .zh-head h2 { color: #faf9ff !important; }
+body.zh-app .zh-home-refresh .zh-lede,
+body.zh-app .zh-home-refresh .zh-feature-heading p,
+body.zh-app .zh-home-refresh .zh-region,
+body.zh-app .zh-home-refresh .zh-popular { color: #b8b4c5 !important; }
+body.zh-app .zh-home-refresh .zh-search,
+body.zh-app .zh-home-refresh .zh-dash,
+body.zh-app .zh-home-refresh .zh-rail { background: rgba(22,22,32,.94) !important; border-color: rgba(206,199,245,.16) !important; }
+body.zh-app .zh-home-refresh .zh-search label { border-color: rgba(206,199,245,.14) !important; color: #d8d4e3 !important; }
+body.zh-app .zh-home-refresh .zh-search input { color: #faf9ff !important; }
+body.zh-app .zh-home-refresh .zh-metric,
+body.zh-app .zh-home-refresh .zh-rail li { background: #252432 !important; border-color: rgba(206,199,245,.12) !important; color: #eeeaff !important; }
+body.zh-app .zh-home-refresh .zh-metric strong,
+body.zh-app .zh-home-refresh .zh-stat strong,
+body.zh-app .zh-home-refresh .zh-job h3 a,
+body.zh-app .zh-home-refresh .zh-job > strong,
+body.zh-app .zh-home-refresh .zh-trade strong,
+body.zh-app .zh-home-refresh .zh-news h2 { color: #faf9ff !important; }
+body.zh-app .zh-home-refresh .zh-metric span,
+body.zh-app .zh-home-refresh .zh-metric small,
+body.zh-app .zh-home-refresh .zh-stat span,
+body.zh-app .zh-home-refresh .zh-job p,
+body.zh-app .zh-home-refresh .zh-trade span,
+body.zh-app .zh-home-refresh .zh-news p { color: #b8b4c5 !important; }
+body.zh-app .zh-home-refresh .zh-job,
+body.zh-app .zh-home-refresh .zh-trade,
+body.zh-app .zh-home-refresh .zh-stat,
+body.zh-app .zh-home-refresh .zh-news,
+body.zh-app .zh-home-refresh .zh-panel { background: linear-gradient(145deg,#1c1c26,#13131b) !important; border-color: rgba(206,199,245,.12) !important; }
+body.zh-app .zh-home-refresh .zh-tags span,
+body.zh-app .zh-home-refresh .zh-popular a,
+body.zh-app .zh-home-refresh .zh-train a,
+body.zh-app .zh-home-refresh .zh-guides-grid > a { background: #242331 !important; color: #e5e0f5 !important; border-color: rgba(206,199,245,.13) !important; }
+body.zh-app .zh-home-refresh .zh-hire { background: radial-gradient(ellipse at 82% 8%,rgba(129,120,255,.30),transparent 42%),linear-gradient(125deg,#211b48,#11111b) !important; }
+body.zh-app .zh-home-refresh .zh-guides-grid > a > strong,
+body.zh-app .zh-home-refresh .zh-guides-grid > a > small { color: #eeeaff !important; }
+body.zh-app .zh-home-refresh .zh-guides-grid > a > em { color: #b7adff !important; }
+body.zh-app .zh-home-refresh .zh-footer,
+body.zh-app .zh-home-refresh .zh-footer a { color: #aaa6b8 !important; }
