@@ -1,0 +1,128 @@
+/* ZibaHub premium dark theme: charcoal surfaces, indigo actions, lavender glow, coral urgency. */
+:root {
+  color-scheme: dark;
+  --canvas: #09090d;
+  --canvas-subtle: #111118;
+  --paper: #18181f;
+  --ink: #f7f6fb;
+  --ink-secondary: #e4e1ee;
+  --muted: #aaa6b8;
+  --muted-light: #858092;
+  --line: rgba(226, 221, 245, .10);
+  --line-strong: rgba(226, 221, 245, .18);
+  --amber: #4f46e5;
+  --amber-light: #8178ff;
+  --amber-deep: #c4bfff;
+  --amber-subtle: rgba(79,70,229,.16);
+  --amber-glow: rgba(79,70,229,.28);
+  --cyan: #a78bfa;
+  --cyan-light: #c4b5fd;
+  --cyan-deep: #ddd6fe;
+  --cyan-subtle: rgba(167,139,250,.14);
+  --cyan-glow: rgba(167,139,250,.18);
+  --zh-text: #f7f6fb;
+  --zh-text-soft: #d2cede;
+  --zh-text-muted: #aaa6b8;
+  --zh-primary: #4f46e5;
+  --zh-border: rgba(226,221,245,.12);
+}
+html { color-scheme: dark; background: #09090d; }
+body, body.zh-app {
+  color: #f7f6fb !important;
+  background:
+    radial-gradient(ellipse at 82% 0%, rgba(79,70,229,.16), transparent 34%),
+    radial-gradient(ellipse at 8% 22%, rgba(167,139,250,.08), transparent 30%),
+    linear-gradient(180deg, #09090d 0%, #0d0d14 55%, #09090d 100%) !important;
+}
+body.zh-app::before {
+  opacity: .12;
+  background-image: linear-gradient(rgba(196,191,255,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(196,191,255,.055) 1px, transparent 1px);
+}
+body.zh-app::after { background: radial-gradient(600px 340px at 50% 0%, rgba(79,70,229,.08), transparent 72%); }
+body.zh-app :where(h1,h2,h3,h4,h5,h6,.page-title) { color: #faf9ff !important; }
+body.zh-app :where(p,li,dd,dt,figcaption,small,.muted,.text-muted,.subtle,.description,.subtitle,.helper-text,.form-hint,.lede) { color: #b8b4c5; }
+body.zh-app :where(label,legend) { color: #d8d4e3 !important; }
+body.zh-app :where(a:not(.btn):not(.btn-amber):not(.btn-arc):not(.zh-post):not(.zh-gold)) { color: #c5c0ff; }
+body.zh-app :where(a:hover) { color: #e0ddff; }
+body.zh-app :where(.card,.panel,.surface,.glass,.glass-subtle,.side,.table-wrap,.notice,.empty,.error-box,.job-row,.filters,.zh-stat,.zh-panel,.zh-job,.zh-trade,.zh-news,.zh-dash,.zh-rail) {
+  color: #f4f2fb !important;
+  background: linear-gradient(145deg, rgba(28,28,38,.96), rgba(19,19,27,.96)) !important;
+  border: 1px solid rgba(206,199,245,.12) !important;
+  box-shadow: 0 16px 38px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+body.zh-app :where(.card,.panel,.surface,.glass,.glass-subtle,.zh-stat,.zh-panel,.zh-job,.zh-trade,.zh-news):hover {
+  border-color: rgba(129,120,255,.42) !important;
+  box-shadow: 0 20px 48px rgba(0,0,0,.34), 0 0 28px rgba(79,70,229,.10) !important;
+}
+body.zh-app :where(.card,.panel,.surface,.glass,.glass-subtle) :where(h1,h2,h3,h4,strong,b) { color: #faf9ff !important; }
+body.zh-app :where(.card,.panel,.surface,.glass,.glass-subtle) :where(p,small,li,label,span) { color: #bdb8ca; }
+body.zh-app :where(.zh-nav,.nav,.zh-signin,.user-menu,.zh-drawer,.zh-search,.search-panel,.jobs-filter-panel,.jobs-hero-note) {
+  color: #f7f6fb !important;
+  background: rgba(20,20,29,.90) !important;
+  border-color: rgba(206,199,245,.15) !important;
+  box-shadow: 0 14px 40px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.04) !important;
+}
+body.zh-app :where(.zh-wordmark strong,.wordmark,.wordmark span,.zh-hero h1,.zh-metric strong,.zh-rail li,.zh-head h2,.zh-stat strong,.zh-foot-col strong) { color: #faf9ff !important; }
+body.zh-app :where(.zh-wordmark small,.zh-head a,.zh-insight a,.zh-guide em,.zh-search svg,.zh-stat svg,.zh-rail svg,.kicker,.section-head a) { color: #a79fff !important; }
+body.zh-app :where(.zh-nav-links a,.nav-links a,.zh-tool,.nav-tool,.zh-signin,.zh-primary-nav a) { color: #e4e1ee !important; }
+body.zh-app :where(.zh-nav-links a:hover,.nav-links a:hover,.zh-tool:hover,.nav-tool:hover,.zh-popular a:hover,.btn-ghost:hover,.btn-line:hover) {
+  color: #fff !important; background: rgba(79,70,229,.18) !important;
+}
+body.zh-app :where(input,select,textarea,.jobs-field input,.jobs-field select) {
+  color: #f7f6fb !important; background: #111119 !important;
+  border: 1px solid rgba(206,199,245,.18) !important;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.25) !important;
+}
+body.zh-app :where(input,select,textarea)::placeholder { color: #888397 !important; opacity: 1; }
+body.zh-app :where(input,select,textarea):focus {
+  border-color: #8178ff !important; box-shadow: 0 0 0 3px rgba(79,70,229,.22) !important;
+}
+body.zh-app :where(select option) { color: #f7f6fb; background: #18181f; }
+body.zh-app :where(.btn,.btn-amber,.btn-arc,.zh-post,.zh-gold,.zh-search button,.zh-news button,.zh-job-actions a:last-child,.jobs-filter-form button) {
+  color: #fff !important; background: linear-gradient(135deg,#6258f5,#4338ca) !important;
+  border-color: rgba(167,139,250,.28) !important;
+  box-shadow: 0 9px 24px rgba(79,70,229,.28), inset 0 1px 0 rgba(255,255,255,.18) !important;
+}
+body.zh-app :where(.btn:hover,.btn-amber:hover,.btn-arc:hover,.zh-post:hover,.zh-gold:hover,.zh-search button:hover,.zh-news button:hover) {
+  filter: brightness(1.12); transform: translateY(-2px);
+}
+body.zh-app :where(.btn-ghost,.btn-line,.zh-signin,.zh-menu,.zh-job-actions button,.zh-save-link) {
+  color: #e7e3f3 !important; background: #20202a !important; border-color: rgba(206,199,245,.18) !important;
+}
+body.zh-app :where(.badge.urgent,.urgent,.tag-urgent,[data-urgent="true"]) {
+  color: #fff1f3 !important; background: linear-gradient(135deg,#f43f5e,#be123c) !important; border-color: rgba(244,63,94,.45) !important;
+}
+body.zh-app :where(.badge,.chip,.hero-eyebrow,.zh-metric i,.trade-icon,.career-icon,.newsletter-icon) {
+  color: #d8d3ff !important; background: rgba(79,70,229,.18) !important; border-color: rgba(167,139,250,.24) !important;
+}
+body.zh-app :where(.badge.arc) { color: #e4dcff !important; background: rgba(167,139,250,.16) !important; }
+body.zh-app :where(.badge.premium) { color: #f0eaff !important; background: linear-gradient(135deg,#5b21b6,#312e81) !important; border-color: rgba(196,181,253,.30) !important; }
+body.zh-app :where(.badge.ink) { color: #fff !important; background: #272535 !important; }
+body.zh-app main :where(th) { color: #eeeaff !important; background: #242333 !important; }
+body.zh-app main :where(td) { color: #d0cbda !important; border-color: rgba(206,199,245,.10) !important; }
+body.zh-app main :where(tr:hover td) { background: rgba(79,70,229,.10) !important; }
+body.zh-app main :where(hr) { border-top-color: rgba(206,199,245,.14) !important; }
+body.zh-app main :where(.notice,[role="status"]) { color: #e3ddff !important; background: rgba(79,70,229,.14) !important; border-color: rgba(129,120,255,.28) !important; }
+body.zh-app main :where(.empty) { color: #d0cbda !important; background: #171720 !important; border-color: rgba(167,139,250,.30) !important; }
+body.zh-app main :where(.error-box,[role="alert"]) { color: #ffe4e8 !important; background: rgba(190,18,60,.16) !important; border-color: rgba(244,63,94,.34) !important; }
+body.zh-app :where(.zh-region,.zh-popular a,.zh-tags span,.zh-train a,.zh-guide) {
+  color: #e5e0f5 !important; background: #1b1a27 !important; border-color: rgba(206,199,245,.13) !important;
+}
+body.zh-app :where(.zh-hire,.dark-band,.salary-card,.employer-cta) {
+  color: #fff !important; background: radial-gradient(ellipse at 82% 8%,rgba(129,120,255,.30),transparent 42%), linear-gradient(125deg,#211b48,#11111b 72%) !important;
+}
+body.zh-app :where(.zh-hire,.dark-band,.salary-card,.employer-cta) :where(h1,h2,h3,h4,p,span,small,strong,a) { color: #fff !important; }
+body.zh-app :where(.zh-footer,.zh-footer a,.zh-flags,.zh-footer-meta) { color: #aaa6b8 !important; }
+body.zh-app .zh-footer a:hover { color: #fff !important; }
+body.zh-app .zh-guide { background: #191922 !important; border-color: rgba(206,199,245,.13) !important; }
+body.zh-app .zh-job h3 a, body.zh-app .zh-job p, body.zh-app .zh-trade { color: #e8e5f0 !important; }
+body.zh-app .zh-form-error { color: #fda4af !important; }
+body.zh-app .zh-form-ok { color: #86efac !important; }
+body.zh-app ::selection { color: #fff; background: #4f46e5; }
+:focus-visible { outline: 2px solid #a79fff !important; outline-offset: 3px; }
+@media (max-width: 760px) {
+  body.zh-app { background: linear-gradient(180deg,#09090d 0%,#101019 100%) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.zh-app *, body.zh-app *::before, body.zh-app *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
