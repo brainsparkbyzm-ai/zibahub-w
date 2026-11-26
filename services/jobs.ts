@@ -1,4 +1,4 @@
-﻿import type { Prisma } from "@prisma/client";
+﻿import type { Application, Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { AppError } from "@/lib/errors";
 import { audit } from "@/lib/audit";
@@ -207,7 +207,7 @@ export async function applyToJob(userId: string, slug: string, coverLetter?: str
   const existing = await db.application.findUnique({
     where: { jobId_userId: { jobId: job.id, userId } },
   });
-  let application;
+  let application: Application;
   if (existing) {
     const updated = await db.application.updateMany({
       where: { id: existing.id, status: "SUBMITTED" },
