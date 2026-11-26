@@ -33,7 +33,17 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       throw new AppError(409, "invalid_transition", "This application status transition is not allowed.");
     }
 
-    await db.application.update({ where: { id }, data: { status } });
+    const updated = await db.application.updateMany({
+      where: {
+        id,
+        status: application.status,
+        job: { company: { ownerId: user.id, status: "PUBLISHED" } },
+      },
+      data: { status },
+    });
+    if (updated.count !== 1) {
+      throw new AppError(409, "application_changed", "This application was updated by another request. Refresh and try again.");
+    }
     await notify({
       userId: application.userId,
       type: "APPLICATION_STATUS",

@@ -1,4 +1,4 @@
-﻿import type { Prisma } from "@prisma/client";
+﻿import type { Application, Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { AppError } from "@/lib/errors";
 import { audit } from "@/lib/audit";
@@ -207,14 +207,28 @@ export async function applyToJob(userId: string, slug: string, coverLetter?: str
   const existing = await db.application.findUnique({
     where: { jobId_userId: { jobId: job.id, userId } },
   });
-  if (existing && existing.status !== "SUBMITTED") {
-    throw new AppError(409, "application_processed", "This application has already been processed and cannot be resubmitted.");
+  let application: Application;
+  if (existing) {
+    const updated = await db.application.updateMany({
+      where: { id: existing.id, status: "SUBMITTED" },
+      data: { coverLetter: coverLetter || null },
+    });
+    if (updated.count !== 1) {
+      throw new AppError(409, "application_processed", "This application has already been processed and cannot be resubmitted.");
+    }
+    application = await db.application.findUniqueOrThrow({ where: { id: existing.id } });
+  } else {
+    try {
+      application = await db.application.create({
+        data: { jobId: job.id, userId, coverLetter: coverLetter || null, resumeUrl: user.resumeUrl },
+      });
+    } catch (error) {
+      if (error && typeof error === "object" && "code" in error && error.code === "P2002") {
+        throw new AppError(409, "application_exists", "An application for this job already exists. Refresh your applications.");
+      }
+      throw error;
+    }
   }
-  const application = await db.application.upsert({
-    where: { jobId_userId: { jobId: job.id, userId } },
-    update: { coverLetter: coverLetter || null, status: "SUBMITTED" },
-    create: { jobId: job.id, userId, coverLetter: coverLetter || null, resumeUrl: user.resumeUrl },
-  });
   await notify({
     userId: job.company.ownerId,
     type: "APPLICATION",

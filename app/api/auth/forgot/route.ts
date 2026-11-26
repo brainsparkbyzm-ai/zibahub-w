@@ -8,7 +8,11 @@ export async function POST(request: Request) {
     const parsed = emailSchema.safeParse(body);
     if (!parsed.success) return Response.json({ ok: false, error: { message: "Enter a valid email." } }, { status: 400 });
     const result = await requestPasswordReset(parsed.data.email, clientIp(request));
-    const message = result.configured ? "If that account exists, a reset email was sent." : "Email is not configured, so no message was sent. If the account exists, use this one-time link: " + (result.devLink || "account not found, no link issued.");
+    const message = result.configured
+      ? "If that account exists, a reset email was sent."
+      : process.env.NODE_ENV === "development"
+        ? "Email is not configured. Development reset link: " + (result.devLink || "account not found, no link issued.")
+        : "If that account exists, a reset email would be sent.";
     return Response.json({ ok: true, message });
   } catch (error) { return fail(error); }
 }
