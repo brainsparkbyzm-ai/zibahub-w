@@ -1,0 +1,29 @@
+/* Site-wide pearl-white canvas. Keep cards, buttons, and intentional accent panels intact. */
+:root {
+  --canvas: #fdfcf9;
+  --canvas-subtle: #f7f6f1;
+  --paper: #ffffff;
+  --glass: rgba(255, 255, 255, 0.78);
+  --glass-strong: rgba(255, 255, 255, 0.9);
+  --glass-solid: rgba(255, 255, 255, 0.97);
+}
+
+html,
+body,
+body.zh-app {
+  min-height: 100%;
+  background: #fdfcf9 !important;
+  background-image: none !important;
+}
+
+body.zh-app::before,
+body.zh-app::after {
+  content: none !important;
+  display: none !important;
+}
+
+body.zh-app main {
+  min-height: 60vh;
+  background: #fdfcf9 !important;
+  background-image: none !important;
+}
