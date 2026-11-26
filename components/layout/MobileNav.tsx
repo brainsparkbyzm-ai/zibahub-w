@@ -17,7 +17,15 @@ const links = [
   ["/calculators", "Tools"],
 ];
 
-export function MobileNav({ signedIn }: { signedIn: boolean }) {
+export function MobileNav({
+  signedIn,
+  accountHref,
+  accountLabel,
+}: {
+  signedIn: boolean;
+  accountHref: string;
+  accountLabel: string;
+}) {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     if (!open) return;
@@ -25,6 +33,7 @@ export function MobileNav({ signedIn }: { signedIn: boolean }) {
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
+
   return (
     <>
       <button className="zh-menu" type="button" aria-expanded={open} aria-controls="zh-mobile-nav" onClick={() => setOpen((value) => !value)}>
@@ -35,7 +44,8 @@ export function MobileNav({ signedIn }: { signedIn: boolean }) {
           {links.map(([href, label]) => (
             <Link key={href} href={href} onClick={() => setOpen(false)}>{label}</Link>
           ))}
-          <Link href={signedIn ? "/dashboard" : "/sign-in"} onClick={() => setOpen(false)}>{signedIn ? "Account" : "Sign In"}</Link>
+          {signedIn ? <Link href={accountHref} onClick={() => setOpen(false)}>{accountLabel}</Link> : null}
+          <Link href="/sign-in" onClick={() => setOpen(false)}>Sign In</Link>
           <Link href="/employer/jobs/new" onClick={() => setOpen(false)}>Post a Job</Link>
         </div>
       ) : null}
