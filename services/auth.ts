@@ -31,23 +31,22 @@ async function alertAdminsOfRepeatedLoginFailures() {
 
 export async function registerUser(input: z.infer<typeof registerSchema>, meta: { ip: string; userAgent: string | null }) {
   await rateLimit(`register:${meta.ip}`, 8, 60 * 60 * 1000);
-  const email = input.email.toLowerCase();
+  const email = input.email.trim().toLowerCase();
   const existing = await db.user.findUnique({ where: { email } });
   if (existing) throw new AppError(409, "email_taken", "An account with that email already exists.");
-  const user = await db.user.create({
-    data: {
-      email,
-      name: input.name,
-      role: input.role,
-      passwordHash: await hashPassword(input.password),
-    },
-  });
-  if (input.role === "EMPLOYER") {
-    const name = input.companyName?.trim() || `${input.name} Hiring`;
-    await db.company.create({
-      data: { ownerId: user.id, name, slug: uniqueSlug(name), status: "PENDING", description: "Company profile is waiting for details." },
+  const passwordHash = await hashPassword(input.password);
+  const user = await db.$transaction(async (tx) => {
+    const created = await tx.user.create({
+      data: { email, name: input.name, role: input.role, passwordHash },
     });
-  }
+    if (input.role === "EMPLOYER") {
+      const name = input.companyName?.trim() || `${input.name} Hiring`;
+      await tx.company.create({
+        data: { ownerId: created.id, name, slug: uniqueSlug(name), status: "PENDING", description: "Company profile is waiting for details." },
+      });
+    }
+    return created;
+  });
   await audit(user.id, "user.register", "User", user.id, { role: user.role });
   const verification = await issueVerification(user.id, user.email);
   await createSession(user, meta);
@@ -91,8 +90,10 @@ async function issueVerification(userId: string, email: string) {
 }
 
 export async function requestPasswordReset(email: string, ip: string) {
+  const normalizedEmail = email.trim().toLowerCase();
   await rateLimit(`reset:${ip}`, 6, 60 * 60 * 1000);
-  const user = await db.user.findUnique({ where: { email: email.toLowerCase() } });
+  await rateLimit(`reset-account:${hashToken(normalizedEmail)}`, 4, 60 * 60 * 1000);
+  const user = await db.user.findUnique({ where: { email: normalizedEmail } });
   if (!user) return { sent: false, configured: emailConfig().configured, neutral: true };
   const token = randomToken();
   await db.passwordResetToken.create({
@@ -109,23 +110,39 @@ export async function requestPasswordReset(email: string, ip: string) {
 }
 
 export async function resetPassword(input: z.infer<typeof resetSchema>) {
+  const now = new Date();
   const row = await db.passwordResetToken.findUnique({ where: { tokenHash: hashToken(input.token) } });
-  if (!row || row.usedAt || row.expiresAt < new Date()) throw new AppError(400, "invalid_token", "This reset link is invalid or expired.");
-  await db.user.update({ where: { id: row.userId }, data: { passwordHash: await hashPassword(input.password) } });
-  await db.passwordResetToken.update({ where: { id: row.id }, data: { usedAt: new Date() } });
-  await db.session.deleteMany({ where: { userId: row.userId } });
+  if (!row || row.usedAt || row.expiresAt <= now) throw new AppError(400, "invalid_token", "This reset link is invalid or expired.");
+  const passwordHash = await hashPassword(input.password);
+  await db.$transaction(async (tx) => {
+    const consumed = await tx.passwordResetToken.updateMany({
+      where: { id: row.id, usedAt: null, expiresAt: { gt: now } },
+      data: { usedAt: now },
+    });
+    if (consumed.count !== 1) throw new AppError(400, "invalid_token", "This reset link is invalid or expired.");
+    await tx.user.update({ where: { id: row.userId }, data: { passwordHash } });
+    await tx.session.deleteMany({ where: { userId: row.userId } });
+  });
   await audit(row.userId, "user.password_reset", "User", row.userId);
 }
 
 export async function verifyEmail(token: string) {
+  const now = new Date();
   const row = await db.emailVerificationToken.findUnique({ where: { tokenHash: hashToken(token) } });
-  if (!row || row.usedAt || row.expiresAt < new Date()) throw new AppError(400, "invalid_token", "This verification link is invalid or expired.");
-  await db.user.update({ where: { id: row.userId }, data: { emailVerifiedAt: new Date() } });
-  await db.emailVerificationToken.update({ where: { id: row.id }, data: { usedAt: new Date() } });
+  if (!row || row.usedAt || row.expiresAt <= now) throw new AppError(400, "invalid_token", "This verification link is invalid or expired.");
+  await db.$transaction(async (tx) => {
+    const consumed = await tx.emailVerificationToken.updateMany({
+      where: { id: row.id, usedAt: null, expiresAt: { gt: now } },
+      data: { usedAt: now },
+    });
+    if (consumed.count !== 1) throw new AppError(400, "invalid_token", "This verification link is invalid or expired.");
+    await tx.user.update({ where: { id: row.userId }, data: { emailVerifiedAt: now } });
+  });
   await audit(row.userId, "user.email_verified", "User", row.userId);
 }
 
 export async function resendVerification(userId: string) {
+  await rateLimit(`verify-resend:${hashToken(userId)}`, 4, 60 * 60 * 1000);
   const user = await db.user.findUnique({ where: { id: userId } });
   if (!user) throw new AppError(404, "not_found", "Account not found.");
   if (user.emailVerifiedAt) return { alreadyVerified: true, sent: false, configured: emailConfig().configured, devLink: null };
