@@ -24,8 +24,7 @@ export async function getJobPricing(): Promise<JobPricing> {
 
 export function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-  if (!key || !webhookSecret) return null;
+  if (!key) return null;
   return new Stripe(key);
 }
 
