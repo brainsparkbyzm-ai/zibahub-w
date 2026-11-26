@@ -20,7 +20,10 @@ export async function SiteHeader() {
   } catch {
     user = null;
   }
+
   const accountHref = user?.role === "ADMIN" ? "/admin" : user?.role === "EMPLOYER" ? "/employer" : "/dashboard";
+  const accountLabel = user?.role === "ADMIN" ? "Admin" : user?.role === "EMPLOYER" ? "Employer" : user?.name?.split(" ")[0] || "Account";
+
   return (
     <header className="zh-header">
       <div className="zh-nav">
@@ -42,15 +45,10 @@ export async function SiteHeader() {
             <HeartIcon />
             <span>Saved</span>
           </Link>
-          {user ? (
-            user.role !== "ADMIN" ? (
-              <Link className="zh-signin" href={accountHref}>{user.name.split(" ")[0]}</Link>
-            ) : null
-          ) : (
-            <Link className="zh-signin" href="/sign-in">Sign In</Link>
-          )}
+          {user ? <Link className="zh-account-link" href={accountHref}>{accountLabel}</Link> : null}
+          <Link className="zh-signin" href="/sign-in">Sign In</Link>
           <Link className="zh-post" href="/employer/jobs/new">Post a Job</Link>
-          <MobileNav signedIn={Boolean(user)} />
+          <MobileNav signedIn={Boolean(user)} accountHref={accountHref} accountLabel={accountLabel} />
         </div>
       </div>
     </header>
