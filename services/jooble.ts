@@ -143,6 +143,22 @@ export async function importJoobleJobs(options: { dryRun?: boolean } = {}) {
   }
 
   const tradeMap = new Map(trades.map((trade) => [trade.slug, trade.id]));
+  // Repair legacy Jooble rows that were assigned from the search keyword rather than the actual title.
+  try {
+    const legacyJobs = await db.job.findMany({
+      where: { source: "JOOBLE", tradeId: { not: null } },
+      select: { id: true, title: true, tradeId: true },
+    });
+    for (const job of legacyJobs) {
+      const slug = matchTradeSlug(job.title);
+      const correctTradeId = slug ? tradeMap.get(slug) ?? null : null;
+      if (correctTradeId !== job.tradeId) {
+        await db.job.update({ where: { id: job.id }, data: { tradeId: correctTradeId } });
+      }
+    }
+  } catch (error) {
+    errors.push(`Legacy trade correction: ${error instanceof Error ? error.message : "Unknown error"}`);
+  }
 
   const importSearches = [
     ...TRADES.map((item) => ({ ...item, tradeId: tradeMap.get(item.slug) })),
