@@ -11,6 +11,8 @@ const TRADES = [
   { slug: "carpenter", keyword: "carpenter" },
   { slug: "mechanic", keyword: "mechanic" },
   { slug: "roofer", keyword: "roofer" },
+  { slug: "heavy-equipment", keyword: "heavy equipment operator excavator bulldozer crane operator" },
+  { slug: "industrial-maintenance", keyword: "industrial maintenance technician millwright maintenance mechanic" },
 ];
 
 const INDUSTRIES = [
@@ -18,6 +20,24 @@ const INDUSTRIES = [
   { slug: "grocery", keyword: "grocery supermarket cashier stocker produce deli" },
   { slug: "trainers", keyword: "personal trainer fitness trainer gym instructor fitness coach" },
 ];
+
+const TRADE_TITLE_RULES: Record<string, RegExp> = {
+  electrician: /\b(electrician|electrical apprentice|electrical technician|journeyman wireman|wireman)\b/i,
+  hvac: /\b(hvac|heating and cooling|refrigeration technician|air conditioning technician)\b/i,
+  plumber: /\b(plumber|plumbing apprentice|pipefitter|pipe fitter)\b/i,
+  welder: /\b(welder|welding technician|fabricator|fabrication welder)\b/i,
+  construction: /\b(construction worker|construction laborer|general laborer|building laborer|construction supervisor|site supervisor)\b/i,
+  carpenter: /\b(carpenter|carpentry|finish carpenter|framing carpenter|cabinet maker)\b/i,
+  mechanic: /\b(mechanic|automotive technician|diesel technician|auto technician|vehicle technician)\b/i,
+  roofer: /\b(roofer|roofing technician|roofing installer)\b/i,
+  "heavy-equipment": /\b(heavy equipment operator|excavator operator|bulldozer operator|crane operator|loader operator)\b/i,
+  "industrial-maintenance": /\b(industrial maintenance|maintenance mechanic|maintenance technician|millwright|plant mechanic)\b/i,
+};
+
+function matchTradeSlug(title: string): string | null {
+  const matches = Object.entries(TRADE_TITLE_RULES).filter(([, pattern]) => pattern.test(title));
+  return matches.length === 1 ? matches[0][0] : null;
+}
 
 type JoobleJob = {
   title?: string;
@@ -123,6 +143,25 @@ export async function importJoobleJobs(options: { dryRun?: boolean } = {}) {
   }
 
   const tradeMap = new Map(trades.map((trade) => [trade.slug, trade.id]));
+  // Dry runs must never mutate existing records.
+  if (!dryRun) {
+    // Repair legacy Jooble rows that were assigned from the search keyword rather than the actual title.
+    try {
+      const legacyJobs = await db.job.findMany({
+        where: { source: "JOOBLE", tradeId: { not: null } },
+        select: { id: true, title: true, tradeId: true },
+      });
+      for (const job of legacyJobs) {
+        const slug = matchTradeSlug(job.title);
+        const correctTradeId = slug ? tradeMap.get(slug) ?? null : null;
+        if (correctTradeId !== job.tradeId) {
+          await db.job.update({ where: { id: job.id }, data: { tradeId: correctTradeId } });
+        }
+      }
+    } catch (error) {
+      errors.push(`Legacy trade correction: ${error instanceof Error ? error.message : "Unknown error"}`);
+    }
+  }
 
   const importSearches = [
     ...TRADES.map((item) => ({ ...item, tradeId: tradeMap.get(item.slug) })),
@@ -138,24 +177,28 @@ export async function importJoobleJobs(options: { dryRun?: boolean } = {}) {
     }
 
     try {
+      for (let page = 1; page <= 3; page++) {
       const response = await fetch(`https://jooble.org/api/${key}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           keywords: tradeConfig.keyword,
           location: "United States",
-          page: "1",
+          page,
+          ResultOnPage: 50,
+          companysearch: false,
         }),
         signal: AbortSignal.timeout(20000),
       });
 
       if (!response.ok) {
         errors.push(`Jooble ${tradeConfig.slug}: HTTP ${response.status}`);
-        continue;
+        break;
       }
 
-      const payload = await response.json() as { jobs?: JoobleJob[] };
+      const payload = await response.json() as { jobs?: JoobleJob[]; totalCount?: number };
       searches++;
+      if (!payload.jobs?.length) break;
 
       for (const item of payload.jobs || []) {
         const title = cleanText(item.title || "");
@@ -189,6 +232,8 @@ export async function importJoobleJobs(options: { dryRun?: boolean } = {}) {
         }
         seenExternalIds.add(externalId);
 
+        const matchedTradeSlug = matchTradeSlug(title);
+        const matchedTradeId = matchedTradeSlug ? tradeMap.get(matchedTradeSlug) ?? null : null;
         const location = parseLocation(item.location);
         const salary = parseSalary(item.salary);
         const employmentType = parseEmployment(item.type);
@@ -206,7 +251,7 @@ export async function importJoobleJobs(options: { dryRun?: boolean } = {}) {
             source: "JOOBLE",
             externalId,
             sourceUrl: link,
-            tradeId,
+            tradeId: matchedTradeId,
             country: "United States",
             region: location.region,
             city: location.city,
@@ -230,6 +275,7 @@ export async function importJoobleJobs(options: { dryRun?: boolean } = {}) {
             isSeed: false,
           },
         });
+      }
       }
     } catch (error) {
       errors.push(`${tradeConfig.slug}: ${error instanceof Error ? error.message : "Unknown error"}`);

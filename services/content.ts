@@ -11,7 +11,7 @@ export async function tradeBySlug(slug: string) {
   return db.trade.findFirst({
     where: { slug, status: "PUBLISHED" },
     include: {
-      jobs: { where: { status: "ACTIVE" }, take: 6, include: { company: true }, orderBy: { postedAt: "desc" } },
+      jobs: { where: { status: "ACTIVE", isSeed: false, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] }, take: 50, include: { company: true }, orderBy: { postedAt: "desc" } },
       salaryBands: { where: { isSeed: true }, take: 6 },
     },
   });
