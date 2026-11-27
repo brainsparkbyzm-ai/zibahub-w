@@ -23,7 +23,7 @@ export const jobSchema = z.object({
   benefits: z.string().max(4000).optional(),
   locationType: z.enum(["ON_SITE", "REMOTE", "HYBRID"]),
   applicationMethod: z.enum(["ONSITE", "URL", "EMAIL"]),
-  applicationTarget: z.string().max(240).optional(),
+  applicationTarget: z.string().trim().max(240).optional(),
   expiresAt: z.string().optional(),
   tier: z.enum(["FREE", "FEATURED", "PREMIUM"]).default("FREE"),
   isApprenticeship: z.coerce.boolean().optional(),
