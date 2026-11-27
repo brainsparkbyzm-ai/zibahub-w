@@ -9,23 +9,32 @@ export function ApiForm({ action, children, submitLabel }: { action: string; chi
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (pending) return;
     setPending(true);
     setError(null);
     setMessage(null);
-    const body = Object.fromEntries(new FormData(event.currentTarget).entries());
-    const response = await fetch(action, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    const payload = await response.json().catch(() => null);
-    setPending(false);
-    if (!response.ok || !payload?.ok) {
-      setError(payload?.error?.message || "The request failed.");
-      return;
+
+    try {
+      const body = Object.fromEntries(new FormData(event.currentTarget).entries());
+      const response = await fetch(action, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const payload = await response.json().catch(() => null);
+
+      if (!response.ok || !payload?.ok) {
+        setError(payload?.error?.message || "The request failed.");
+        return;
+      }
+
+      setMessage(payload.message || "Saved.");
+      if (payload.redirect) window.location.assign(payload.redirect);
+    } catch {
+      setError("Could not reach ZibaHub. Check your connection and try again.");
+    } finally {
+      setPending(false);
     }
-    setMessage(payload.message || "Saved.");
-    if (payload.redirect) window.location.href = payload.redirect;
   }
 
   return (
