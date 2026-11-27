@@ -174,13 +174,14 @@ export async function importJoobleJobs(options: { dryRun?: boolean } = {}) {
     }
 
     try {
+      for (let page = 1; page <= 3; page++) {
       const response = await fetch(`https://jooble.org/api/${key}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           keywords: tradeConfig.keyword,
           location: "United States",
-          page: 1,
+          page,
           ResultOnPage: 50,
           companysearch: false,
         }),
@@ -192,8 +193,9 @@ export async function importJoobleJobs(options: { dryRun?: boolean } = {}) {
         continue;
       }
 
-      const payload = await response.json() as { jobs?: JoobleJob[] };
+      const payload = await response.json() as { jobs?: JoobleJob[]; totalCount?: number };
       searches++;
+      if (!payload.jobs?.length) break;
 
       for (const item of payload.jobs || []) {
         const title = cleanText(item.title || "");
@@ -270,6 +272,7 @@ export async function importJoobleJobs(options: { dryRun?: boolean } = {}) {
             isSeed: false,
           },
         });
+      }
       }
     } catch (error) {
       errors.push(`${tradeConfig.slug}: ${error instanceof Error ? error.message : "Unknown error"}`);
