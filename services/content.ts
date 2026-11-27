@@ -88,7 +88,19 @@ export async function globalSearch(q: string) {
   if (term.length < 2) return { jobs: [], trades: [], apprenticeships: [], courses: [], guides: [], employers: [] };
   const contains = { contains: term, mode: "insensitive" as const };
   const [jobs, trades, apprenticeships, courses, guides, employers] = await Promise.all([
-    db.job.findMany({ where: { status: "ACTIVE", isSeed: false, OR: [{ title: contains }, { city: contains }] }, include: { company: true }, take: 6 }),
+    db.job.findMany({
+      where: {
+        status: "ACTIVE",
+        isSeed: false,
+        AND: [
+          { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+          { OR: [{ companyId: null }, { company: { status: "PUBLISHED" } }] },
+          { OR: [{ title: contains }, { city: contains }] },
+        ],
+      },
+      include: { company: true },
+      take: 6,
+    }),
     db.trade.findMany({ where: { status: "PUBLISHED", name: contains }, take: 6 }),
     db.apprenticeship.findMany({ where: { status: "PUBLISHED", title: contains }, take: 6 }),
     db.course.findMany({ where: { status: "PUBLISHED", title: contains }, take: 6 }),
@@ -103,7 +115,19 @@ export async function homeData() {
     jobs, trades, apprenticeships, courses, guides, employers, products, articles,
     activeJobCount, publishedEmployerCount, publishedTradeCount, apprenticeshipCount, courseCount,
   ] = await Promise.all([
-    db.job.findMany({ where: { status: "ACTIVE", isSeed: false }, include: { company: true, trade: true }, orderBy: [{ tier: "desc" }, { postedAt: "desc" }], take: 6 }),
+    db.job.findMany({
+      where: {
+        status: "ACTIVE",
+        isSeed: false,
+        AND: [
+          { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+          { OR: [{ companyId: null }, { company: { status: "PUBLISHED" } }] },
+        ],
+      },
+      include: { company: true, trade: true },
+      orderBy: [{ tier: "desc" }, { postedAt: "desc" }],
+      take: 6,
+    }),
     db.trade.findMany({ where: { status: "PUBLISHED" }, take: 10, orderBy: { name: "asc" } }),
     db.apprenticeship.findMany({ where: { status: "PUBLISHED" }, include: { trade: true }, take: 3 }),
     db.course.findMany({ where: { status: "PUBLISHED" }, include: { provider: true }, take: 3 }),
@@ -111,7 +135,16 @@ export async function homeData() {
     db.company.findMany({ where: { status: "PUBLISHED" }, take: 4 }),
     db.affiliateProduct.findMany({ where: { status: "PUBLISHED" }, take: 4 }),
     db.article.findMany({ where: { status: "PUBLISHED", sponsored: true }, take: 2 }),
-    db.job.count({ where: { status: "ACTIVE", isSeed: false } }),
+    db.job.count({
+      where: {
+        status: "ACTIVE",
+        isSeed: false,
+        AND: [
+          { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+          { OR: [{ companyId: null }, { company: { status: "PUBLISHED" } }] },
+        ],
+      },
+    }),
     db.company.count({ where: { status: "PUBLISHED" } }),
     db.trade.count({ where: { status: "PUBLISHED" } }),
     db.apprenticeship.count({ where: { status: "PUBLISHED" } }),
