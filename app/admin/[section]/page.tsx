@@ -49,7 +49,27 @@ export default async function AdminSection({ params }: { params: Promise<{ secti
   if (section === "articles" || section === "guest-posts") {
     const posts = await db.guestPost.findMany({ orderBy: { createdAt: "desc" } });
     const articles = await db.article.findMany({ orderBy: { createdAt: "desc" } });
-    return <Section title="Stories and submissions"><h2>Guest posts</h2>{posts.map((row) => <article key={row.id} className="card"><strong>{row.title}</strong><p>{row.companyName} Â· {row.status} Â· {row.sponsored ? "Sponsored" : "Editorial"}</p><p>{row.content.slice(0, 240)}</p><AdminActions id={row.id} entity="guest" statuses={["SUBMITTED", "UNDER_REVIEW", "APPROVED", "REJECTED", "PUBLISHED"]} /></article>)}<h2>Articles</h2>{articles.map((row) => <p key={row.id}>{row.title} Â· {row.status} {row.sponsored ? "Â· sponsored" : ""} <AdminActions id={row.id} entity="article" statuses={contentStatuses} /></p>)}</Section>;
+    return (
+      <Section title="Stories and submissions">
+        <h2>Guest posts</h2>
+        {posts.map((row) => (
+          <article key={row.id} className="card">
+            <strong>{row.title}</strong>
+            <p>{row.companyName} | {row.status} | {row.sponsored ? "Sponsored" : "Editorial"}</p>
+            <p>Contact: {row.contactName} | <a href={`mailto:${row.contactEmail}`}>{row.contactEmail}</a></p>
+            {row.website ? <p>Website: <a href={row.website} target="_blank" rel="noreferrer">{row.website}</a></p> : null}
+            <p>Requested date: {formatDate(row.requestedDate)}</p>
+            {row.reviewNote ? <p>Review note: {row.reviewNote}</p> : null}
+            <p>{row.content.slice(0, 240)}</p>
+            <AdminActions id={row.id} entity="guest" statuses={["SUBMITTED", "UNDER_REVIEW", "APPROVED", "REJECTED", "PUBLISHED"]} />
+          </article>
+        ))}
+        <h2>Articles</h2>
+        {articles.map((row) => (
+          <p key={row.id}>{row.title} | {row.status} {row.sponsored ? "| sponsored" : ""} <AdminActions id={row.id} entity="article" statuses={contentStatuses} /></p>
+        ))}
+      </Section>
+    );
   }
   if (section === "products") {
     const rows = await db.affiliateProduct.findMany({ orderBy: { name: "asc" } });
