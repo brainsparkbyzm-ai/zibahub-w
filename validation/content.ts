@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+const optionalAmount = z.preprocess(
+  (value) => value === "" || value === null ? undefined : value,
+  z.coerce.number().finite().nonnegative().optional(),
+);
+
 export const jobSchema = z.object({
   title: z.string().trim().min(3).max(140),
   description: z.string().trim().min(40).max(12000),
@@ -7,8 +12,8 @@ export const jobSchema = z.object({
   country: z.enum(["United States", "United Kingdom", "Canada"]),
   region: z.string().max(80).optional(),
   city: z.string().max(80).optional(),
-  salaryMin: z.coerce.number().int().nonnegative().optional(),
-  salaryMax: z.coerce.number().int().nonnegative().optional(),
+  salaryMin: optionalAmount,
+  salaryMax: optionalAmount,
   salaryCurrency: z.string().length(3).default("USD"),
   salaryType: z.enum(["HOURLY", "ANNUAL", "DAILY", "UNSPECIFIED"]).default("ANNUAL"),
   employmentType: z.enum(["FULL_TIME", "PART_TIME", "CONTRACT", "APPRENTICESHIP", "TEMPORARY", "SEASONAL"]),
@@ -22,6 +27,31 @@ export const jobSchema = z.object({
   expiresAt: z.string().optional(),
   tier: z.enum(["FREE", "FEATURED", "PREMIUM"]).default("FREE"),
   isApprenticeship: z.coerce.boolean().optional(),
+}).superRefine((job, context) => {
+  if (job.salaryMin != null && job.salaryMax != null && job.salaryMax < job.salaryMin) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["salaryMax"],
+      message: "Maximum pay must be greater than or equal to minimum pay.",
+    });
+  }
+
+  const target = job.applicationTarget?.trim() || "";
+  if (job.applicationMethod === "URL") {
+    if (!target) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ["applicationTarget"], message: "Add the external application URL." });
+    } else {
+      try {
+        if (new URL(target).protocol !== "https:") throw new Error("https_required");
+      } catch {
+        context.addIssue({ code: z.ZodIssueCode.custom, path: ["applicationTarget"], message: "Use a valid HTTPS application URL." });
+      }
+    }
+  }
+
+  if (job.applicationMethod === "EMAIL" && !z.string().email().safeParse(target).success) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["applicationTarget"], message: "Add a valid application email address." });
+  }
 });
 
 export const alertSchema = z.object({
