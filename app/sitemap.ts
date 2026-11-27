@@ -38,7 +38,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       articles,
     ] = await Promise.all([
       db.job.findMany({
-        where: { status: "ACTIVE", isSeed: false },
+        where: {
+          status: "ACTIVE",
+          isSeed: false,
+          AND: [
+            { OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] },
+            { OR: [{ companyId: null }, { company: { status: "PUBLISHED" } }] },
+          ],
+        },
         select: { slug: true, updatedAt: true },
       }),
       db.trade.findMany({
