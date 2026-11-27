@@ -6,6 +6,7 @@ type Defaults = Record<string, string>;
 export function JobForm({ action, trades, defaults = {} }: { action: string; trades: Trade[]; defaults?: Defaults }) {
   return (
     <ApiForm action={action} submitLabel="Save job">
+      <p className="notice">New listings start as Free and wait for admin approval. Featured or Premium placement can be requested separately from Billing.</p>
       <label>Title<input name="title" required defaultValue={defaults.title || ""} /></label>
       <label>Description<textarea name="description" required minLength={40} defaultValue={defaults.description || ""} /></label>
       <label>Trade<select name="tradeId" defaultValue={defaults.tradeId || ""}><option value="">Unspecified</option>{trades.map((trade) => <option key={trade.id} value={trade.id}>{trade.name}</option>)}</select></label>
@@ -25,7 +26,6 @@ export function JobForm({ action, trades, defaults = {} }: { action: string; tra
       <label>Application method<select name="applicationMethod" defaultValue={defaults.applicationMethod || "ONSITE"}><option value="ONSITE">On ZibaHub</option><option value="URL">External URL</option><option value="EMAIL">Email</option></select></label>
       <label>URL or email<input name="applicationTarget" defaultValue={defaults.applicationTarget || ""} /></label>
       <label>Expiry<input name="expiresAt" type="date" defaultValue={defaults.expiresAt || ""} /></label>
-      <label>Placement<select name="tier" defaultValue={defaults.tier || "FREE"}><option value="FREE">Free</option><option value="FEATURED">Featured</option><option value="PREMIUM">Premium</option></select></label>
-    </ApiForm>
+          </ApiForm>
   );
 }
