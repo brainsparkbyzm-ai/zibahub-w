@@ -13,7 +13,7 @@ export function SiteFooter() {
       <FooterCol title="Trade Directory" links={[["Electrician", "/jobs?q=Electrician"], ["HVAC Technician", "/jobs?q=HVAC"], ["Plumber", "/jobs?q=Plumber"], ["Welder", "/jobs?q=Welder"], ["Carpenter", "/jobs?q=Carpenter"], ["Construction", "/jobs?q=Construction"]]} split />
       <FooterCol title="Employers & Industries" links={[["Industry Jobs", "/industries"], ["Hotels & Hospitality", "/jobs?sector=hotels"], ["Grocery Jobs", "/jobs?sector=grocery"], ["Fitness & Trainers", "/jobs?sector=trainers"], ["Post a Job", "/employer/jobs/new"], ["Employer Solutions", "/employers"], ["Pricing", "/employer/billing"], ["Training Finder", "/training"], ["Success Stories", "/guides"], ["FAQ", "/guides"]]} />
       <FooterCol title="Career Tools" links={[["Salary Calculator", "/calculators"], ["Career Path Finder", "/trades"], ["Training Finder", "/training"], ["Resume Builder", "/dashboard/profile"]]} />
-      <FooterCol title="Guides" links={[["Blog", "/guides"], ["Career Guides", "/guides?category=Career%20Guides"], ["Industry Insights", "/guides"], ["Help Center", "/guides"]]} />
+      <FooterCol title="Guides" links={[["Articles and Guest Posts", "/articles"], ["Career Guides", "/guides?category=Career%20Guides"], ["Industry Insights", "/guides"], ["Help Center", "/guides"]]} />
       <FooterCol title="Company" links={[["About Us", "/"], ["Careers", "/jobs"], ["Write for ZibaHub", "/sponsored"], ["Privacy Policy", "/guides"], ["Terms", "/guides"]]} />
       <div className="zh-footer-meta">
         <div className="zh-flags" aria-label="United States, United Kingdom, and Canada">
