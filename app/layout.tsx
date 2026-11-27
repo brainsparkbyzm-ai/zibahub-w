@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   openGraph: { siteName: "ZibaHub", type: "website", title: "ZibaHub — Skilled Trades Jobs, Careers & Tools", description: brand.description },
   twitter: { card: "summary_large_image", title: "ZibaHub — Skilled Trades Jobs, Careers & Tools", description: brand.description },
   robots: { index: true, follow: true },
+  verification: { google: "KGyhVM7j0iFJnhoDV1CK1_LOQXvd2oOYHQXJn-g3uPE" },
 };
 
 export const dynamic = "force-dynamic";
