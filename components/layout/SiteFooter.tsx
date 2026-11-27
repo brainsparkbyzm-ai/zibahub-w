@@ -14,7 +14,7 @@ export function SiteFooter() {
       <FooterCol title="Employers & Industries" links={[["Industry Jobs", "/industries"], ["Hotels & Hospitality", "/jobs?sector=hotels"], ["Grocery Jobs", "/jobs?sector=grocery"], ["Fitness & Trainers", "/jobs?sector=trainers"], ["Post a Job", "/employer/jobs/new"], ["Employer Solutions", "/employers"], ["Pricing", "/employer/billing"], ["Training Finder", "/training"], ["Success Stories", "/guides"], ["FAQ", "/guides"]]} />
       <FooterCol title="Career Tools" links={[["Salary Calculator", "/calculators"], ["Career Path Finder", "/trades"], ["Training Finder", "/training"], ["Resume Builder", "/dashboard/profile"]]} />
       <FooterCol title="Guides" links={[["Blog", "/guides"], ["Career Guides", "/guides?category=Career%20Guides"], ["Industry Insights", "/guides"], ["Help Center", "/guides"]]} />
-      <FooterCol title="Company" links={[["About Us", "/"], ["Careers", "/jobs"], ["Contact", "/sponsored"], ["Privacy Policy", "/guides"], ["Terms", "/guides"]]} />
+      <FooterCol title="Company" links={[["About Us", "/"], ["Careers", "/jobs"], ["Write for ZibaHub", "/sponsored"], ["Privacy Policy", "/guides"], ["Terms", "/guides"]]} />
       <div className="zh-footer-meta">
         <div className="zh-flags" aria-label="United States, United Kingdom, and Canada">
           <span><FlagUS /> US</span>
