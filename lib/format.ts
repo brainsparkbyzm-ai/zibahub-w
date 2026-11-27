@@ -7,7 +7,7 @@ export function money(cents: number | null | undefined, currency = "USD") {
 }
 
 export function salaryRange(min?: number | null, max?: number | null, currency = "USD", type = "ANNUAL") {
-  const label = type === "HOURLY" ? "/hr" : type === "DAILY" ? "/day" : "/yr";
+  const label = type === "HOURLY" ? "/hr" : type === "DAILY" ? "/day" : type === "ANNUAL" ? "/yr" : "";
   if (min == null && max == null) return "Pay not listed";
   if (min != null && max != null) return `${money(min, currency)}–${money(max, currency)}${label}`;
   if (min != null) return `From ${money(min, currency)}${label}`;
