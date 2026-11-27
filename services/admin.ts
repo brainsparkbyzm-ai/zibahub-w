@@ -64,21 +64,45 @@ export async function setReportStatus(actorId: string, id: string, status: Repor
 }
 
 export async function setGuestStatus(actorId: string, id: string, status: GuestPostStatus, reviewNote?: string) {
-  const post = await db.guestPost.update({ where: { id }, data: { status, reviewNote: reviewNote || null } });
-  if (status === "PUBLISHED") {
-    await db.article.create({
-      data: {
-        slug: uniqueSlug(post.title),
-        title: post.title,
-        excerpt: `Sponsored submission from ${post.companyName}.`,
-        content: post.content,
-        category: post.category,
-        sponsored: post.sponsored,
-        status: "PUBLISHED",
-        publishedAt: new Date(),
-      },
+  const post = await db.$transaction(async (tx) => {
+    const current = await tx.guestPost.findUnique({ where: { id } });
+    if (!current) throw new AppError(404, "guest_post_not_found", "Guest post not found.");
+
+    if (current.status === "PUBLISHED" && status !== "PUBLISHED") {
+      throw new AppError(409, "guest_post_already_published", "Published submissions cannot be reverted here. Update the published article instead.");
+    }
+    if (status === "PUBLISHED" && current.status !== "APPROVED" && current.status !== "PUBLISHED") {
+      throw new AppError(409, "guest_post_approval_required", "Approve the guest post before publishing it.");
+    }
+
+    const changed = await tx.guestPost.updateMany({
+      where: { id, status: current.status },
+      data: { status, reviewNote: reviewNote || null },
     });
-  }
+    if (changed.count !== 1) {
+      throw new AppError(409, "guest_post_changed", "This submission changed during review. Refresh and try again.");
+    }
+
+    const saved = await tx.guestPost.findUniqueOrThrow({ where: { id } });
+    if (status === "PUBLISHED" && current.status !== "PUBLISHED") {
+      await tx.article.create({
+        data: {
+          slug: uniqueSlug(saved.title),
+          title: saved.title,
+          excerpt: saved.sponsored
+            ? `Sponsored submission from ${saved.companyName}.`
+            : `Editorial guest post submitted by ${saved.companyName}.`,
+          content: saved.content,
+          category: saved.category,
+          sponsored: saved.sponsored,
+          status: "PUBLISHED",
+          publishedAt: new Date(),
+        },
+      });
+    }
+    return saved;
+  });
+
   await audit(actorId, "admin.guest_post", "GuestPost", id, { status });
   return post;
 }

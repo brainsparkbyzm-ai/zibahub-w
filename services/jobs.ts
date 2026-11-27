@@ -12,7 +12,12 @@ import { jobSchema } from "@/validation/content";
 const jobInclude = { company: true, trade: true, _count: { select: { applications: true } } } satisfies Prisma.JobInclude;
 
 function activeWhere(): Prisma.JobWhereInput {
-  return { status: "ACTIVE", isSeed: false, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] };
+  return {
+    status: "ACTIVE",
+    isSeed: false,
+    OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+    AND: [{ OR: [{ companyId: null }, { company: { status: "PUBLISHED" } }] }],
+  };
 }
 
 export async function listJobs(query: Record<string, string | undefined>) {
@@ -183,8 +188,8 @@ export async function publishJob(actorId: string, jobId: string) {
 }
 
 export async function toggleSave(userId: string, slug: string) {
-  const job = await db.job.findUnique({ where: { slug } });
-  if (!job) throw new AppError(404, "not_found", "Job not found.");
+  const job = await db.job.findFirst({ where: { slug, ...activeWhere() } });
+  if (!job) throw new AppError(404, "not_found", "This job is not available to save.");
   const existing = await db.savedJob.findUnique({ where: { userId_jobId: { userId, jobId: job.id } } });
   if (existing) {
     await db.savedJob.delete({ where: { id: existing.id } });
@@ -199,7 +204,7 @@ export async function applyToJob(userId: string, slug: string, coverLetter?: str
   if (!user) throw new AppError(401, "unauthenticated", "Sign in to apply.");
   if (user.role !== "USER") throw new AppError(403, "candidate_only", "Only candidate accounts can apply for jobs.");
   if (!user.emailVerifiedAt) throw new AppError(403, "email_unverified", "Verify your email before applying.");
-  const job = await db.job.findFirst({ where: { slug, status: "ACTIVE" }, include: { company: true } });
+  const job = await db.job.findFirst({ where: { slug, ...activeWhere() }, include: { company: true } });
   if (!job) throw new AppError(404, "not_found", "This job is not open.");
   if (job.applicationMethod !== "ONSITE") throw new AppError(400, "external_apply", "This employer accepts applications outside ZibaHub.");
   if (!job.company) throw new AppError(400, "external_apply", "This job does not accept applications through ZibaHub.");
