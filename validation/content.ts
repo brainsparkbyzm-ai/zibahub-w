@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { SUPPORTED_JOB_COUNTRIES } from "@/config/markets";
 
 const optionalAmount = z.preprocess(
   (value) => value === "" || value === null ? undefined : value,
@@ -9,7 +10,7 @@ export const jobSchema = z.object({
   title: z.string().trim().min(3).max(140),
   description: z.string().trim().min(40).max(12000),
   tradeId: z.string().optional(),
-  country: z.enum(["United States", "United Kingdom", "Canada"]),
+  country: z.enum(SUPPORTED_JOB_COUNTRIES),
   region: z.string().max(80).optional(),
   city: z.string().max(80).optional(),
   salaryMin: optionalAmount,
