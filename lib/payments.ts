@@ -8,7 +8,8 @@ export type JobPricing = {
   PREMIUM: number;
 };
 
-export const defaultPricing: JobPricing = { currency: "USD", FREE: 0, FEATURED: 14900, PREMIUM: 29900 };
+// Founding-employer launch pricing. A job_pricing SiteSetting can override these defaults.
+export const defaultPricing: JobPricing = { currency: "USD", FREE: 0, FEATURED: 4900, PREMIUM: 9900 };
 
 export async function getJobPricing(): Promise<JobPricing> {
   const row = await db.siteSetting.findUnique({ where: { key: "job_pricing" } });
