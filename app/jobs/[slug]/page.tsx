@@ -100,15 +100,17 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
       name: employerName,
       ...(job.company?.website ? { sameAs: job.company.website } : {}),
     },
-    jobLocation: {
-      "@type": "Place",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: job.city || undefined,
-        addressRegion: job.region || undefined,
-        addressCountry: job.country,
+    ...(job.locationType !== "REMOTE" ? {
+      jobLocation: {
+        "@type": "Place",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: job.city || undefined,
+          addressRegion: job.region || undefined,
+          addressCountry: job.country,
+        },
       },
-    },
+    } : {}),
     directApply: job.applicationMethod === "ONSITE",
   };
   return (
