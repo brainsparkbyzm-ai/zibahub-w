@@ -60,7 +60,9 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
       : job.salaryType === "ANNUAL"
         ? "YEAR"
         : null;
-  const baseSalary = salaryUnit && (job.salaryMin != null || job.salaryMax != null)
+  // Google requires JobPosting baseSalary to be employer-provided. External
+  // feed salary estimates are not asserted as employer-provided ZibaHub data.
+  const baseSalary = job.companyId && salaryUnit && (job.salaryMin != null || job.salaryMax != null)
     ? {
         "@type": "MonetaryAmount",
         currency: job.salaryCurrency,
@@ -79,7 +81,13 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
     description: job.description,
     datePosted: job.postedAt.toISOString(),
     ...(job.expiresAt ? { validThrough: job.expiresAt.toISOString() } : {}),
-    employmentType: job.employmentType,
+    ...({
+      FULL_TIME: { employmentType: "FULL_TIME" },
+      PART_TIME: { employmentType: "PART_TIME" },
+      CONTRACT: { employmentType: "CONTRACTOR" },
+      TEMPORARY: { employmentType: "TEMPORARY" },
+      SEASONAL: { employmentType: "TEMPORARY" },
+    }[job.employmentType] || {}),
     ...(job.externalId ? {
       identifier: {
         "@type": "PropertyValue",
