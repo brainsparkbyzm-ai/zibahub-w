@@ -75,6 +75,15 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
         },
       }
     : undefined;
+  const employmentTypeSchema: Record<string, { employmentType: string }> = {
+    FULL_TIME: { employmentType: "FULL_TIME" },
+    PART_TIME: { employmentType: "PART_TIME" },
+    CONTRACT: { employmentType: "CONTRACTOR" },
+    TEMPORARY: { employmentType: "TEMPORARY" },
+    SEASONAL: { employmentType: "TEMPORARY" },
+    // APPRENTICESHIP is intentionally omitted: it is not a supported
+    // Google JobPosting employmentType value.
+  };
   const schema = job.isSeed ? null : {
     "@context": "https://schema.org",
     "@type": "JobPosting",
@@ -82,13 +91,7 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
     description: jobDescriptionHtml,
     datePosted: job.postedAt.toISOString(),
     ...(job.expiresAt ? { validThrough: job.expiresAt.toISOString() } : {}),
-    ...({
-      FULL_TIME: { employmentType: "FULL_TIME" },
-      PART_TIME: { employmentType: "PART_TIME" },
-      CONTRACT: { employmentType: "CONTRACTOR" },
-      TEMPORARY: { employmentType: "TEMPORARY" },
-      SEASONAL: { employmentType: "TEMPORARY" },
-    }[job.employmentType] || {}),
+    ...(employmentTypeSchema[job.employmentType] || {}),
     ...(job.externalId ? {
       identifier: {
         "@type": "PropertyValue",
