@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
+import { getJobPricing } from "@/lib/payments";
+import { money } from "@/lib/format";
 
 export const metadata = pageMeta({
   title: "Hire Skilled Tradespeople",
@@ -7,7 +9,9 @@ export const metadata = pageMeta({
   path: "/for-employers",
 });
 
-export default function ForEmployersPage() {
+export default async function ForEmployersPage() {
+  const pricing = await getJobPricing().catch(() => null);
+
   return (
     <main className="shell page">
       <h1 className="page-title">Hire skilled tradespeople with ZibaHub</h1>
@@ -52,15 +56,18 @@ export default function ForEmployersPage() {
         </ul>
       </section>
 
-      <section aria-labelledby="employer-membership">
-        <h2 id="employer-membership">Recruitment packages</h2>
-        <p>
-          Employer posting and promotional options are shown during the relevant account
-          and checkout flow when available. Contact ZibaHub before purchasing if you need
-          a recurring recruitment arrangement or help onboarding multiple vacancies.
-          Package availability, prices and terms must be confirmed before payment.
-        </p>
-        <p><Link href="/sign-up">Start employer registration</Link></p>
+      <section className="card" aria-labelledby="employer-membership">
+        <h2 id="employer-membership">Founding-employer pricing</h2>
+        {pricing ? (
+          <>
+            <p>Standard vacancy: {money(pricing.FREE, pricing.currency)}.</p>
+            <p>Featured vacancy: {money(pricing.FEATURED, pricing.currency)} one-time.</p>
+            <p>Premium vacancy: {money(pricing.PREMIUM, pricing.currency)} one-time.</p>
+            <p>Pay only for the vacancy upgrade you choose. No recurring subscription is charged through this checkout.</p>
+          </>
+        ) : <p>Current placement prices will be shown in your employer billing area before checkout.</p>}
+        <p>Founding employers can create a company profile and submit a standard vacancy for review without a paid upgrade.</p>
+        <p><Link href="/sign-up">Create your employer account</Link></p>
       </section>
     </main>
   );
