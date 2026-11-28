@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SUPPORTED_JOB_COUNTRIES } from "@/config/markets";
 import { listJobs } from "@/services/jobs";
 import { publishedTrades } from "@/services/content";
 import { load } from "@/lib/safe";
@@ -6,7 +7,7 @@ import { JobList } from "@/components/jobs/JobList";
 import { DatabaseNotice, EmptyState } from "@/components/ui/States";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Jobs", description: "Search skilled-trade jobs by role, trade, location, experience, salary, employment type and posting date across the United States, UK and Canada.", path: "/jobs" });
+export const metadata = pageMeta({ title: "Skilled Trade Jobs in USA, Canada, UK & Europe", description: "Find skilled trade jobs across the USA, Canada, UK and Europe. Search electrician, plumber, HVAC, welding, construction, mechanic and apprenticeship opportunities by country and city.", path: "/jobs" });
 
 export default async function JobsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const raw = await searchParams;
@@ -22,8 +23,8 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
       <header className="jobs-hero">
         <div className="jobs-hero-copy">
           <p className="kicker jobs-kicker">Skilled-trade marketplace</p>
-          <h1 className="page-title">{sectorLabel ? `${sectorLabel} jobs` : "Find your next trade role"}</h1>
-          <p className="jobs-intro">{sectorLabel ? `Explore live ${sectorLabel.toLowerCase()} opportunities. Refine by location, work type and experience.` : "Discover skilled-trade opportunities and narrow your search by location, trade and the way you want to work."}</p>
+          <h1 className="page-title">{sectorLabel ? `${sectorLabel} jobs` : query.country ? `Jobs in ${query.country}` : "Find your next trade role"}</h1>
+          <p className="jobs-intro">{sectorLabel ? `Explore live ${sectorLabel.toLowerCase()} opportunities. Refine by location, work type and experience.` : query.country ? `Browse skilled trade jobs in ${query.country}, including electrician, plumber, HVAC, construction, welding, mechanic and apprenticeship roles. Filter by city and job type.` : "Discover skilled-trade opportunities across the USA, Canada, UK and Europe. Search electrician, plumber, HVAC, construction, welding and mechanic jobs by country, location, trade and work type."}</p><p className="jobs-intro"><Link href="/jobs-in-uk">Explore all skilled trade jobs in the UK →</Link></p>
         </div>
         <div className="jobs-hero-note">
           <span className="jobs-note-icon" aria-hidden="true">↗</span>
@@ -56,9 +57,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
           <label className="jobs-field"><span>Country</span>
             <select name="country" defaultValue={query.country || ""}>
               <option value="">Any country</option>
-              <option value="United States">United States</option>
-              <option value="United Kingdom">United Kingdom</option>
-              <option value="Canada">Canada</option>
+              {SUPPORTED_JOB_COUNTRIES.map((country) => <option key={country} value={country}>{country}</option>)}
             </select>
           </label>
           <label className="jobs-field"><span>City</span>
