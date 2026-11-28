@@ -9,7 +9,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
   title: "Build Your Career in the Skilled Trades",
-  description: "Find better trade jobs, compare salaries, discover apprenticeships and make smarter career moves.",
+  description: "Find skilled trade jobs in the USA, UK and Canada. Explore electrician, plumber, HVAC, construction, welding and mechanic jobs, compare salaries and discover apprenticeships.",
   path: "/",
 });
 
@@ -60,6 +60,7 @@ export default async function HomePage() {
           <div className="zh-popular">
             <span>Popular trades:</span>
             {popular.map((item) => <Link key={item} href={`/jobs?q=${encodeURIComponent(item)}`}>{item}</Link>)}
+            <Link href="/jobs-in-uk">Jobs in UK</Link>
           </div>
         </div>
         <HeroVisual />
