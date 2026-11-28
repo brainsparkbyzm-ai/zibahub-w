@@ -3,7 +3,7 @@ import { guideCategories } from "@/config/navigation";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
-  title: "Write for ZibaHub | Guest Posts and Sponsored Content",
+  title: "Guest Posts & Sponsored Content",
   description: "Submit an original skilled-trades, careers or employer story for editorial review.",
   path: "/sponsored",
 });
