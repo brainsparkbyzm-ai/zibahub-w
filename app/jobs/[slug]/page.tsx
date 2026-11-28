@@ -53,6 +53,7 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
   const job = result.data;
   const employerName = job.externalCompanyName || job.company?.name || "Employer";
   await recordJobView(job.id).catch(() => undefined);
+  const jobDescriptionHtml = renderMarkdown(job.description);
   const salaryUnit = job.salaryType === "HOURLY"
     ? "HOUR"
     : job.salaryType === "DAILY"
@@ -78,7 +79,7 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
     "@context": "https://schema.org",
     "@type": "JobPosting",
     title: job.title,
-    description: job.description,
+    description: jobDescriptionHtml,
     datePosted: job.postedAt.toISOString(),
     ...(job.expiresAt ? { validThrough: job.expiresAt.toISOString() } : {}),
     ...({
@@ -133,11 +134,12 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
         <span>{titleCaseEnum(job.locationType)}</span>
         <span>{titleCaseEnum(job.employmentType)}</span>
         <span>Posted {formatDate(job.postedAt)}</span>
+        {job.sourceUrl ? <a href={job.sourceUrl} rel="nofollow noopener noreferrer">Original listing</a> : null}
       </p>
       <p><strong>{salaryRange(job.salaryMin, job.salaryMax, job.salaryCurrency, job.salaryType)}</strong></p>
       {job.isSeed ? <div className="notice">Sample listing for development. Do not treat the employer, pay, or requirements as a verified opening.</div> : null}
       <div className="grid-2">
-        <article className="prose card" dangerouslySetInnerHTML={{ __html: renderMarkdown(job.description) }} />
+        <article className="prose card" dangerouslySetInnerHTML={{ __html: jobDescriptionHtml }} />
         <aside className="card">
           <h2>Apply</h2>
           {job.applicationMethod === "ONSITE" ? <Link className="btn btn-amber" href={`/jobs/${job.slug}/apply`}>Apply on ZibaHub</Link> : job.applicationMethod === "URL" && job.applicationTarget ? <a className="btn" href={job.applicationTarget} rel="nofollow noopener noreferrer">Employer application</a> : job.applicationMethod === "EMAIL" && job.applicationTarget ? <a className="btn" href={`mailto:${job.applicationTarget}`}>Email the employer</a> : <p>Application method is not configured.</p>}
