@@ -5,6 +5,7 @@ import { MobileNav } from "@/components/layout/MobileNav";
 
 const links = [
   { href: "/jobs", label: "Jobs" },
+  { href: "/markets", label: "Markets" },
   { href: "/industries", label: "Industries" },
   { href: "/trades", label: "Trades" },
   { href: "/apprenticeships", label: "Apprenticeships" },
