@@ -6,7 +6,7 @@ import { JobList } from "@/components/jobs/JobList";
 import { DatabaseNotice, EmptyState } from "@/components/ui/States";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Jobs", description: "Search skilled-trade jobs by role, trade, location, experience, salary, employment type and posting date across the United States, UK and Canada.", path: "/jobs" });
+export const metadata = pageMeta({ title: "Skilled Trade Jobs in USA, UK & Canada", description: "Find skilled trade jobs across the USA, United Kingdom and Canada. Search electrician, plumber, HVAC, welding, construction, mechanic and apprenticeship opportunities by city.", path: "/jobs" });
 
 export default async function JobsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const raw = await searchParams;
@@ -22,8 +22,8 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
       <header className="jobs-hero">
         <div className="jobs-hero-copy">
           <p className="kicker jobs-kicker">Skilled-trade marketplace</p>
-          <h1 className="page-title">{sectorLabel ? `${sectorLabel} jobs` : "Find your next trade role"}</h1>
-          <p className="jobs-intro">{sectorLabel ? `Explore live ${sectorLabel.toLowerCase()} opportunities. Refine by location, work type and experience.` : "Discover skilled-trade opportunities and narrow your search by location, trade and the way you want to work."}</p>
+          <h1 className="page-title">{sectorLabel ? `${sectorLabel} jobs` : query.country === "United Kingdom" ? "Jobs in United Kingdom" : query.country === "United States" ? "Jobs in United States" : query.country === "Canada" ? "Jobs in Canada" : "Find your next trade role"}</h1>
+          <p className="jobs-intro">{sectorLabel ? `Explore live ${sectorLabel.toLowerCase()} opportunities. Refine by location, work type and experience.` : query.country === "United Kingdom" ? "Browse skilled trade jobs in the UK, including electrician, plumber, HVAC, construction, welding, mechanic and apprenticeship roles. Filter by city and job type." : "Discover skilled-trade opportunities across the USA, UK and Canada. Search electrician, plumber, HVAC, construction, welding and mechanic jobs by location, trade and work type."}</p><p className="jobs-intro"><Link href="/jobs-in-uk">Explore all skilled trade jobs in the UK →</Link></p>
         </div>
         <div className="jobs-hero-note">
           <span className="jobs-note-icon" aria-hidden="true">↗</span>
