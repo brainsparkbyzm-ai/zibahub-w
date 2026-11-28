@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SUPPORTED_JOB_COUNTRIES } from "@/config/markets";
 import { listApprenticeships } from "@/services/content";
 import { load } from "@/lib/safe";
 import { DatabaseNotice, EmptyState, SampleBadge } from "@/components/ui/States";
@@ -26,7 +27,7 @@ export default async function ApprenticeshipsPage({ searchParams }: { searchPara
         <p>Useful official starting points include the <a href="https://www.apprenticeship.gov/apprenticeship-job-finder" target="_blank" rel="noopener noreferrer">United States Apprenticeship Job Finder</a>, <a href="https://www.gov.uk/apply-apprenticeship" target="_blank" rel="noopener noreferrer">Find an apprenticeship in England</a> and <a href="https://red-seal.ca/eng/resources/related-sites.shtml" target="_blank" rel="noopener noreferrer">Canadian Red Seal related trade resources</a>.</p>
       </section>
       <form className="filters glass" action="/apprenticeships">
-        <label>Country<select name="country" defaultValue={query.country || ""}><option value="">Any</option><option>United States</option><option>United Kingdom</option><option>Canada</option></select></label>
+        <label>Country<select name="country" defaultValue={query.country || ""}><option value="">Any</option>{SUPPORTED_JOB_COUNTRIES.map((country) => <option key={country}>{country}</option>)}</select></label>
         <label>Trade slug<input name="trade" defaultValue={query.trade || ""} /></label>
         <label>City<input name="city" defaultValue={query.city || ""} /></label>
         <label>Provider<input name="provider" defaultValue={query.provider || ""} /></label>
