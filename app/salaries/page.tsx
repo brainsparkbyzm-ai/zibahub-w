@@ -5,7 +5,7 @@ import { DatabaseNotice, EmptyState } from "@/components/ui/States";
 import { money } from "@/lib/format";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Salaries", description: "Illustrative pay context and working calculators for skilled trades.", path: "/salaries" });
+export const metadata = pageMeta({ title: "Salaries", description: "Compare skilled-trade pay estimates by occupation, country, region and experience. Check each source, currency, unit and reference period.", path: "/salaries" });
 
 export default async function SalariesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const raw = await searchParams;

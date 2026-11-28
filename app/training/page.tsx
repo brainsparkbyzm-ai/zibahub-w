@@ -6,7 +6,7 @@ import { DatabaseNotice, EmptyState, SampleBadge } from "@/components/ui/States"
 import { money } from "@/lib/format";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Training", description: "Courses and certifications for skilled trades.", path: "/training" });
+export const metadata = pageMeta({ title: "Training", description: "Compare skilled-trade courses and certifications by trade, country and delivery format. Check provider details, fees and qualification outcomes.", path: "/training" });
 
 export default async function TrainingPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const raw = await searchParams;
@@ -15,6 +15,8 @@ export default async function TrainingPage({ searchParams }: { searchParams: Pro
   return (
     <div className="shell page zh-directory-page zh-page-training">
       <h1 className="page-title">Training and certifications</h1>
+      <p>Compare published courses by trade, country and delivery format. Where information is available, a listing shows the provider, duration, price, delivery method and certification details. Course availability and fees can change, so confirm them directly with the provider before enrolling.</p>
+      <p>A certificate or course title does not automatically mean that a licence is recognised in every country. Check the relevant regulator, apprenticeship authority or industry body for your intended workplace. For reference, see <a href="https://www.citb.co.uk/funding-support" target="_blank" rel="noopener noreferrer">CITB training and funding information</a> in the UK and <a href="https://red-seal.ca/eng/resources/related-sites.shtml" target="_blank" rel="noopener noreferrer">Canadian Red Seal trade resources</a>.</p>
       <form className="filters glass" action="/training">
         <label>Trade slug<input name="trade" defaultValue={query.trade || ""} /></label>
         <label>Country<input name="country" defaultValue={query.country || ""} /></label>

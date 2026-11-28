@@ -6,7 +6,7 @@ import { JobList } from "@/components/jobs/JobList";
 import { DatabaseNotice, EmptyState } from "@/components/ui/States";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Jobs", description: "Search skilled-trade jobs across the US, UK, and Canada.", path: "/jobs" });
+export const metadata = pageMeta({ title: "Jobs", description: "Search skilled-trade jobs by role, trade, location, experience, salary, employment type and posting date across the United States, UK and Canada.", path: "/jobs" });
 
 export default async function JobsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const raw = await searchParams;
