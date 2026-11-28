@@ -66,7 +66,7 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
   return (
     <div className="shell page">
       {schema ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} /> : null}
-      <p className="kicker">{job.trade?.name || "Trade role"}</p>
+      <p className="kicker">{job.trade ? <Link href={`/trades/${job.trade.slug}`}>{job.trade.name} careers</Link> : "Trade role"}</p>
       <h1 className="page-title">{job.title}</h1>
       <p className="meta">
         {job.isSeed ? <SampleBadge /> : null}
@@ -96,6 +96,17 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
       {job.requirements ? <section className="card"><h2>Requirements</h2><div className="prose" dangerouslySetInnerHTML={{ __html: renderMarkdown(job.requirements) }} /></section> : null}
       {job.benefits ? <section className="card"><h2>Benefits</h2><div className="prose" dangerouslySetInnerHTML={{ __html: renderMarkdown(job.benefits) }} /></section> : null}
       {job.skills.length ? <p className="chips">{job.skills.map((skill) => <span className="chip" key={skill}>{skill}</span>)}</p> : null}
+      {job.trade ? (
+        <nav className="card" aria-label="Related career resources">
+          <h2>Explore this trade</h2>
+          <p>Learn about the career path, compare pay and discover training routes related to this vacancy.</p>
+          <div className="chips">
+            <Link className="chip" href={`/trades/${job.trade.slug}`}>Trade career guide</Link>
+            <Link className="chip" href={`/salaries/${job.trade.slug}`}>Salary information</Link>
+            <Link className="chip" href="/apprenticeships">Apprenticeships</Link>
+          </div>
+        </nav>
+      ) : null}
     </div>
   );
 }
