@@ -1,5 +1,6 @@
 ﻿import Link from "next/link";
 import { LogoMark, Wordmark } from "@/components/brand/Logo";
+import { MARKET_LINKS } from "@/config/markets";
 
 export function SiteFooter() {
   return (
@@ -10,6 +11,7 @@ export function SiteFooter() {
           <Wordmark />
         </Link>
       </div>
+      <FooterCol title="Global Markets" links={MARKET_LINKS.map((market) => [market.label, market.href])} />
       <FooterCol title="Trade Directory" links={[["Electrician", "/jobs?q=Electrician"], ["HVAC Technician", "/jobs?q=HVAC"], ["Plumber", "/jobs?q=Plumber"], ["Welder", "/jobs?q=Welder"], ["Carpenter", "/jobs?q=Carpenter"], ["Construction", "/jobs?q=Construction"]]} split />
       <FooterCol title="Employers & Industries" links={[["Industry Jobs", "/industries"], ["Hotels & Hospitality", "/jobs?sector=hotels"], ["Grocery Jobs", "/jobs?sector=grocery"], ["Fitness & Trainers", "/jobs?sector=trainers"], ["Post a Job", "/employer/jobs/new"], ["Employer Solutions", "/employers"], ["Pricing", "/employer/billing"], ["Training Finder", "/training"], ["Success Stories", "/guides"], ["FAQ", "/guides"]]} />
       <FooterCol title="Career Tools" links={[["Salary Calculator", "/calculators"], ["Career Path Finder", "/trades"], ["Training Finder", "/training"], ["Resume Builder", "/dashboard/profile"]]} />
@@ -19,7 +21,7 @@ export function SiteFooter() {
         <div className="zh-flags" aria-label="United States, United Kingdom, and Canada">
           <span><FlagUS /> US</span>
           <span><FlagUK /> UK</span>
-          <span><FlagCA /> Canada</span>
+          <span><FlagCA /> Canada</span>\n          <Link href="/jobs-in-europe">Europe</Link>
         </div>
         <small>© {new Date().getFullYear()} ZibaHub. All rights reserved.</small>
       </div>
