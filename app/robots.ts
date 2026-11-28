@@ -8,7 +8,9 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       // Keep authenticated employer workspace private without blocking public
       // /employers and /employers/[slug] company profiles from search engines.
-      disallow: ["/admin", "/dashboard", "/employer/", "/api"],
+      // Exact roots plus their subpaths; keep similarly named public
+      // routes such as /employers and /articles crawlable.
+      disallow: ["/admin$", "/admin/", "/dashboard$", "/dashboard/", "/employer$", "/employer/", "/api"],
     },
     sitemap: `${brand.url}/sitemap.xml`,
   };
