@@ -4,7 +4,7 @@ import { load } from "@/lib/safe";
 import { DatabaseNotice, EmptyState, SampleBadge } from "@/components/ui/States";
 import { pageMeta } from "@/lib/seo";
 
-export const metadata = pageMeta({ title: "Apprenticeships", description: "Apprenticeship listings for skilled trades.", path: "/apprenticeships" });
+export const metadata = pageMeta({ title: "Apprenticeships", description: "Compare skilled-trade apprenticeships by country, trade, provider, city, duration and paid status. Check requirements before applying.", path: "/apprenticeships" });
 
 export default async function ApprenticeshipsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const raw = await searchParams;
@@ -13,6 +13,18 @@ export default async function ApprenticeshipsPage({ searchParams }: { searchPara
   return (
     <div className="shell page zh-directory-page zh-page-apprenticeships">
       <h1 className="page-title">Apprenticeships</h1>
+      <p>Compare published skilled-trade programmes by country, trade, city, provider, duration and whether the opportunity is marked paid. Listings can differ in entry requirements, training structure and application process, so read each programme description carefully.</p>
+      <p>Before applying, confirm the provider, employer, pay or wage arrangement, expected hours, training location and current application status on the programme's official website. A directory listing is a starting point, not a guarantee that a vacancy is still open or that a qualification is recognised in every jurisdiction.</p>
+      <section aria-labelledby="apprenticeship-checklist">
+        <h2 id="apprenticeship-checklist">How to compare a programme</h2>
+        <ol>
+          <li>Check the occupation, level and entry requirements against your previous experience.</li>
+          <li>Compare paid status, wage information, duration, working hours and where training takes place.</li>
+          <li>Ask who provides supervision, assessment and any recognised qualification.</li>
+          <li>Use the employer or training provider's official application page to confirm deadlines and availability.</li>
+        </ol>
+        <p>Useful official starting points include the <a href="https://www.apprenticeship.gov/apprenticeship-job-finder" target="_blank" rel="noopener noreferrer">United States Apprenticeship Job Finder</a>, <a href="https://www.gov.uk/apply-apprenticeship" target="_blank" rel="noopener noreferrer">Find an apprenticeship in England</a> and <a href="https://red-seal.ca/eng/resources/related-sites.shtml" target="_blank" rel="noopener noreferrer">Canadian Red Seal related trade resources</a>.</p>
+      </section>
       <form className="filters glass" action="/apprenticeships">
         <label>Country<select name="country" defaultValue={query.country || ""}><option value="">Any</option><option>United States</option><option>United Kingdom</option><option>Canada</option></select></label>
         <label>Trade slug<input name="trade" defaultValue={query.trade || ""} /></label>
