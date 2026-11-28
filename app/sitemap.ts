@@ -23,8 +23,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/calculators",
     "/sponsored",
   ].map((path) => ({
+    // Static routes do not change on every sitemap request. Omitting
+    // lastModified avoids sending Google a false "updated now" signal.
     url: `${brand.url}${path}`,
-    lastModified: now,
   }));
 
   try {
