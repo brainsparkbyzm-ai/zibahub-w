@@ -14,7 +14,7 @@ export default async function TradesPage() {
       <p>Explore skilled-trade career paths, from electrical and HVAC work to plumbing, welding, carpentry and construction. Each trade profile explains the work and links to related opportunities where listings are available.</p>
       <p>Use a profile to move between current jobs, apprenticeship listings and salary context. Requirements, licences and recognised qualifications differ by country and sometimes by state or province, so check the relevant local authority before paying for training or accepting work.</p>
       {!result.ok ? <DatabaseNotice /> : result.data.length === 0 ? <EmptyState title="No trades yet" body="An admin can add trades. The list is not filled with fake categories." /> : (
-        <div className="grid-3">{result.data.map((trade) => <article key={trade.id} className="card"><h3><Link href={`/trades/${trade.slug}`}>{trade.name}</Link></h3><p>{trade.summary}</p></article>)}</div>
+        <div className="grid-3">{result.data.map((trade) => <article key={trade.id} className="card"><h2><Link href={`/trades/${trade.slug}`}>{trade.name}</Link></h2><p>{trade.summary}</p></article>)}</div>
       )}
     </div>
   );
