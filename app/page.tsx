@@ -79,7 +79,7 @@ export default async function HomePage() {
         <div className="zh-jobs-col">
           <div className="zh-head">
             <h2>Featured Jobs</h2>
-            <Link href="/jobs">View All Jobs →</Link>
+            <Link href="/jobs">View All Jobs →</Link>\n            <Link href="/markets">Explore global markets →</Link>
           </div>
           <div className="zh-job-grid">
             {jobs.length ? jobs.map((job) => (
