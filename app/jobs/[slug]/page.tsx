@@ -30,8 +30,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     .trim()
     .slice(0, 160);
 
+  const roleTitle = job.title.replace(/\s+/g, " ").trim();
+  const localContext = [job.city, job.region].filter(Boolean).join(", ");
+  const titleWithLocation = localContext ? `${roleTitle} in ${localContext}` : roleTitle;
+  const conciseTitle = titleWithLocation.length <= 50
+    ? titleWithLocation
+    : roleTitle.length <= 50
+      ? roleTitle
+      : `${roleTitle.slice(0, 49).trimEnd()}…`;
+
   return pageMeta({
-    title: `${job.title} at ${employerName} | ZibaHub`,
+    title: conciseTitle,
     description: `${location ? `${location}. ` : ""}${description}`.slice(0, 160),
     path: `/jobs/${slug}`,
   });
