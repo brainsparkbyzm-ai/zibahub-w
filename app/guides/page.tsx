@@ -18,7 +18,7 @@ export default async function GuidesPage({ searchParams }: { searchParams: Promi
       <p>Requirements are not identical across the United States, the United Kingdom and Canada. Check the regulator or recognised industry body for the place where you plan to work, and use the <Link href="/trades">trade directory</Link>, <Link href="/apprenticeships">apprenticeship listings</Link> and <Link href="/salaries">salary context</Link> alongside each guide.</p>
       <div className="chips">{guideCategories.map((item) => <Link key={item} className="chip" href={`/guides?category=${encodeURIComponent(item)}`}>{item}</Link>)}</div>
       {!result.ok ? <DatabaseNotice /> : result.data.length === 0 ? <EmptyState title="No published guides" body="Drafts stay in the admin panel until they are published." /> : (
-        <div className="list">{result.data.map((guide) => <article key={guide.id} className="card"><span className="badge">{guide.category}</span><h3><Link href={`/guides/${guide.slug}`}>{guide.title}</Link></h3><p>{guide.excerpt} {guide.isSeed ? <SampleBadge /> : null}</p></article>)}</div>
+        <div className="list">{result.data.map((guide) => <article key={guide.id} className="card"><span className="badge">{guide.category}</span><h2><Link href={`/guides/${guide.slug}`}>{guide.title}</Link></h2><p>{guide.excerpt} {guide.isSeed ? <SampleBadge /> : null}</p></article>)}</div>
       )}
     </div>
   );
