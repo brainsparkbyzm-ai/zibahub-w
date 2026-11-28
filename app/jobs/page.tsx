@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SUPPORTED_JOB_COUNTRIES } from "@/config/markets";
 import { listJobs } from "@/services/jobs";
 import { publishedTrades } from "@/services/content";
 import { load } from "@/lib/safe";
@@ -56,9 +57,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
           <label className="jobs-field"><span>Country</span>
             <select name="country" defaultValue={query.country || ""}>
               <option value="">Any country</option>
-              <option value="United States">United States</option>
-              <option value="United Kingdom">United Kingdom</option>
-              <option value="Canada">Canada</option>
+              {SUPPORTED_JOB_COUNTRIES.map((country) => <option key={country} value={country}>{country}</option>)}
             </select>
           </label>
           <label className="jobs-field"><span>City</span>
