@@ -134,7 +134,7 @@ export default async function JobDetail({ params }: { params: Promise<{ slug: st
         <span>{titleCaseEnum(job.locationType)}</span>
         <span>{titleCaseEnum(job.employmentType)}</span>
         <span>Posted {formatDate(job.postedAt)}</span>
-        {job.sourceUrl ? <a href={job.sourceUrl} rel="nofollow noopener noreferrer">Original listing</a> : null}
+        {job.sourceUrl && /^https?:\/\//i.test(job.sourceUrl) ? <a href={job.sourceUrl} rel="nofollow noopener noreferrer">Original listing</a> : null}
       </p>
       <p><strong>{salaryRange(job.salaryMin, job.salaryMax, job.salaryCurrency, job.salaryType)}</strong></p>
       {job.isSeed ? <div className="notice">Sample listing for development. Do not treat the employer, pay, or requirements as a verified opening.</div> : null}
